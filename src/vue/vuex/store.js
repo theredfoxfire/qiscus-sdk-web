@@ -9,7 +9,13 @@ Vue.use(Vuex)
 const state = {
   rooms: qiscus.rooms,
   selected: qiscus.selected,
-  windowStatus: false
+  windowStatus: false,
+  UserData: {
+    email: qiscus.email,
+    username: qiscus.username,
+    baseURL: qiscus.baseURL,
+    userData: qiscus.userData
+  }
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -19,6 +25,28 @@ const mutations = {
   },
   TOGGLE_CHAT_WINDOW (state) {
     state.windowStatus = !state.windowStatus
+  },
+  CHAT_TARGET (state, email) {
+    qiscus.chatTarget(email)
+    .then((response) => {
+      state.selected = qiscus.selected
+    })
+  },
+  BACK_TO_HOME (state) {
+    state.selected = null;
+  },
+  SUBMIT_COMMENT (state, topic_id, comment) {
+    return qiscus.submitComment(topic_id, comment)
+    .then((response) => {
+      state.selected = qiscus.selected;
+      return Promise.resolve(state.selected);
+    })
+  },
+  LOAD_COMMENTS (state, topic_id, last_comment_id, timestamp, after) {
+    return qiscus.loadComments(topic_id, last_comment_id, timestamp, after)
+    .then((response) => {
+      return Promise.resolve(state.selected);
+    })
   }
 }
 

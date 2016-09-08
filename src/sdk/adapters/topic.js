@@ -11,13 +11,15 @@ export default class TopicAdapter {
     this.token       = HTTPAdapter.token;
   }
 
-  loadComments(topic_id, last_comment_id=0) {
-    // return this.HTTPAdapter.get(`api/v1/mobile/load_comments?token=${this.token}&topic_id=${topic_id}&last_comment_id=${last_comment_id}`)
-    return this.HTTPAdapter.get(`api/v1/mobile/topic/${topic_id}/comment/${last_comment_id}/token/${this.token}`)
+  loadComments(topic_id, last_comment_id=0, timestamp, after) {
+    let params = `token=${this.token}&topic_id=${topic_id}`;
+    if(timestamp) params += `&timestamp=${timestamp}`;
+    if(after) params.after += `&after=${after}`;
+    return this.HTTPAdapter.get(`api/v2/mobile/load_comments?${params}`, params)
     .then((res) => {
       return new Promise((resolve, reject) => {
         if(res.status != 200) return new Promise((resolve, reject) => reject(res));
-        const data = res.body.results;
+        const data = res.body.results.comments;
         return resolve(data);
       })
     }, (error) => {

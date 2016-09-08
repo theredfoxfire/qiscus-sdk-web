@@ -35,11 +35,11 @@ export default class User {
   // }
 
   postComment(topicId, commentMessage, uniqueId) {
-    return this.HTTPAdapter.post(`api/v1/mobile/postcomment`, {token: this.token, comment: commentMessage, topic_id: topicId, unique_id: uniqueId})
+    return this.HTTPAdapter.post(`api/v2/mobile/post_comment`, {token: this.token, comment: commentMessage, topic_id: topicId, unique_temp_id: uniqueId})
     .then((res) => {
       return new Promise((resolve, reject) => {
-        if(res.body.success != true) return reject(res);
-        const data = res.body;
+        if(res.body.status != 200) return reject(res);
+        const data = res.body.results.comment;
         return resolve(data);
       })
     }, (error) => {

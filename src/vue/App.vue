@@ -1,7 +1,7 @@
 <template>
   <div id="qcw-app">
     <chat-trigger label="Chat"></chat-trigger>
-    <chat-window></chat-window>
+    <chat-window :users="users"></chat-window>
   </div>
 </template>
 
@@ -20,6 +20,15 @@ import ChatTrigger from './components/ChatTrigger.vue'
 export default {
   components: {
     ChatWindow, ChatTrigger
+  },
+  data() {
+    return {
+      users: [
+        {username: 'fikri', email: 'fikri@qiscus.com'},
+        {username: 'uddin_penyok', email: 'apiep.test@gg.com'},
+        {username: 'evan', email: 'e2@qiscus.com'}
+      ]
+    }
   },
   store
 }

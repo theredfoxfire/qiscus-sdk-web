@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import moment from 'moment'
 import HttpAdapter from './adapters/http';
 import UserAdapter from './adapters/user';
 import RoomAdapter from './adapters/room';
@@ -12,16 +13,16 @@ class QiscusSDK {
     this.userData = null;
     this.baseURL  = null;
     this.HTTPAdapter = null;
-
+    this.pendingCommentId = 0;
   }
 
   /**
-   * Setting Up User Credentials for next API Request
-   * @param {string} AppId - qiscus Application ID
-   * @param {string} email - client email (will be used for login or register)
-   * @param {string} key - client unique key
-   * @return {void}
-   */
+  * Setting Up User Credentials for next API Request
+  * @param {string} AppId - qiscus Application ID
+  * @param {string} email - client email (will be used for login or register)
+  * @param {string} key - client unique key
+  * @return {void}
+  */
   setUser(AppId, email, key, username, avatar_url) {
     if(!AppId) throw new Error('AppId Undefined');
     this.baseURL    = `//${AppId}.qiscus.com`;
@@ -32,10 +33,10 @@ class QiscusSDK {
   }
 
   /**
-   * Initializing the SDK, connect to Qiscus Server, the server will then
-   * return User Data, we'll need this data for further API request
-   * @return {void}
-   */
+  * Initializing the SDK, connect to Qiscus Server, the server will then
+  * return User Data, we'll need this data for further API request
+  * @return {void}
+  */
   init() {
     console.info('Initializing Qiscus SDK');
     // Connect to Login or Register API
@@ -50,7 +51,7 @@ class QiscusSDK {
     }).then((response) => {
       return response.json();
     }).then((jsonObj) => {
-      this.userData = jsonObj.user;
+      this.userData = jsonObj.results.user;
       // now that we have the token, etc, we need to set all our adapters
       ///////////////// API CLIENT /////////////////
       this.HTTPAdapter = new HttpAdapter(this.baseURL, this.userData.token)
@@ -59,224 +60,246 @@ class QiscusSDK {
       this.userAdapter      = new UserAdapter(this.HTTPAdapter);
       this.roomAdapter      = new RoomAdapter(this.HTTPAdapter);
       this.topicAdapter     = new TopicAdapter(this.HTTPAdapter);
-      // when success, we load this users room
-      this.loadRooms();
     })
   }
 
+  getUserToken() {
+    return this.userData.token;
+  }
+
+  getBaseURL() {
+    return this.baseURL;
+  }
+
   /**
-   * Load Rooms of Current User
-   */
-   loadRooms() {
-     // Load Rooms and it's data
-     return this.roomAdapter.loadRooms().
-     then((response) => {
-       _.map(response, (res) => {
-         this._addRoom(new Room(res));
-       });
-     });
-   }
+  * Load Rooms of Current User
+  */
+  loadRooms() {
+    // Load Rooms and it's data
+    return this.roomAdapter.loadRooms().
+    then((response) => {
+      _.map(response, (res) => {
+        this._addRoom(new Room(res));
+      });
+    });
+  }
 
-   _addRoom(room) {
-     // check 1st if we already have the room
-     const theroom = this._getRoom(room.id);
-     if(!theroom) this.rooms.push(room);
-   }
+  chatTarget(email) {
+    // check if the room exists
+    let TheRoom = _.find(this.rooms, {name: email});
+    if(TheRoom) return this.selected = Room;
 
-   _getRoom(room_id) {
-     return _.find(this.rooms, {id: room_id});
-   }
+    // If not exists, let's get or create target room
+    return this.roomAdapter.getOrCreateRoom(email)
+    .then((response) => {
+      TheRoom = new Room(response);
+      qiscus.selected = TheRoom;
+      return this.selected = qiscus.selected;
+    })
+  }
 
-   _getRoomOfTopic(topic_id) {
-     // TODO: This is expensive. We need to refactor
-     // it using some kind map of topicId as the key
-     // and roomId as its value.
-     return _.find(this.rooms, function(room) {
-       return _.find(room.topics, function(topic) {
-         return topic.id == topic_id;
-       });
-     })
-   }
+  _addRoom(room) {
+    // check 1st if we already have the room
+    const theroom = this._getRoom(room.id);
+    if(!theroom) this.rooms.push(room);
+  }
 
-   selectRoom(room_id) {
-     const room = this._getRoom(room_id);
-     if(room.topics.length < 1) {
-       // this room hasn't been loaded yet, let's load it
-       return this.loadTopics(room_id).then((response) => {
-         this.selected.room  = room;
-         this.selected.topic = room.topics[0];
-       });
-     } else {
-       this.selected.room  = room;
-       this.selected.topic = room.topics[0];
-       return new Promise((resolve, reject) => resolve(this.selected));
-     }
-   }
+  _getRoom(room_id) {
+    return _.find(this.rooms, {id: room_id});
+  }
 
-   selectTopic(topic_id) {
-     let room = this.selected.room;
-     let topic = room.getTopic(topic_id);
-     // check if messages has been loaded or not
-     if(topic.comments.length < 1) {
-       return this.loadComments(topic_id).then((response) => { this.selected.topic = topic });
-     }
-     this.selected.topic = topic;
-     return new Promise((resolve, reject) => resolve(topic));
-   }
+  _getRoomOfTopic(topic_id) {
+    // TODO: This is expensive. We need to refactor
+    // it using some kind map of topicId as the key
+    // and roomId as its value.
+    return _.find(this.rooms, function(room) {
+      return _.find(room.topics, function(topic) {
+        return topic.id == topic_id;
+      });
+    })
+  }
 
-   loadTopics(room_id) {
-     // note: when we load a topic, we also need to load its' message directly
+  selectRoom(room_id) {
+    const room = this._getRoom(room_id);
+    if(room.topics.length < 1) {
+      // this room hasn't been loaded yet, let's load it
+      return this.loadTopics(room_id).then((response) => {
+        this.selected.room  = room;
+        this.selected.topic = room.topics[0];
+      });
+    } else {
+      this.selected.room  = room;
+      this.selected.topic = room.topics[0];
+      return new Promise((resolve, reject) => resolve(this.selected));
+    }
+  }
 
-     return this.roomAdapter.loadTopics(room_id).
-     then((response) => {
+  selectTopic(topic_id) {
+    let room = this.selected.room;
+    let topic = room.getTopic(topic_id);
+    // check if messages has been loaded or not
+    if(topic.comments.length < 1) {
+      return this.loadComments(topic_id).then((response) => { this.selected.topic = topic });
+    }
+    this.selected.topic = topic;
+    return new Promise((resolve, reject) => resolve(topic));
+  }
 
-       // let's add this topics to rooms
-       const room = this._getRoom(room_id);
-       _.map(response.topics, (res) => {
-         let topic = new Topic(res);
-         room.addTopic(new Topic(topic));
-       })
+  loadTopics(room_id) {
+    // note: when we load a topic, we also need to load its' message directly
 
-       // now load the first topic messages
-       let topic = room.topics[0];
-       if(topic.comments.length < 1) {
-         return this.loadComments(topic.id);
-       } else {
-         return new Promise((resolve, reject) => resolve(room.topics));
-       }
+    return this.roomAdapter.loadTopics(room_id).
+    then((response) => {
 
-     })
-   }
+      // let's add this topics to rooms
+      const room = this._getRoom(room_id);
+      _.map(response.topics, (res) => {
+        let topic = new Topic(res);
+        room.addTopic(new Topic(topic));
+      })
 
-   loadComments(topic_id, last_comment_id=0) {
-     return this.topicAdapter.loadComments(topic_id, last_comment_id)
-     .then((response) => {
-       // get the topic
-       let room = this._getRoomOfTopic(topic_id);
-       let topic = room.getTopic(topic_id);
-       let comments;
-       // ada dua kondisi, komen sudah di load( ), dan yang belum
-       if(last_comment_id > 0) {
-         // ini berarti load more, dibalik dulu comment nya, diprepend, bukan dipush
-         // ambil komen yang lama
-         comments = topic.comments;
-         // ambil komen yang baru, balik dulu urutannya, terus convert ke objek komen
-         let newComment = _.map(_.reverse(response.comments), (cmt) => new Comment(cmt));
-         comments = newComment.concat(comments);
-         topic.comments.length = 0;
-       } else {
-         comments = _.reverse(response.comments);
-       }
-       _.map(comments, (comment) => {
-         const cmt = (last_comment_id > 0) ? comment : new Comment(comment);
-         topic.addComment(cmt);
-       });
-       return new Promise((resolve, reject) => resolve(topic));
-     }, (error) => {
-       console.error('Error loading comments', error);
-     });
-   }
+      // now load the first topic messages
+      let topic = room.topics[0];
+      if(topic.comments.length < 1) {
+        return this.loadComments(topic.id);
+      } else {
+        return new Promise((resolve, reject) => resolve(room.topics));
+      }
 
-   submitComment(topicId, commentMessage, uniqueId) {
-     var self = this;
-     var room = self._getRoomOfTopic(topicId);
+    })
+  }
 
-     self.pendingCommentId--;
-     var pendingCommentId     = self.pendingCommentId;
-     // var pendingCommentSender = room.getParticipant(store.get('qcData').email);
-     var pendingCommentDate   = new Date();
-     var qcData = store.get('qcData');
-     var commentData = {
-       message: commentMessage,
-       username_as: qcData.username,
-       username_real: 'me',
-       user_avatar: {
-         avatar: {
-           url: qcData.avatar
-         }
-       },
-       id: pendingCommentId
-     }
-     var pendingComment       = new Comment(commentData);
-     // We're gonna use timestamp for uniqueId for now.
-     // "bq" stands for "Bonjour Qiscus" by the way.
-     if(!uniqueId) {
-       uniqueId = "bq" + Date.now()
-     }
-     // 		var uniqueId = "bq" + Date.now();
-     pendingComment.attachUniqueId(uniqueId);
-     pendingComment._markAsPending();
-     this.receiveComment(topicId, pendingComment, uniqueId);
-     return this.userAdapter.postComment(topicId, commentMessage, uniqueId,
-       function(res) {
-         // When the posting succeeded, we mark the Comment as sent,
-         // so all the interested party can be notified.
-         pendingComment._markAsSent();
+  loadComments(topic_id, last_comment_id=0) {
+    return this.topicAdapter.loadComments(topic_id, last_comment_id)
+    .then((response) => {
+      this.selected.receiveComments(_.reverse(response));
+      // get the topic
+      // let room = this._getRoomOfTopic(topic_id);
+      // let topic = room.getTopic(topic_id);
+      // let comments;
+      // // ada dua kondisi, komen sudah di load( ), dan yang belum
+      // if(last_comment_id > 0) {
+      //   // ini berarti load more, dibalik dulu comment nya, diprepend, bukan dipush
+      //   // ambil komen yang lama
+      //   comments = topic.comments;
+      //   // ambil komen yang baru, balik dulu urutannya, terus convert ke objek komen
+      //   let newComment = _.map(_.reverse(response.comments), (cmt) => new Comment(cmt));
+      //   comments = newComment.concat(comments);
+      //   topic.comments.length = 0;
+      // } else {
+      //   comments = _.reverse(response.comments);
+      // }
+      // _.map(comments, (comment) => {
+      //   const cmt = (last_comment_id > 0) ? comment : new Comment(comment);
+      //   topic.addComment(cmt);
+      // });
+      console.info('Receiving Comments');
+      return new Promise((resolve, reject) => resolve(response));
+    }, (error) => {
+      console.error('Error loading comments', error);
+    });
+  }
 
-         return new Promise((resolve, reject) => resolve(res));
-       },
-       function(reason) {
-         pendingComment.markAsFailed();
-         return new Promise((resolve, reject) => reject(reason));
-       }
-     );
-   }
+  submitComment(topicId, commentMessage, uniqueId) {
+    var self = this;
+    var room = self._getRoomOfTopic(topicId);
 
-   receiveComment(topicId, comment, uniqueId) {
-     var _this = this;
-     var room  = this._getRoomOfTopic(topicId);
-     var topic = room.getTopic(topicId);
-     if(uniqueId){
-       var commentWtUniqueId = _.find(topic.comments, function(cmt){
-         return cmt.unique_id == uniqueId;
-       });
-       //if uniqueId exist and comment id fake exist, it will delete fake comment
-       if(commentWtUniqueId && comment.id > 0){
-         _.remove(topic.comments, function(cmt){
-           return uniqueId == cmt.unique_id;
-         })
-       }
-     }
+    self.pendingCommentId--;
+    var pendingCommentId     = self.pendingCommentId;
+    // var pendingCommentSender = room.getParticipant(store.get('qcData').email);
+    var pendingCommentDate   = new Date();
+    var commentData = {
+      message: commentMessage,
+      username_as: this.username,
+      username_real: this.email,
+      user_avatar: {
+        avatar: {
+          url: this.avatar
+        }
+      },
+      id: pendingCommentId
+    }
+    var pendingComment       = new Comment(commentData);
+    // We're gonna use timestamp for uniqueId for now.
+    // "bq" stands for "Bonjour Qiscus" by the way.
+    if(!uniqueId) {
+      uniqueId = "bq" + Date.now()
+    }
+    // 		var uniqueId = "bq" + Date.now();
+    pendingComment.attachUniqueId(uniqueId);
+    pendingComment._markAsPending();
+    this.receiveComment(pendingComment, uniqueId);
+    return this.userAdapter.postComment(topicId, commentMessage, uniqueId)
+    .then((res) => {
+      // When the posting succeeded, we mark the Comment as sent,
+      // so all the interested party can be notified.
+      pendingComment._markAsSent();
+      _.remove(this.selected.comments, function(cmt){
+        return cmt.id == pendingCommentId;
+      })
+      return new Promise((resolve, reject) => resolve(res));
+    }, (err) => {
+      pendingComment.markAsFailed();
+      return new Promise((resolve, reject) => reject(err));
+    });
+  }
 
-     // Add the comment.
-     topic.addComment(comment);
-     // Update unread count if necessary. That is, if these two
-     // conditions are met:
-     // 1. The Comment doesn't belong to the currently selected
-     //    Topic. Because it doesn't makes sense to have unread
-     //    Comments when the User is currently watching the
-     //    Topic, does it?
-     // 2. The Comment owner is not the current User. Because
-     //    it doesn't make for the User to not read what he/she
-     //    wrote.
-     // if ( topic != this.selected.topic && comment.sender.email != this.email ) {
-     //   topic.increaseUnreadCommentsCount();
-     // }
-     // If the topic is the currently selected Topic, then
-     // we should reset the first unread Comment, because
-     // it means that the user (most likely) already read
-     // all the unread comments in the Topic.
-     // if (topic == this.selected.topic) {
-     //   topic.resetFirstUnreadComment();
-     // }
-     //Check if comment is uploadComment
-     //It will not update the id --> if it updates the id it'll be the last room
-     // if(!comment.isUploadComment){
-     //   // Update last Topic ID and the last Comment ID of the Room if the
-     //   // Comment is sent.
-     //   if (comment.isSent) {
-     //     room.setLastTopicAndComment(topicId, comment.id);
-     //   }
-     // }
-     // Finally, let's make sure the Rooms stay sorted.
-     this.sortRooms();
-   };
+  receiveComment(comment, uniqueId) {
+    //  var room  = this._getRoomOfTopic(topicId);
+    //  var topic = room.getTopic(topicId);
+    if(uniqueId){
+      var commentWtUniqueId = _.find(this.selected.comments, function(cmt){
+        return cmt.unique_id == uniqueId;
+      });
+      //if uniqueId exist and comment id fake exist, it will delete fake comment
+      if(commentWtUniqueId && comment.id > 0){
+        _.remove(this.selected.comments, function(cmt){
+          return uniqueId == cmt.unique_id;
+        })
+      }
+    }
 
-   sortRooms() {
-     this.rooms.sort(function(leftSideRoom, rightSideRoom) {
-       return rightSideRoom.lastCommentId - leftSideRoom.lastCommentId;
-     });
-   }
+    // Add the comment.
+    let Cmt = _.find(this.selected.comments, {id: comment.id});
+    if(!Cmt) this.selected.comments.push(comment);
+    //  topic.addComment(comment);
+    // Update unread count if necessary. That is, if these two
+    // conditions are met:
+    // 1. The Comment doesn't belong to the currently selected
+    //    Topic. Because it doesn't makes sense to have unread
+    //    Comments when the User is currently watching the
+    //    Topic, does it?
+    // 2. The Comment owner is not the current User. Because
+    //    it doesn't make for the User to not read what he/she
+    //    wrote.
+    // if ( topic != this.selected.topic && comment.sender.email != this.email ) {
+    //   topic.increaseUnreadCommentsCount();
+    // }
+    // If the topic is the currently selected Topic, then
+    // we should reset the first unread Comment, because
+    // it means that the user (most likely) already read
+    // all the unread comments in the Topic.
+    // if (topic == this.selected.topic) {
+    //   topic.resetFirstUnreadComment();
+    // }
+    //Check if comment is uploadComment
+    //It will not update the id --> if it updates the id it'll be the last room
+    // if(!comment.isUploadComment){
+    //   // Update last Topic ID and the last Comment ID of the Room if the
+    //   // Comment is sent.
+    //   if (comment.isSent) {
+    //     room.setLastTopicAndComment(topicId, comment.id);
+    //   }
+    // }
+    // Finally, let's make sure the Rooms stay sorted.
+    //  this.sortRooms();
+  };
+
+  sortRooms() {
+    this.rooms.sort(function(leftSideRoom, rightSideRoom) {
+      return rightSideRoom.lastCommentId - leftSideRoom.lastCommentId;
+    });
+  }
 
 }
 
@@ -286,7 +309,7 @@ export class Room {
     this.last_comment_id                 = room_data.last_comment_id;
     this.last_comment_message            = room_data.last_comment_message;
     this.last_comment_message_created_at = room_data.last_comment_message_created_at;
-    this.last_comment_topic_id           = room_data.last_comment_topic_id;
+    this.last_comment_topic_id           = room_data.last_topic_id;
     this.last_comment_topic_title        = room_data.last_comment_topic_title;
     this.avatar                          = room_data.room_avatar;
     this.name                            = room_data.name;
@@ -294,9 +317,18 @@ export class Room {
     this.secret_code                     = room_data.secret_code;
     this.participants                    = room_data.participants;
     this.topics                          = []
+    this.comments                        = []
     this.count_notif                     = room_data.count_notif;
     this.isLoaded                        = false;
     this.code_en                         = room_data.code_en;
+    this.receiveComments(room_data.comments);
+  }
+
+  receiveComments(comments) {
+    _.map(comments, (comment) => {
+      let Cmt = _.find(this.comments, {id: comment.id});
+      if(!Cmt) this.comments.push(new Comment(comment));
+    })
   }
 
   countUnreadComments() {
@@ -384,8 +416,8 @@ export class Comment {
     this.id            = comment.id;
     this.before_id     = comment.comment_before_id;
     this.message       = comment.message;
-    this.username_as   = comment.username_as;
-    this.username_real = comment.username_real;
+    this.username_as   = comment.username_as || comment.username;
+    this.username_real = comment.username_real || comment.email;
     let theDate        = moment(comment.created_at);
     this.date          = theDate.format('YYYY-MM-DD');
     this.time          = theDate.format('HH:mm A');
