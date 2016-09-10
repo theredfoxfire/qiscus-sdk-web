@@ -12,6 +12,7 @@ class QiscusSDK {
     this.selected = null;
     this.userData = null;
     this.baseURL  = null;
+    this.participants = [];
     this.HTTPAdapter = null;
     this.pendingCommentId = 0;
   }
@@ -60,6 +61,12 @@ class QiscusSDK {
       this.userAdapter      = new UserAdapter(this.HTTPAdapter);
       this.roomAdapter      = new RoomAdapter(this.HTTPAdapter);
       this.topicAdapter     = new TopicAdapter(this.HTTPAdapter);
+    })
+  }
+
+  setParticipants(participants = []) {
+    _.map(participants, (ptcp) => {
+      this.participants.push({email: ptcp.email, username: ptcp.username, avatar: ptcp.avatar});
     })
   }
 

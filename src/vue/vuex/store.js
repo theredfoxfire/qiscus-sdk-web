@@ -7,15 +7,9 @@ Vue.use(Vuex)
 // Create an object to hold the initial state when
 // the app starts up
 const state = {
-  rooms: qiscus.rooms,
   selected: qiscus.selected,
   windowStatus: false,
-  UserData: {
-    email: qiscus.email,
-    username: qiscus.username,
-    baseURL: qiscus.baseURL,
-    userData: qiscus.userData
-  }
+  participants: qiscus.participants
 }
 
 // Create an object storing various mutations. We will write the mutation

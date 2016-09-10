@@ -13,10 +13,10 @@
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <ul id="messages__comments">
-        <li v-if="selected.comments.length >= 10" class="load-more-button"
+        <!-- <li v-if="selected.comments.length >= 10" class="load-more-button"
           @click="loadComments(selected_topic_id, comments[0].id)">
           <i class="fa fa-loading" v-if="isLoadingComment"></i> Load more comments
-        </li>
+        </li> -->
         <li v-if="selected.comments.length > 0" v-for="comment in selected.comments">
           <comment :comment="comment" :onupdate="scrollToBottom" :userdata="userdata"></comment>
         </li>
@@ -37,17 +37,17 @@
 
 <script>
 import Comment from './Comment.vue'
-import {getWindowStatus, getSelected, getUserData} from '../vuex/getters'
+import {getWindowStatus, getSelected, getUserData, getParticipants} from '../vuex/getters'
 import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
 export default {
-  props: ['users'],
   components: {ChatParticipants, Comment},
   vuex: {
     getters: {
       windowStatus: getWindowStatus,
       selected: getSelected,
-      userdata: getUserData
+      userdata: getUserData,
+      users: getParticipants
     },
     actions: {
       chatTarget,

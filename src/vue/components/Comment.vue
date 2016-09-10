@@ -1,5 +1,5 @@
 <template>
-  <div class="comment">
+  <div class="comment" :class="{'comment--me': comment.username_real == myemail}">
     <!-- <avatar :src="comment.avatar"></avatar> -->
     <div class="comment__message">
       <div class="comment__info">
@@ -22,6 +22,11 @@ export default {
   props: ['comment','onupdate', 'userdata'],
   ready(){
     this.onupdate();
+  },
+  computed: {
+    myemail() {
+      return qiscus.email
+    }
   },
   created() {
     const comment = this.comment;
@@ -57,7 +62,7 @@ export default {
   data () {
     return {
       message: '',
-      me: this.userdata.username,
+      me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
         highlightCode: true,
@@ -102,6 +107,9 @@ export default {
   &.welcome:before{
       border: 0;
   }
+  &--me {
+    justify-content: flex-end;
+  }
 }
 .comment__message {
   padding-top: 5px;
@@ -112,24 +120,43 @@ export default {
   width: 100%;
   max-width: 200px;
   background: #F4F4F4;
+  border: 1px solid darken(#F4F4F4,10);
   padding: 10px;
   border-radius: 5px;
   position: relative;
-  box-shadow: 0 3px 5px rgba(0,0,0,.15);
-  &:after {
-    right: 100%;
-    top: 30px;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(238, 238, 238, 0);
-    border-right-color: #F4F4F4;
-    border-width: 15px;
-    margin-top: -15px;
+  // box-shadow: 0 3px 5px rgba(0,0,0,.15);
+  .comment--me & {
+    background: rgba(0, 111, 94, .1);
+    border: 1px solid rgba(0,111,94,.3);
   }
+  // .comment-me &:not():after {
+  //   right: 100%;
+  //   top: 30px;
+  //   border: solid transparent;
+  //   content: " ";
+  //   height: 0;
+  //   width: 0;
+  //   position: absolute;
+  //   pointer-events: none;
+  //   border-color: rgba(238, 238, 238, 0);
+  //   border-right-color: #F4F4F4;
+  //   border-width: 15px;
+  //   margin-top: -15px;
+  // }
+  // .comment-me &:after {
+  //   right: 100%;
+  //   top: 30px;
+  //   border: solid transparent;
+  //   content: " ";
+  //   height: 0;
+  //   width: 0;
+  //   position: absolute;
+  //   pointer-events: none;
+  //   border-color: rgba(238, 238, 238, 0);
+  //   border-left-color: #F4F4F4;
+  //   border-width: 15px;
+  //   margin-top: -15px;
+  // }
 }
 .welcome__message {
   padding-top: 5px;
