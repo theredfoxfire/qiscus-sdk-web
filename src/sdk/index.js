@@ -45,9 +45,13 @@ class QiscusSDK {
     formData.append('email', this.email);
     formData.append('password', this.key);
     formData.append('username', this.username);
-    formData.append('avatar_url', this.avatar_ur);
+    if(this.avatar_url) formData.append('avatar_url', this.avatar_url);
     fetch(`${this.baseURL}/api/v2/mobile/login_or_register`, {
       method: 'POST',
+      // headers: {
+      //   "Content-Type": "application/x-www-form-urlencoded"
+      // },
+      // body: `email=${this.email}&password=${this.key}&username=${this.username}&avatar_url=${this.avatar_url}`
       body: formData
     }).then((response) => {
       return response.json();
@@ -219,11 +223,12 @@ class QiscusSDK {
       message: commentMessage,
       username_as: this.username,
       username_real: this.email,
-      user_avatar: {
-        avatar: {
-          url: this.avatar
-        }
-      },
+      user_avatar: this.avatar_url,
+      // user_avatar: {
+      //   avatar: {
+      //     url: this.avatar
+      //   }
+      // },
       id: pendingCommentId
     }
     var pendingComment       = new Comment(commentData);
@@ -429,7 +434,8 @@ export class Comment {
     this.date          = theDate.format('YYYY-MM-DD');
     this.time          = theDate.format('HH:mm A');
     this.unique_id     = comment.unique_id;
-    this.avatar        = comment.user_avatar.avatar.url;
+    // this.avatar        = comment.user_avatar.avatar.url;
+    this.avatar        = comment.user_avatar;
     /* comment status */
     this.isPending = false;
     this.isSent    = false;
