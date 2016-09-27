@@ -146,14 +146,6 @@ export default {
   flex-flow: column nowrap;
   background: #FFF;
 }
-ul#messages__comments {
-  list-style: none;
-  margin:0; padding:0;
-  height: 285px;
-  overflow: hidden;
-  overflow-y: auto;
-  padding: 10px;
-}
 .comment-form {
   display: flex;
   flex-flow: row nowrap;

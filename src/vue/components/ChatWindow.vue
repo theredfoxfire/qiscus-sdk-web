@@ -4,7 +4,8 @@
       <div class="qcw-header">
         Select Chat Participant
       </div>
-      <chat-participants :users="users" :click-handler="chatTarget"></chat-participants>
+      <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
+      <!--<chat-participants :users="users" :click-handler="chatTarget"></chat-participants>-->
     </div>
     <div v-if="selected">
       <div class="qcw-header">
@@ -119,6 +120,7 @@ export default {
   position: fixed;
   bottom: 70px; right: 5px;
   border-radius: 5px;
+  background: #FFF;
   box-shadow: 0 15px 17px rgba(0,0,0,.3);
   transform: translateY(150%);
   transition: transform 0.32s ease;
@@ -165,6 +167,7 @@ i.fa {
 }
 ul#messages__comments {
   list-style: none;
+  background: #FFF;
   margin:0;
   height: 380px;
   overflow: hidden;

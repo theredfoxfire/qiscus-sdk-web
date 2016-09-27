@@ -7,6 +7,7 @@ Vue.use(Vuex)
 // Create an object to hold the initial state when
 // the app starts up
 const state = {
+  qiscus: qiscus,
   selected: qiscus.selected,
   windowStatus: false,
   participants: qiscus.participants
@@ -23,7 +24,8 @@ const mutations = {
   CHAT_TARGET (state, email) {
     qiscus.chatTarget(email)
     .then((response) => {
-      state.selected = qiscus.selected
+      state.selected = qiscus.selected;
+      state.windowStatus = true;
     })
   },
   BACK_TO_HOME (state) {
