@@ -189,10 +189,10 @@ export default {
 }
 .image-container {
   width: 100px; height: 100px; overflow: hidden;
-  padding: 10px;
   border: 1px solid #ccc; border-radius: 5px;
   img {
-    width: 100%;
+    min-height: 110px;
+    transform: translate3d(-50%, -50%, 0);
   }
 }
 .file-container{
