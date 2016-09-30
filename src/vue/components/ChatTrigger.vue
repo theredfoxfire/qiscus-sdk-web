@@ -1,14 +1,16 @@
 <template>
   <button class="qcw-trigger-btn" @click="toggleChatWindow">
-    {{ label || 'Chat' }}
+    <Loader v-if="loading"></Loader> {{ label || 'Chat' }}
   </button>
 </template>
 
 <script>
 import {toggleChatWindow} from '../vuex/actions'
+import Loader from './Loader.vue'
 
 export default {
-  props: ['label'],
+  props: ['label', 'loading'],
+  components: { Loader },
   vuex: {
     actions: {
       toggleChatWindow

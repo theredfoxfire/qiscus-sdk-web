@@ -22,7 +22,9 @@ class qiscusSDK extends EventEmitter {
     // SDK Configuration
     self.baseURL     = null;
     self.HTTPAdapter = null;
+    self.isLogin     = false;
     self.options     = {};
+    self.isLoading   = false;
 
     //////////////////////////// EVENTS OBSERVERS /////////////////////////////
     /**
@@ -41,6 +43,7 @@ class qiscusSDK extends EventEmitter {
      * Basically, it sets up necessary properties for qiscusSDK
      */
     self.on('login-success', function(response){
+      self.isLogin  = true;
       self.userData = response.results.user;
 
       // now that we have the token, etc, we need to set all our adapters
@@ -104,33 +107,32 @@ class qiscusSDK extends EventEmitter {
     });
   }
 
-  /**
-  * Load Rooms of Current User
-  */
-  loadRooms() {
-    // Load Rooms and it's data
-    return this.roomAdapter.loadRooms().
-    then((response) => {
-      _.map(response, (res) => {
-        this._addRoom(new Room(res));
-      });
-    });
-  }
-
   chatTarget(email) {
     // check if the room exists
     let TheRoom;
     let self = this;
+    self.isLoading = true;
     TheRoom  = _.find(this.rooms, {name: email});
     if(TheRoom) return this.selected = Room;
 
     // If not exists, let's get or create target room
     return this.roomAdapter.getOrCreateRoom(email)
     .then((response) => {
-      self.emit('newmessages', response);
       TheRoom = new Room(response);
       qiscus.selected = TheRoom;
+      self.isLoading = false;
       return this.selected = qiscus.selected;
+    })
+  }
+
+  /**
+   * This method let us get new comments from server
+   * If comment count > 0 then we have new message
+   */
+  sync() {
+    this.userAdapter.sync().
+    then((comments) => {
+      if(comments.length > 0) this.emit('newmessages', comments);
     })
   }
 
