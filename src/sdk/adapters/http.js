@@ -3,7 +3,11 @@ import request from 'superagent';
 export default class HttpAdapter {
   constructor(baseURL,token) {
     this.baseURL = baseURL;
-    this.token   = token;
+    this.token   = null;
+  }
+
+  setToken(token) {
+    this.token = token;
   }
 
   get(path, headers={}, options) {

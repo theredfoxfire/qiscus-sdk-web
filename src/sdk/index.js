@@ -4,82 +4,104 @@ import HttpAdapter from './adapters/http';
 import UserAdapter from './adapters/user';
 import RoomAdapter from './adapters/room';
 import TopicAdapter from './adapters/topic';
+import {EventEmitter} from 'events';
 
-class QiscusSDK {
+class qiscusSDK extends EventEmitter {
 
   constructor() {
-    this.rooms    = null;
-    this.selected = null;
-    this.userData = null;
-    this.baseURL  = null;
-    this.participants = [];
-    this.HTTPAdapter = null;
-    this.pendingCommentId = 0;
+    super();
+    const self = this;
+    // Chat Related properties
+    self.rooms    = null;
+    self.selected = null;
+    self.pendingCommentId = 0;
+
+    // User Properties
+    self.userData = null;
+
+    // SDK Configuration
+    self.baseURL     = null;
+    self.HTTPAdapter = null;
+    self.options     = {};
+
+    //////////////////////////// EVENTS OBSERVERS /////////////////////////////
+    /**
+     * This event will be called when there's new post messages
+     * If use pass a callback when initiating SDK, we'll call that function
+     * @param {string} data - JSON Response from SYNC API
+     * @return {void} 
+    */
+    self.on('newmessages', function(data){
+      // let's convert the data into something we can use
+      if(self.options.newMessagesCallBack) self.options.newMessagesCallBack(data);
+    })
+
+    /**
+     * This event will be called when login is sucess
+     * Basically, it sets up necessary properties for qiscusSDK
+     */
+    self.on('login-success', function(response){
+      self.userData = response.results.user;
+
+      // now that we have the token, etc, we need to set all our adapters
+      ///////////////// API CLIENT /////////////////
+      self.HTTPAdapter = new HttpAdapter(self.baseURL);
+      self.HTTPAdapter.setToken(self.userData.token);
+
+      //////////////// CORE BUSINESS LOGIC ////////////////////////
+      // this.messageAdapter   = new MessageAdapter(this.HTTPAdapters);
+      self.userAdapter      = new UserAdapter(self.HTTPAdapter);
+      self.roomAdapter      = new RoomAdapter(self.HTTPAdapter);
+      self.topicAdapter     = new TopicAdapter(self.HTTPAdapter);
+    })
   }
 
   /**
   * Setting Up User Credentials for next API Request
-  * @param {string} AppId - qiscus Application ID
   * @param {string} email - client email (will be used for login or register)
   * @param {string} key - client unique key
+  * @param {string} username - client username
+  * @param {string} avatar_url - the url for chat avatar (optional)
   * @return {void}
   */
-  setUser(AppId, email, key, username, avatar_url) {
-    if(!AppId) throw new Error('AppId Undefined');
-    this.baseURL    = `//${AppId}.qiscus.com`;
+  setUser(email, key, username, avatar_url) {
     this.email      = email;
     this.key        = key;
     this.username   = username;
     this.avatar_url = avatar_url;
   }
-
+  
   /**
   * Initializing the SDK, connect to Qiscus Server, the server will then
   * return User Data, we'll need this data for further API request
+  * @param {object} options - Qiscus SDK Options
   * @return {void}
   */
-  init() {
+  init(options) {
     console.info('Initializing Qiscus SDK');
+    // Let's initialize the app based on options 
+    if(options) this.options = Object.assign({}, this.options, options);
+    this.baseURL             = `//${this.options.AppId}.qiscus.com`;
+
+    if(!this.options.AppId) throw new Error('AppId Undefined');
+
     // Connect to Login or Register API
+    this.connectToQiscus().then((response) => this.emit('login-success', response));
+  }
+
+  connectToQiscus() {
     var formData = new FormData();
     formData.append('email', this.email);
     formData.append('password', this.key);
     formData.append('username', this.username);
     if(this.avatar_url) formData.append('avatar_url', this.avatar_url);
-    fetch(`${this.baseURL}/api/v2/mobile/login_or_register`, {
+
+    return fetch(`${this.baseURL}/api/v2/mobile/login_or_register`, {
       method: 'POST',
-      // headers: {
-      //   "Content-Type": "application/x-www-form-urlencoded"
-      // },
-      // body: `email=${this.email}&password=${this.key}&username=${this.username}&avatar_url=${this.avatar_url}`
       body: formData
     }).then((response) => {
       return response.json();
-    }).then((jsonObj) => {
-      this.userData = jsonObj.results.user;
-      // now that we have the token, etc, we need to set all our adapters
-      ///////////////// API CLIENT /////////////////
-      this.HTTPAdapter = new HttpAdapter(this.baseURL, this.userData.token)
-      //////////////// CORE BUSINESS LOGIC ////////////////////////
-      // this.messageAdapter   = new MessageAdapter(this.HTTPAdapters);
-      this.userAdapter      = new UserAdapter(this.HTTPAdapter);
-      this.roomAdapter      = new RoomAdapter(this.HTTPAdapter);
-      this.topicAdapter     = new TopicAdapter(this.HTTPAdapter);
-    })
-  }
-
-  setParticipants(participants = []) {
-    _.map(participants, (ptcp) => {
-      this.participants.push({email: ptcp.email, username: ptcp.username, avatar: ptcp.avatar});
-    })
-  }
-
-  getUserToken() {
-    return this.userData.token;
-  }
-
-  getBaseURL() {
-    return this.baseURL;
+    });
   }
 
   /**
@@ -97,12 +119,15 @@ class QiscusSDK {
 
   chatTarget(email) {
     // check if the room exists
-    let TheRoom = _.find(this.rooms, {name: email});
+    let TheRoom;
+    let self = this;
+    TheRoom  = _.find(this.rooms, {name: email});
     if(TheRoom) return this.selected = Room;
 
     // If not exists, let's get or create target room
     return this.roomAdapter.getOrCreateRoom(email)
     .then((response) => {
+      self.emit('newmessages', response);
       TheRoom = new Room(response);
       qiscus.selected = TheRoom;
       return this.selected = qiscus.selected;
@@ -475,6 +500,6 @@ export class Comment {
 
 window.qiscus = null;
 export default (function QiscusStoreSingleton() {
-  if (!qiscus) qiscus = new QiscusSDK();
+  if (!qiscus) qiscus = new qiscusSDK();
   return qiscus;
 })();
