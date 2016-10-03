@@ -35,6 +35,14 @@ class qiscusSDK extends EventEmitter {
     */
     self.on('newmessages', function(data){
       // let's convert the data into something we can use
+      // first we need to make sure we sort this data out based on room_id
+      _.map(data, (comment) => {
+        let theRoom = _.find(self.rooms, {id: comment.room_id});
+        if( theRoom ) theRoom.receiveComments(comment);
+        // Code below means the room does not exist yet, let's create
+        theRoom = new Room({id: comment.room_id, name: comment.email});
+        theRoom.receiveComments(comment);
+      })
       if(self.options.newMessagesCallBack) self.options.newMessagesCallBack(data);
     })
 

@@ -66,7 +66,7 @@ export default {
   created() {
     let self = this;
     setInterval(function(){
-      self.sync()
+      qiscus.sync()
     }, 5000);
   },
   methods: {
