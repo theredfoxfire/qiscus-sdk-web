@@ -35,8 +35,8 @@ qiscus.init({AppId: 'dragonfly'});
 # Init Options
 There are various options you can pass to init method. They are:
 
-| option              	| required 	| description                                                                                                                                                                                                    	|
-|---------------------	|----------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| AppId               	| true     	| You can get this ID by contacting qiscus, this will be use to differentiate company or user using qiscus sdk                                                                                                   	|
-| newMessagesCallBack 	| false    	| You can pass callback that will be run whenever there's incoming new message. It only accept one parameter ``` javascript function newMessagesCallBack ( data ) {    console.log('incoming data', data); } ``` 	|
+| option              	| required 	| description                                                                                                                                                                                      	|
+|---------------------	|----------	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| AppId               	| true     	| You can get this ID by contacting qiscus, this will be use to differentiate company or user using qiscus sdk                                                                                     	|
+| newMessagesCallBack 	| false    	| You can pass callback that will be run whenever there's incoming new message. It only accept one parameter `function newMessagesCallBack ( data ) {    console.log('incoming data', data); } ` 	  |
 
