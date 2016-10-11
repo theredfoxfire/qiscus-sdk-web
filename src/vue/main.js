@@ -13,7 +13,12 @@ function newMessagesCallBack(data){
 };
 
 /* eslint-disable no-new */
-window.vm = new Vue({
-  el: 'body',
-  components: { QiscusWidget }
-})
+// window.vm = new Vue({
+//   el: 'body',
+//   components: { QiscusWidget }
+// })
+new Vue({
+  render(h) {
+    return h(QiscusWidget)
+  }
+}).$mount('#qiscus-widget')

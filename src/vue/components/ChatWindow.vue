@@ -3,9 +3,9 @@
     <div v-if="!selected">
       <div class="qcw-header">
         Select Chat Participant
+        <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
-      <!--<chat-participants :users="users" :click-handler="chatTarget"></chat-participants>-->
     </div>
     <div v-if="selected">
       <div class="qcw-header">
@@ -22,9 +22,6 @@
           <comment :comment="comment" :onupdate="scrollToBottom" :userdata="userdata"></comment>
         </li>
       </ul>
-      <!-- <form class="qcw-comment-poster" @submit.prevent="trySubmitComment">
-        <input type="text" v-model="commentInput" placeholder="Type your comment here">
-      </form> -->
       <div class="qcw-comment-form">
         <textarea placeholder="type your comment here ..." @keyup.enter="trySubmitComment($event)" v-model="commentInput"></textarea>
         <div class="uploader">
@@ -38,25 +35,15 @@
 
 <script>
 import Comment from './Comment.vue'
-import {getWindowStatus, getSelected, getUserData, getParticipants} from '../vuex/getters'
 import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
 export default {
   components: {ChatParticipants, Comment},
-  vuex: {
-    getters: {
-      windowStatus: getWindowStatus,
-      selected: getSelected,
-      userdata: getUserData,
-      users: getParticipants
-    },
-    actions: {
-      chatTarget,
-      toggleChatWindow,
-      backToHome,
-      submitComment,
-      loadComments
-    }
+  computed: {
+    windowStatus: function(){ return this.$store.state.windowStatus },
+    selected: function() { return this.$store.state.selected },
+    userdata: function() { return this.$store.state.userdata },
+    users: function() { return this.$store.state.users },
   },
   data() {
     return {
@@ -70,6 +57,9 @@ export default {
     }, 5000);
   },
   methods: {
+    backToHome() {
+      this.$store.dispatch('backToHome')
+    },
     trySubmitComment(e) {
       if(!e.shiftKey){
         e.preventDefault();
@@ -79,9 +69,20 @@ export default {
         this.commentInput = null
       }
     },
+    submitComment(topic_id, comment) {
+      this.$store.dispatch('submitComment', {topic_id, comment})
+    },
+    toggleChatWindow() {
+      this.$store.dispatch('toggleChatWindow')
+    },
     sync(){
-      console.info('Syncing messages ...');
       if(this.selected) this.loadComments(this.selected.last_comment_topic_id);
+    },
+    loadComments() {
+      this.$store.dispatch('loadComments', this.selected.last_comment_topic_id)
+    },
+    chatTarget(id) {
+      this.$store.dispatch('chatTarget', id)
     },
     scrollToBottom: function() {
       var element = document.getElementById('messages__comments');
@@ -99,7 +100,6 @@ export default {
       xhr.onload = function() {
         if(xhr.status === 200) {
           // file(s) uploaded), let's post to comment
-          console.log('file uploaded', xhr.response);
           var url = JSON.parse(xhr.response).results.file.url
           vm.submitComment(vm.selected.last_comment_topic_id, `[file] ${url} [/file]`);
         }

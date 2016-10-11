@@ -6,7 +6,7 @@
         <span class="comment__username">{{comment.username_as}}</span>
         <span class="comment__time"><i class="fa fa-check" v-if="comment.username_as == me"></i> {{comment.time}}</span>
       </div>
-      <div>{{{ message }}}</div>
+      <div v-html="message"></div>
     </div>
   </div>
 </template>
@@ -14,13 +14,13 @@
 <script>
 import EmbedJS from 'embed-js';
 import marked from 'marked';
-import highlight from 'highlight.js';
+// import highlight from 'highlight.js';
 // import Avatar from './Avatar';
 
 export default {
   // components: { Avatar },
   props: ['comment','onupdate', 'userdata'],
-  ready(){
+  mounted(){
     this.onupdate();
   },
   computed: {
@@ -65,12 +65,12 @@ export default {
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
-        highlightCode: true,
+        // highlightCode: true,
         marked: true,
-        emoji: true,
+        // emoji: true,
         plugins: {
           marked: marked,
-          highlightjs: highlight
+          // highlightjs: highlight
         }
       })
     }

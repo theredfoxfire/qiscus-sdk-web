@@ -5,16 +5,15 @@
 </template>
 
 <script>
-import {toggleChatWindow} from '../vuex/actions'
 import Loader from './Loader.vue'
 
 export default {
   props: ['label', 'loading'],
   components: { Loader },
-  vuex: {
-    actions: {
-      toggleChatWindow
-    }
+  methods: { 
+    toggleChatWindow() {
+      this.$store.dispatch('toggleChatWindow');
+    } 
   }
 }
 </script>

@@ -21,17 +21,14 @@ export default {
   components: {
     ChatWindow, ChatTrigger
   },
-  vuex: {
-    getters: {
-      triggerLabel: function(state){
-        if(!state.qiscus.isLogin) return `initializing qiscus widget ...`;
-        if(state.qiscus.isLoading) return `loading chat data ...`;
-        return 'Chat'
-      },
-      loading: function(state) {
-        if(!state.qiscus.isLogin || state.qiscus.isLoading) return true;
-        return false;
-      }
+  name: 'QiscusWidget',
+  computed: {
+    triggerLabel() {
+      return this.$store.getters.triggerLabel;
+    },
+    loading() {
+      if(!this.$store.state.qiscus.isLogin || this.$store.state.qiscus.isLoading) return true;
+      return false;
     }
   },
   store

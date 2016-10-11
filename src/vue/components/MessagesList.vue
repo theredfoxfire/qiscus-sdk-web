@@ -116,7 +116,7 @@ export default {
       const room_id = lstore.get('qcData').room_id;
       this.listener = new Listener(this.pusher, qiscus);
   },
-  ready() {
+  mounted() {
     this.loadRooms().then((response) => {
       this.scrollToBottom();
       // this.listener.listenUserEvent(lstore.get('qcData').token);

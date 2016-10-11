@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import actions from './actions'
 
 // Make vue aware of Vuex
 Vue.use(Vuex)
@@ -31,8 +32,8 @@ const mutations = {
   BACK_TO_HOME (state) {
     state.selected = null;
   },
-  SUBMIT_COMMENT (state, topic_id, comment) {
-    return qiscus.submitComment(topic_id, comment)
+  SUBMIT_COMMENT (state, payload) {
+    return qiscus.submitComment(payload.topic_id, payload.comment)
     .then((response) => {
       state.selected = qiscus.selected;
       return Promise.resolve(state.selected);
@@ -46,17 +47,22 @@ const mutations = {
   }
 }
 
-// Combine the initial state and the mutations to create a Vuex store.
-// This store can be linked to our app.
-// export default new Vuex.Store({
-//   state,
-//   mutations
-// })
+// Set the Getters
+const getters = {
+  triggerLabel: (state) => {
+    if(!state.qiscus.isLogin) return `initializing qiscus widget ...`;
+    if(state.qiscus.isLoading) return `loading chat data ...`;
+    return 'Chat'
+  }
+}
+
 window.vStore = null;
 export default (function QiscusStoreSingleton() {
   if (!vStore) vStore = new Vuex.Store({
     state,
-    mutations
+    mutations,
+    getters,
+    actions
   })
   return vStore;
 })();
