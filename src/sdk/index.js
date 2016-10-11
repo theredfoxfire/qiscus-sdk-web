@@ -31,7 +31,7 @@ class qiscusSDK extends EventEmitter {
      * This event will be called when there's new post messages
      * If use pass a callback when initiating SDK, we'll call that function
      * @param {string} data - JSON Response from SYNC API
-     * @return {void} 
+     * @return {void}
     */
     self.on('newmessages', function(data){
       // let's convert the data into something we can use
@@ -81,7 +81,7 @@ class qiscusSDK extends EventEmitter {
     this.username   = username;
     this.avatar_url = avatar_url;
   }
-  
+
   /**
   * Initializing the SDK, connect to Qiscus Server, the server will then
   * return User Data, we'll need this data for further API request
@@ -90,9 +90,9 @@ class qiscusSDK extends EventEmitter {
   */
   init(options) {
     console.info('Initializing Qiscus SDK');
-    // Let's initialize the app based on options 
+    // Let's initialize the app based on options
     if(options) this.options = Object.assign({}, this.options, options);
-    this.baseURL             = `//${this.options.AppId}.qiscus.com`;
+    this.baseURL             = `//qiscus-sdk-api.herokuapp.com`;
 
     if(!this.options.AppId) throw new Error('AppId Undefined');
 
@@ -107,7 +107,7 @@ class qiscusSDK extends EventEmitter {
     formData.append('username', this.username);
     if(this.avatar_url) formData.append('avatar_url', this.avatar_url);
 
-    return fetch(`${this.baseURL}/api/v2/mobile/login_or_register`, {
+    return fetch(`${this.baseURL}/api/v2/sdk/login_or_register`, {
       method: 'POST',
       body: formData
     }).then((response) => {

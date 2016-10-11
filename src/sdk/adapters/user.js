@@ -13,7 +13,7 @@ export default class User {
   }
 
   postComment(topicId, commentMessage, uniqueId) {
-    return this.HTTPAdapter.post(`api/v2/mobile/post_comment`, {token: this.token, comment: commentMessage, topic_id: topicId, unique_temp_id: uniqueId})
+    return this.HTTPAdapter.post(`api/v2/sdk/post_comment`, {token: this.token, comment: commentMessage, topic_id: topicId, unique_temp_id: uniqueId})
     .then((res) => {
       return new Promise((resolve, reject) => {
         if(res.body.status != 200) return reject(res);
@@ -28,7 +28,7 @@ export default class User {
   }
 
   sync() {
-    return this.HTTPAdapter.get(`api/v2/mobile/sync`)
+    return this.HTTPAdapter.get(`api/v2/sdk/sync?token=${this.token}`)
     .then((res) => {
       return new Promise((resolve, reject) => {
         if(res.body.status != 200) return reject(res);

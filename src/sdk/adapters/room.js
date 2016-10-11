@@ -12,9 +12,9 @@ export default class RoomAdapter {
   }
 
   getOrCreateRoom(email) {
-    return this.HTTPAdapter.post(`api/v2/mobile/get_or_create_room_with_target`, {
+    return this.HTTPAdapter.post(`api/v2/sdk/get_or_create_room_with_target`, {
       token: this.token,
-      "emails[]": email
+      "emails": email
     })
     .then((res) => {
       if(res.body.status != 200) return new Promise((resolve, reject) => reject(res));

@@ -96,7 +96,7 @@ export default {
       formData.append('file', files[0]);
       formData.append('token', qiscus.getUserToken());
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', `${qiscus.baseURL}/api/v2/mobile/upload`, true);
+      xhr.open('POST', `${qiscus.baseURL}/api/v2/sdk/upload`, true);
       xhr.onload = function() {
         if(xhr.status === 200) {
           // file(s) uploaded), let's post to comment
