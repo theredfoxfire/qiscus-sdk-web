@@ -12,9 +12,11 @@ class qiscusSDK extends EventEmitter {
     super();
     const self = this;
     // Chat Related properties
-    self.rooms    = null;
+    self.rooms    = [];
+    self.room_name_id_map = {};
     self.selected = null;
     self.pendingCommentId = 0;
+    self.last_received_comment_id = 0;
 
     // User Properties
     self.userData = null;
@@ -38,11 +40,17 @@ class qiscusSDK extends EventEmitter {
       // first we need to make sure we sort this data out based on room_id
       _.map(data, (comment) => {
         let theRoom = _.find(self.rooms, {id: comment.room_id});
-        if( theRoom ) theRoom.receiveComments(comment);
-        // Code below means the room does not exist yet, let's create
-        theRoom = new Room({id: comment.room_id, name: comment.email});
-        theRoom.receiveComments(comment);
-      })
+        if( !theRoom ){
+          // Code below means the room does not exist yet, let's create
+          // theRoom = new Room({id: comment.room_id, name: comment.room_name, comments: [], last_comment_id: comment.id});
+          // self.rooms.push(theRoom);
+          // console.info('room not found', theRoom.id)
+          // self.room_name_id_map[]
+        } else {
+          theRoom.receiveComments([comment])
+        }
+        // theRoom.receiveComments([comment]);
+      }) 
       if(self.options.newMessagesCallBack) self.options.newMessagesCallBack(data);
     })
 
@@ -92,7 +100,7 @@ class qiscusSDK extends EventEmitter {
     console.info('Initializing Qiscus SDK');
     // Let's initialize the app based on options
     if(options) this.options = Object.assign({}, this.options, options);
-    this.baseURL             = `//qiscus-sdk-api.herokuapp.com`;
+    this.baseURL             = `//${options.AppId}.qiscus.com`;
 
     if(!this.options.AppId) throw new Error('AppId Undefined');
 
@@ -120,16 +128,29 @@ class qiscusSDK extends EventEmitter {
     let TheRoom;
     let self = this;
     self.isLoading = true;
-    TheRoom  = _.find(this.rooms, {name: email});
-    if(TheRoom) return this.selected = Room;
+    
+    // We need to get room id 1st, based on room_name_id_map
+    let roomId = self.room_name_id_map[email] || null;
+    TheRoom  = _.find(self.rooms, {id: roomId});
+    if(TheRoom){
+      console.info('found', TheRoom.id)
+      self.selected = TheRoom
+      self.last_received_comment_id = TheRoom.last_comment_id
+      self.isLoading = false;
+      return new Promise((resolve, reject) => resolve(TheRoom))
+    } 
 
     // If not exists, let's get or create target room
     return this.roomAdapter.getOrCreateRoom(email)
     .then((response) => {
       TheRoom = new Room(response);
-      qiscus.selected = TheRoom;
+      console.info('created', TheRoom.id)
+      self.room_name_id_map[email] = TheRoom.id;
+      console.info('room created', self.room_name_id_map)
+      self.last_received_comment_id = TheRoom.last_comment_id
+      self.rooms.push(TheRoom);
       self.isLoading = false;
-      return this.selected = qiscus.selected;
+      return this.selected = TheRoom;
     })
   }
 
@@ -138,7 +159,7 @@ class qiscusSDK extends EventEmitter {
    * If comment count > 0 then we have new message
    */
   sync() {
-    this.userAdapter.sync().
+    this.userAdapter.sync(this.last_received_comment_id).
     then((comments) => {
       if(comments.length > 0) this.emit('newmessages', comments);
     })
@@ -219,26 +240,6 @@ class qiscusSDK extends EventEmitter {
     return this.topicAdapter.loadComments(topic_id, last_comment_id)
     .then((response) => {
       this.selected.receiveComments(_.reverse(response));
-      // get the topic
-      // let room = this._getRoomOfTopic(topic_id);
-      // let topic = room.getTopic(topic_id);
-      // let comments;
-      // // ada dua kondisi, komen sudah di load( ), dan yang belum
-      // if(last_comment_id > 0) {
-      //   // ini berarti load more, dibalik dulu comment nya, diprepend, bukan dipush
-      //   // ambil komen yang lama
-      //   comments = topic.comments;
-      //   // ambil komen yang baru, balik dulu urutannya, terus convert ke objek komen
-      //   let newComment = _.map(_.reverse(response.comments), (cmt) => new Comment(cmt));
-      //   comments = newComment.concat(comments);
-      //   topic.comments.length = 0;
-      // } else {
-      //   comments = _.reverse(response.comments);
-      // }
-      // _.map(comments, (comment) => {
-      //   const cmt = (last_comment_id > 0) ? comment : new Comment(comment);
-      //   topic.addComment(cmt);
-      // });
       console.info('Receiving Comments');
       return new Promise((resolve, reject) => resolve(response));
     }, (error) => {

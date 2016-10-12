@@ -25,8 +25,8 @@ const mutations = {
   CHAT_TARGET (state, email) {
     qiscus.chatTarget(email)
     .then((response) => {
-      state.selected = qiscus.selected;
       state.windowStatus = true;
+      state.selected = state.qiscus.selected;
     })
   },
   BACK_TO_HOME (state) {
@@ -36,12 +36,6 @@ const mutations = {
     return qiscus.submitComment(payload.topic_id, payload.comment)
     .then((response) => {
       state.selected = qiscus.selected;
-      return Promise.resolve(state.selected);
-    })
-  },
-  LOAD_COMMENTS (state, topic_id, last_comment_id, timestamp, after) {
-    return qiscus.loadComments(topic_id, last_comment_id, timestamp, after)
-    .then((response) => {
       return Promise.resolve(state.selected);
     })
   }

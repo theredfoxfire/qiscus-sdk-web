@@ -41,7 +41,7 @@ export default {
   components: {ChatParticipants, Comment},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
-    selected: function() { return this.$store.state.selected },
+    selected: function() { return this.$store.state.qiscus.selected},
     userdata: function() { return this.$store.state.userdata },
     users: function() { return this.$store.state.users },
   },
@@ -53,7 +53,7 @@ export default {
   created() {
     let self = this;
     setInterval(function(){
-      qiscus.sync()
+      if(qiscus.selected) qiscus.sync()
     }, 5000);
   },
   methods: {

@@ -27,8 +27,8 @@ export default class User {
     })
   }
 
-  sync() {
-    return this.HTTPAdapter.get(`api/v2/sdk/sync?token=${this.token}`)
+  sync(id = 0) {
+    return this.HTTPAdapter.get(`api/v2/sdk/sync?token=${this.token}&last_received_comment_id=${id}`)
     .then((res) => {
       return new Promise((resolve, reject) => {
         if(res.body.status != 200) return reject(res);
@@ -37,7 +37,7 @@ export default class User {
       })
     }, (error) => {
       return new Promise((resolve, reject) => {
-        return reject(err);
+        return reject(error);
       })
     })
   }
