@@ -6,7 +6,7 @@
 
 # Installation and Usage
 
-You need to include the javascript and css files from the build directory. And you also need to append `<qiscus-widget></qiscus-widget>` tag before closing body tag.
+You need to include the javascript and css files from the build directory. And you also need to append `<div id="qiscus-widget"></div>` tag before closing body tag.
 
 ``` html
 <!DOCTYPE html>
@@ -17,8 +17,12 @@ You need to include the javascript and css files from the build directory. And y
   <link rel="stylesheet" type="text/css" href="path/to/css/qiscus-sdk.css"> 
 </head>
 <body>
-  <qiscus-widget></qiscus-widget>
+  <div id="qiscus-widget"></div>
   <script src="path/to/js/qiscus-sdk.js"></script>
+  <script>
+     qiscus.setUser('your@email.com', 'key', 'username');
+     qiscus.init({AppId: 'dragonfly'});
+  </script>
 </body>
 </html>
 ```
@@ -32,6 +36,8 @@ qiscus.setUser('email@email.com', 'key', 'username');
 qiscus.init({AppId: 'dragonfly'});
 ```
 
+You can get `AppId` by requesting one from [sdk.qiscus.com](http://sdk.qiscus.com)
+
 # Init Options
 There are various options you can pass to init method. They are:
 
@@ -42,3 +48,11 @@ There are various options you can pass to init method. They are:
 
 ![qiscus SDK demo](sdk.png)
 
+# API
+This version of sdk also include the `view layer` which is written in `vuejs` and using `vuex` for the `state management`. 
+We're being introduced one more global object called `vStore` to access this view layer so you can chat different target.
+Here are methods you can access through this `vStore` object. 
+| option              	| how to use 	| description                                                                                                                                                                                      	|
+|---------------------	|----------	|----------------------------------------------------------------------------	|
+| chatTarget            | `vStore.dispatch('chatTarget', 'target@email.com')` | Have a chat with target email |
+| toggleChatWindow 	    | `vStore.dispatch('toggleChatWindow')` | Toggle Chat Window Widget (maximize and minimize state) 	  |
