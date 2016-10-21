@@ -94,7 +94,7 @@ export default {
       var formData = new FormData();
       var reader   = new FileReader();
       formData.append('file', files[0]);
-      formData.append('token', qiscus.getUserToken());
+      formData.append('token', qiscus.userData.token);
       var xhr = new XMLHttpRequest();
       xhr.open('POST', `${qiscus.baseURL}/api/v2/sdk/upload`, true);
       xhr.onload = function() {
