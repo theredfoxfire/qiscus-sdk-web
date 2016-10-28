@@ -123,7 +123,13 @@ class qiscusSDK extends EventEmitter {
     });
   }
 
-  chatTarget(email) {
+  /**
+   * Chat with targetted email
+   * @param email {string} - target chat email
+   * @param distinct_id {string | optional} - unique string to differentiate chat room with same target
+   * @return <Room>
+   */
+  chatTarget(email, distinct_id=0) {
     // check if the room exists
     let TheRoom;
     let self = this;
@@ -141,7 +147,7 @@ class qiscusSDK extends EventEmitter {
     } 
 
     // If not exists, let's get or create target room
-    return this.roomAdapter.getOrCreateRoom(email)
+    return this.roomAdapter.getOrCreateRoom(email, distinct_id)
     .then((response) => {
       TheRoom = new Room(response);
       console.info('created', TheRoom.id)
