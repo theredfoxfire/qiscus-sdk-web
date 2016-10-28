@@ -11,10 +11,11 @@ export default class RoomAdapter {
     this.token       = HTTPAdapter.token;
   }
 
-  getOrCreateRoom(email, distinct_id) {
+  getOrCreateRoom(email, options, distinct_id) {
     let params = { token: this.token, emails: email };
     if(distinct_id) params[distinct_id] = distinct_id;
-    
+    if(options) params[options] = options;
+
     return this.HTTPAdapter.post(`api/v2/sdk/get_or_create_room_with_target`, params)
     .then((res) => {
       if(res.body.status != 200) return new Promise((resolve, reject) => reject(res));
