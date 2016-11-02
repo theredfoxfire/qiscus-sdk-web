@@ -75,3 +75,4 @@ Widget components have namespaces of `qcw...`
 | .qcw-comment-form | Comment Form container |
 | .qcw-comment-form textarea | Comment Text Input Field |
 | .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
+| .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 

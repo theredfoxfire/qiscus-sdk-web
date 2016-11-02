@@ -21,6 +21,9 @@
         <li v-if="selected.comments.length > 0" v-for="comment in selected.comments">
           <comment :comment="comment" :onupdate="scrollToBottom" :userdata="userdata"></comment>
         </li>
+        <li v-if="uploads.length > 0" v-for="upload in uploads">
+          <div class="qcw-upload-info">Uploading {{ upload }} ...</div>
+        </li>
       </ul>
       <div class="qcw-comment-form">
         <textarea placeholder="type your comment here ..." @keyup.enter="trySubmitComment($event)" v-model="commentInput"></textarea>
@@ -49,7 +52,8 @@ export default {
   },
   data() {
     return {
-      commentInput: null,
+      commentInput: '',
+      uploads: [],
       mqtt: mqtt.connect("ws://52.77.234.57:1884")
     }
   },
@@ -80,7 +84,7 @@ export default {
         e.stopPropagation();
         if(this.commentInput.length < 1) return;
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
-        this.commentInput = null
+        this.commentInput = ''
       }
     },
     submitComment(topic_id, comment) {
@@ -107,6 +111,7 @@ export default {
       var files    = e.target.files || e.dataTransfer.files;
       var formData = new FormData();
       var reader   = new FileReader();
+      vm.uploads.push(files[0].name);
       formData.append('file', files[0]);
       formData.append('token', qiscus.userData.token);
       var xhr = new XMLHttpRequest();
@@ -115,6 +120,7 @@ export default {
         if(xhr.status === 200) {
           // file(s) uploaded), let's post to comment
           var url = JSON.parse(xhr.response).results.file.url
+          vm.uploads.splice(vm.uploads.indexOf(files[0].name),1)
           vm.submitComment(vm.selected.last_comment_topic_id, `[file] ${url} [/file]`);
         }
       }
@@ -229,5 +235,15 @@ ul#messages__comments {
   max-height: 30px;
   resize: none;
   outline: none;
+}
+.qcw-upload-info {
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: lighten(#8bc, 19);
+  color: #444;
+  font-size: 10px;
+  text-align: center;
+  max-width: 200px;
+  margin: 0 auto;
 }
 </style>

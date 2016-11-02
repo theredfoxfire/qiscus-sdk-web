@@ -1,10 +1,10 @@
 <template>
-  <div class="comment" :class="{'comment--me': comment.username_real == myemail}">
+  <div class="qcw-comment" :class="{'comment--me': comment.username_real == myemail}">
     <!-- <avatar :src="comment.avatar"></avatar> -->
-    <div class="comment__message">
-      <div class="comment__info">
-        <span class="comment__username">{{comment.username_as}}</span>
-        <span class="comment__time"><i class="fa fa-check" v-if="comment.username_as == me"></i> {{comment.time}}</span>
+    <div class="qcw-comment__message">
+      <div class="qcw-comment__info">
+        <span class="qcw-comment__username">{{comment.username_as}}</span>
+        <span class="qcw-comment__time"><i class="fa fa-check" v-if="comment.username_as == me"></i> {{comment.time}}</span>
       </div>
       <div v-html="message"></div>
     </div>
@@ -38,12 +38,12 @@ export default {
         if (this.readyState == 4 && this.status == 200){
           const src = URL.createObjectURL(this.response);
           if (comment.isImageAttachment()) {
-              self.message = `<div class="image-container"><a href="${src}" target="_blank"><img src="${src}" alt="${comment.getAttachmentURI()}" /></a></div>`
+              self.message = `<div class="qcw-image-container"><a href="${src}" target="_blank"><img src="${src}" alt="${comment.getAttachmentURI()}" /></a></div>`
           }else {
               var uri = comment.getAttachmentURI();
               var filename = uri.split('/').pop().split('#')[0].split('?')[0];
               var ext = filename.split('.').pop();
-              self.message = `<div class="file-container"><a href="${comment.getAttachmentURI()}" target="_blank"><i class="fa fa-file-o" aria-hidden="true"><div class="ft">File</div><div class="fe">${ext}</div></i><div class="file-name">${filename}</div></a></div>`
+              self.message = `<div class="qcw-file-container"><a href="${comment.getAttachmentURI()}" target="_blank"><i class="fa fa-file-o" aria-hidden="true"><div class="ft">File</div><div class="fe">${ext}</div></i><div class="file-name">${filename}</div></a></div>`
           }
           self.onupdate();
         }
@@ -80,7 +80,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-.comment .avatar {
+.qcw-comment .avatar {
   border: 2px solid #3EC4AF;
   min-width: 30px;
   margin-right: 15px;
@@ -88,21 +88,21 @@ export default {
   z-index: 2;
   width: 50px !important; height: 50px !important;
 }
-.comment .avatar img {
+.qcw-comment .avatar img {
   width: 50px !important; height: 50px !important;
 }
-.comment {
+.qcw-comment {
   display: flex;
   position: relative;
   font-size: 12px;
   &.welcome:before{
       border: 0;
   }
-  &--me {
+  &.comment--me {
     justify-content: flex-end;
   }
 }
-.comment__message {
+.qcw-comment__message {
   padding-top: 5px;
   line-height: 1.7em;
   min-height: 30px;
@@ -110,12 +110,12 @@ export default {
   margin-bottom: 5px;
   width: 100%;
   max-width: 200px;
-  background: #2CA;
+  background: lighten(#8bc, 20);
   padding: 10px;
   border-radius: 0 15px 15px 15px;
   position: relative;
   .comment--me & {
-    background: #0AD;
+    background: #8bc;
     color: #FFF;
     border-radius: 15px 0 15px 15px;
   }
@@ -129,7 +129,7 @@ export default {
     position: absolute;
     pointer-events: none;
     border-color: rgba(238, 238, 238, 0);
-    border-left-color: #0AD;
+    border-left-color: #8bc;
     border-width: 15px;
     margin-top: -15px;
     margin-left: -23px;
@@ -145,7 +145,7 @@ export default {
     position: absolute;
     pointer-events: none;
     border-color: rgba(238, 238, 238, 0);
-    border-left-color: #2CA;
+    border-left-color: lighten(#8bc, 20);
     border-width: 15px;
     margin-top: -15px;
     transform: rotate(-45deg);
@@ -164,38 +164,45 @@ export default {
   position: relative;
   box-shadow: 0 3px 5px rgba(0,0,0,.15);
 }
-.comment__message p {
+.qcw-comment__message p {
   margin: 0;
 }
-.comment__info {
+.qcw-comment__info {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px dotted #ccc;
   margin-bottom: 7px;
 }
-.comment__username {
+.qcw-comment__username {
   font-weight: bold; line-height: 1;
   color: #444;
   .comment--me & {
     color: #FFF;
   }
 }
-.comment__time {
+.qcw-comment__time {
   font-size: 10px;
   color: #444;
   .comment--me & {
     color: #FFF;
   }
 }
-.image-container {
-  width: 100px; height: 100px; overflow: hidden;
-  border: 1px solid #ccc; border-radius: 5px;
+.qcw-image-container {
+  height: 100px; overflow: hidden;
+  margin: -8px -10px -10px -10px;
+  border-radius: 0 0 5px 5px;
   img {
+    min-width: 200px;
     min-height: 110px;
-    transform: translate3d(-50%, -50%, 0);
+    opacity: .5;
+    transition: opacity .32s ease;
+    // transform: translate3d(-50%, -50%, 0);
+    &:hover {
+      opacity: 1;
+    }
   }
 }
-.file-container{
+.qcw-file-container{
     a{
         display: flex;
         color: #2c3e50;

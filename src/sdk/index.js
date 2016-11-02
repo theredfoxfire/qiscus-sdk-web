@@ -19,7 +19,7 @@ class qiscusSDK extends EventEmitter {
     self.last_received_comment_id = 0;
 
     // User Properties
-    self.userData = null;
+    self.userData = {};
 
     // SDK Configuration
     self.baseURL     = null;
@@ -135,6 +135,9 @@ class qiscusSDK extends EventEmitter {
     let TheRoom;
     let self = this;
     self.isLoading = true;
+
+    // make sure data already loaded first
+    if(this.userData.length != undefined) return false;
     
     // We need to get room id 1st, based on room_name_id_map
     let roomId = self.room_name_id_map[email] || null;
