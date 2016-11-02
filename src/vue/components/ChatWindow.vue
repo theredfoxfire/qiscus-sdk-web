@@ -25,8 +25,9 @@
       <div class="qcw-comment-form">
         <textarea placeholder="type your comment here ..." @keyup.enter="trySubmitComment($event)" v-model="commentInput"></textarea>
         <div class="uploader">
-          <i class="fa fa-paperclip"></i>
-          <input class="uploader__input" name="file" type="file" @change="uploadFile">
+          <i class="fa fa-paper-plane" v-if="commentInput.length > 0" @click="trySubmitComment($event)"></i>
+          <i class="fa fa-paperclip" v-if="commentInput.length <= 0"></i>
+          <input class="uploader__input" name="file" type="file" @change="uploadFile" v-if="commentInput.length <= 0">
         </div>
       </div>
     </div>
@@ -44,8 +45,7 @@ export default {
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected},
-    userdata: function() { return this.$store.state.qiscus.userData },
-    users: function() { return this.$store.state.users },
+    userdata: function() { return this.$store.state.qiscus.userData }
   },
   data() {
     return {
@@ -198,8 +198,13 @@ ul#messages__comments {
     box-sizing: border-box;
   }
   i {
-    font-size: 24px; margin-left: 15px; color: #444;
+    font-size: 20px; margin: 5px 0 0 15px; color: #444;
+    padding: 4px 7px 0 5px;
+    color: #eee;
     cursor: pointer;
+    background: #8bc;
+    border-radius: 50%;
+    width: 30px; height: 30px;
   }
   .uploader {
     flex-basis: 80%;
@@ -219,10 +224,10 @@ ul#messages__comments {
 .qcw-comment-form textarea {
   width: 330px;
   border-radius: 5px;
+  border: 1px solid #ddd;
   font-size: 12px; padding: 7px 10px;
   max-height: 30px;
   resize: none;
-  border: 0;
-  border-bottom: 1px solid #ddd;
+  outline: none;
 }
 </style>

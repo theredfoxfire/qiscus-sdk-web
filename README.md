@@ -72,4 +72,6 @@ Widget components have namespaces of `qcw...`
 | .qcw-container | Widget Window Wrapper div |
 | .qcw-header | Widget Header containing active chat title |
 | ul#messages__comments | Messages list container |
-| .qcw-comment-form | Comment Form container | 
+| .qcw-comment-form | Comment Form container |
+| .qcw-comment-form textarea | Comment Text Input Field |
+| .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
