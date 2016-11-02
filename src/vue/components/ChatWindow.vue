@@ -2,7 +2,7 @@
   <div class="qcw-container" :class="{'qcw-container--open': windowStatus}">
     <div v-if="!selected">
       <div class="qcw-header">
-        Select Chat Participant
+        Welcome, <strong>{{ userdata.username }}</strong>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
@@ -37,17 +37,20 @@
 import Comment from './Comment.vue'
 import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
+import mqtt from 'mqtt'
+
 export default {
   components: {ChatParticipants, Comment},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected},
-    userdata: function() { return this.$store.state.userdata },
+    userdata: function() { return this.$store.state.qiscus.userData },
     users: function() { return this.$store.state.users },
   },
   data() {
     return {
       commentInput: null,
+      mqtt: mqtt.connect("ws://52.77.234.57:1884")
     }
   },
   created() {
@@ -55,10 +58,21 @@ export default {
     setInterval(function(){
       if(qiscus.selected) qiscus.sync()
     }, 5000);
+    this.mqtt.subscribe('r/456/456/+/t');
+    this.mqtt.publish('r/456/456/fikri@qiscus.com/t', 1);
+    this.mqtt.on('message', function(topic, message) {
+      console.log(message.toString(), topic);
+    })
   },
   methods: {
     backToHome() {
       this.$store.dispatch('backToHome')
+    },
+    subscribeTopic(room_id, topic_id) {
+      this.mqtt.subscribe(`r/${room_id}/${topic_id}/t`)
+    },
+    unsubscribeTopic(room_id, topic_id) {
+      this.mqtt.unsubscribe(`r/${room_id}/${topic_id}/t`)
     },
     trySubmitComment(e) {
       if(!e.shiftKey){
@@ -118,10 +132,10 @@ export default {
   width: 400px;
   height: 500px;
   position: fixed;
-  bottom: 70px; right: 5px;
+  bottom: 50px; right: 5px;
   border-radius: 5px;
   background: #FFF;
-  box-shadow: 0 15px 17px rgba(0,0,0,.3);
+  box-shadow: 0 3px 15px rgba(0,0,0,.3);
   transform: translateY(150%);
   transition: transform 0.32s ease;
   font-family: sans-serif;
@@ -130,10 +144,11 @@ export default {
   }
 }
 .qcw-header {
-  background: #1abc9c;
+  background: #8bc;
   color: #ecf0f1;
   padding: 15px;
   border-radius: 5px 5px 0 0;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.3);
   font-weight: bold;
   text-align: center;
 }

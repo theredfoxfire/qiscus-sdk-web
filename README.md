@@ -57,3 +57,19 @@ Here are methods you can access through this `vStore` object.
 |---------------------	|----------	|----------------------------------------------------------------------------	|
 | chatTarget            | `vStore.dispatch('chatTarget', 'target@email.com')` | Have a chat with target email |
 | toggleChatWindow 	    | `vStore.dispatch('toggleChatWindow')` | Toggle Chat Window Widget (maximize and minimize state) 	  |
+
+# CSS Classes
+
+The widget is built using vuejs and divided into several components. We also use fontawesome for the icon, so you can target fontawesome css class directly. You can change the appearance of the widget by using these css selectors below.
+
+## Widget Trigger Button (to toggle the chat window)
+
+Widget components have namespaces of `qcw...`
+
+| css properties | description |
+|----- | ---- |
+| .qcw-trigger-button | Button for toggling the chat window | 
+| .qcw-container | Widget Window Wrapper div |
+| .qcw-header | Widget Header containing active chat title |
+| ul#messages__comments | Messages list container |
+| .qcw-comment-form | Comment Form container | 
