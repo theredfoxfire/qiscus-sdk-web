@@ -19,7 +19,7 @@ import marked from 'marked';
 
 export default {
   // components: { Avatar },
-  props: ['comment','onupdate', 'userdata'],
+  props: ['comment','onupdate'],
   mounted(){
     this.onupdate();
   },
@@ -218,6 +218,7 @@ export default {
             margin-left: 5px;
             font-size: 12px;
             background: transparent;
+            font-family: sans-serif;
         }
         .fe{
             font-size: 16px;
@@ -227,6 +228,7 @@ export default {
             margin-top: -12px;
             margin-left: 10px;
             border-radius: 2px;
+            font-family: sans-serif;
         }
     }
     .file-name{

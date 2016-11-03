@@ -24,9 +24,17 @@
         <li v-if="uploads.length > 0" v-for="upload in uploads">
           <div class="qcw-upload-info">Uploading {{ upload }} ...</div>
         </li>
+        <li v-if="mqttData.typing != ''">
+          {{ mqttData.typing }} is typing ...
+        </li>
       </ul>
       <div class="qcw-comment-form">
-        <textarea placeholder="type your comment here ..." @keyup.enter="trySubmitComment($event)" v-model="commentInput"></textarea>
+        <textarea placeholder="type your comment here ..."
+          @focus="publishTyping"
+          @keyup="publishTyping"
+          @keyup.enter="trySubmitComment($event)" 
+          v-model="commentInput">
+        </textarea>
         <div class="uploader">
           <i class="fa fa-paper-plane" v-if="commentInput.length > 0" @click="trySubmitComment($event)"></i>
           <i class="fa fa-paperclip" v-if="commentInput.length <= 0"></i>
@@ -42,19 +50,21 @@ import Comment from './Comment.vue'
 import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
 import mqtt from 'mqtt'
+import MqttAdapter from '../../MqttAdapter.js'
 
 export default {
   components: {ChatParticipants, Comment},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected},
-    userdata: function() { return this.$store.state.qiscus.userData }
+    userdata: function() { return this.$store.state.qiscus.userData },
+    mqtt: function() { return this.$store.state.mqtt },
+    mqttData: function() { return this.$store.state.mqttData }
   },
   data() {
     return {
       commentInput: '',
-      uploads: [],
-      mqtt: mqtt.connect("ws://52.77.234.57:1884")
+      uploads: []
     }
   },
   created() {
@@ -62,13 +72,15 @@ export default {
     setInterval(function(){
       if(qiscus.selected) qiscus.sync()
     }, 5000);
-    this.mqtt.subscribe('r/456/456/+/t');
-    this.mqtt.publish('r/456/456/fikri@qiscus.com/t', 1);
-    this.mqtt.on('message', function(topic, message) {
-      console.log(message.toString(), topic);
-    })
   },
   methods: {
+    publishTyping() {
+      if(this.commentInput.length > 0){
+        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 1);
+      } else {
+        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
+      } 
+    },
     backToHome() {
       this.$store.dispatch('backToHome')
     },
@@ -85,6 +97,7 @@ export default {
         if(this.commentInput.length < 1) return;
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
         this.commentInput = ''
+        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
       }
     },
     submitComment(topic_id, comment) {
