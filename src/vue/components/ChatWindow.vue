@@ -24,7 +24,7 @@
         <li v-if="uploads.length > 0" v-for="upload in uploads">
           <div class="qcw-upload-info">Uploading {{ upload }} ...</div>
         </li>
-        <li v-if="mqttData.typing != ''">
+        <li v-if="mqttData.typing != ''" class="isTypingText">
           {{ mqttData.typing }} is typing ...
         </li>
       </ul>
@@ -258,5 +258,11 @@ ul#messages__comments {
   text-align: center;
   max-width: 200px;
   margin: 0 auto;
+}
+.isTypingText {
+  position: absolute;
+  text-align: left;
+  bottom: 12px;
+  font-size: 10px;
 }
 </style>
