@@ -20,7 +20,8 @@ const state = {
   selected: qiscus.selected,
   windowStatus: false,
   participants: qiscus.participants,
-  mqtt: new MqttAdapter("ws://52.77.234.57:1884", callbacks),
+  // mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886", callbacks),
+  mqtt: new MqttAdapter("ws://mqtt.qiscus.com:1884", callbacks),
   mqttData: {
     typing: ''
   }
@@ -55,6 +56,7 @@ const mutations = {
     })
   },
   SET_TYPING (state, payload) {
+    if(payload.topic == state.qiscus.email) return
     if(payload.message == 1){
       state.mqttData.typing = payload.topic;
     } else {

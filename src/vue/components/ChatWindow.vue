@@ -76,9 +76,9 @@ export default {
   methods: {
     publishTyping() {
       if(this.commentInput.length > 0){
-        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 1);
+        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/${this.userdata.email}/t`, 1);
       } else {
-        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
+        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/${this.userdata.email}/t`, 0);
       } 
     },
     backToHome() {

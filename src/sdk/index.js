@@ -108,6 +108,13 @@ class qiscusSDK extends EventEmitter {
     this.connectToQiscus().then((response) => this.emit('login-success', response));
   }
 
+  initWithOptions(options) {
+    this.setUser(options.email, options.key, options.username, null);
+    if(options) this.options = Object.assign({}, this.options, options.option);
+    this.baseURL             = `//${options.AppId}.qiscus.com`;
+    this.connectToQiscus().then((response) => this.emit('login-success', response));
+  }
+
   connectToQiscus() {
     var formData = new FormData();
     formData.append('email', this.email);
