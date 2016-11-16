@@ -101,6 +101,7 @@ export default {
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
         this.commentInput = ''
         this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
+        // this.mqtt.publish(`${this.userdata.token}/c`, '{"id":3326,"comment_before_id":2920,"message":"Halo","username":"Zetra","email":"zetra1@gmail.com","user_avatar":"https://qiscuss3.s3.amazonaws.com/uploads/d8cf89cba2be4953bcbb471778263e86/2.png","timestamp":"2016-10-28T08:23:03Z","created_at":"2016-10-28T08:23:03.074Z","room_id":207,"topic_id":207,"unique_temp_id":"android_1477642981693c5458b0531df164"}');
       }
     },
     submitComment(topic_id, comment) {

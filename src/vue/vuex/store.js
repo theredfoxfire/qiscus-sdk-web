@@ -21,7 +21,7 @@ const state = {
   windowStatus: false,
   participants: qiscus.participants,
   // mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886", callbacks),
-  mqtt: new MqttAdapter("ws://mqtt.qiscus.com:1884", callbacks),
+  mqtt: new MqttAdapter("ws://mqtt.qiscus.com:1884/mqtt", callbacks),
   mqttData: {
     typing: ''
   },
@@ -45,7 +45,6 @@ const mutations = {
       state.selected = state.qiscus.selected;
       state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
       state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
-      console.info('isi token', state.qiscus.userData.token)
     })
   },
   BACK_TO_HOME (state) {
