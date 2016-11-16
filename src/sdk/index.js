@@ -100,7 +100,6 @@ class qiscusSDK extends EventEmitter {
     console.info('Initializing Qiscus SDK');
     // Let's initialize the app based on options
     if(options) this.options = Object.assign({}, this.options, options);
-    console.info(options, this.options);
     this.baseURL             = `//${options.AppId}.qiscus.com`;
 
     if(!this.options.AppId) throw new Error('AppId Undefined');

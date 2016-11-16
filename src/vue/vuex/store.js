@@ -44,6 +44,8 @@ const mutations = {
       state.windowStatus = true;
       state.selected = state.qiscus.selected;
       state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
+      state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
+      console.info('isi token', state.qiscus.userData.token)
     })
   },
   BACK_TO_HOME (state) {

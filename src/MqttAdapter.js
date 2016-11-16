@@ -8,8 +8,10 @@ export default class MqttAdapter {
       message = message.toString();
       topic = topic.split("/");
       // set event handler
+      console.info('isi topic', topic)
       if(topic.length == 2) {
         // it's a comment message -> {token}/c
+        console.info(topic, message);
       } else if(topic.length == 3) {
         // it's a user status message -> u/{user}/s
       } else if(topic[0] == 'r' && topic[4] == 't') {

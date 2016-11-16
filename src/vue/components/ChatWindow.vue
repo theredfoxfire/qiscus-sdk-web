@@ -88,6 +88,7 @@ export default {
     },
     subscribeTopic(room_id, topic_id) {
       this.mqtt.subscribe(`r/${room_id}/${topic_id}/t`)
+      this.mqtt.subscribe(`${qiscus.userData.token}/c`)
     },
     unsubscribeTopic(room_id, topic_id) {
       this.mqtt.unsubscribe(`r/${room_id}/${topic_id}/t`)
@@ -209,6 +210,17 @@ ul#messages__comments {
   overflow: hidden;
   overflow-y: auto;
   padding: 10px 20px;
+}
+ul#messages__comments::-webkit-scrollbar {
+ width: 9px; background-color: #ddd;
+ opacity: 0.3;
+ &:hover {
+   transition: opacity 0.32s ease;
+   opacity: 1;
+ }
+}
+ul#messages__comments::-webkit-scrollbar-thumb {
+ border-radius: 10px; -webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.3);	background-color: #8bc;
 }
 .qcw-comment-form {
   display: flex;
