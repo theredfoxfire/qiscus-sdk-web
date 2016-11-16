@@ -100,18 +100,12 @@ class qiscusSDK extends EventEmitter {
     console.info('Initializing Qiscus SDK');
     // Let's initialize the app based on options
     if(options) this.options = Object.assign({}, this.options, options);
+    console.info(options, this.options);
     this.baseURL             = `//${options.AppId}.qiscus.com`;
 
     if(!this.options.AppId) throw new Error('AppId Undefined');
 
     // Connect to Login or Register API
-    this.connectToQiscus().then((response) => this.emit('login-success', response));
-  }
-
-  initWithOptions(options) {
-    this.setUser(options.email, options.key, options.username, null);
-    if(options) this.options = Object.assign({}, this.options, options.option);
-    this.baseURL             = `//${options.AppId}.qiscus.com`;
     this.connectToQiscus().then((response) => this.emit('login-success', response));
   }
 

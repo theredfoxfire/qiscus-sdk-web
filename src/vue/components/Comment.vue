@@ -194,49 +194,48 @@ export default {
   img {
     min-width: 200px;
     min-height: 110px;
-    opacity: .5;
-    transition: opacity .32s ease;
     // transform: translate3d(-50%, -50%, 0);
+    cursor: -webkit-zoom-in;
     &:hover {
       opacity: 1;
     }
   }
 }
 .qcw-file-container{
-    a{
-        display: flex;
-        color: #2c3e50;
+  a{
+      display: flex;
+      color: #2c3e50;
+  }
+  i.fa{
+    position: relative;
+    font-size: 3em;
+    color: #2c3e50;
+    float: left;
+    .ft{
+      position: absolute;
+      top: 10px;
+      margin-left: 5px;
+      font-size: 12px;
+      background: transparent;
+      font-family: sans-serif;
     }
-    i.fa{
-        position: relative;
-        font-size: 3em;
-        color: #2c3e50;
-        float: left;
-        .ft{
-            position: absolute;
-            top: 10px;
-            margin-left: 5px;
-            font-size: 12px;
-            background: transparent;
-            font-family: sans-serif;
-        }
-        .fe{
-            font-size: 16px;
-            background: #2c3e50;
-            color: #fff;
-            padding: 2px 6px 4px 4px;
-            margin-top: -12px;
-            margin-left: 10px;
-            border-radius: 2px;
-            font-family: sans-serif;
-        }
+    .fe{
+      font-size: 16px;
+      background: #2c3e50;
+      color: #fff;
+      padding: 2px 6px 4px 4px;
+      margin-top: -12px;
+      margin-left: 10px;
+      border-radius: 2px;
+      font-family: sans-serif;
     }
-    .file-name{
-        word-break: break-word;
-        line-height: 1.4;
-        float: left;
-        padding-top: 5px;
-        padding-left: 5px;
-    }
+  }
+  .file-name{
+    word-break: break-word;
+    line-height: 1.4;
+    float: left;
+    padding-top: 5px;
+    padding-left: 5px;
+  }
 }
 </style>

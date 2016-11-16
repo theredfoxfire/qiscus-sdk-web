@@ -1,15 +1,15 @@
 <template>
   <div class="qcw-container" :class="{'qcw-container--open': windowStatus}">
-    <div v-if="!selected">
+    <init-config v-if="!selected && !init"></init-config>
+    <div v-if="init && !selected">
       <div class="qcw-header">
         Welcome, <strong>{{ userdata.username }}</strong>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
     </div>
-    <div v-if="selected">
+    <div v-if="init && selected">
       <div class="qcw-header">
-        <i class="fa fa-chevron-left" @click="backToHome"></i>
         {{ selected.name }}
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
@@ -49,17 +49,19 @@
 import Comment from './Comment.vue'
 import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
+import InitConfig from './InitConfig.vue'
 import mqtt from 'mqtt'
 import MqttAdapter from '../../MqttAdapter.js'
 
 export default {
-  components: {ChatParticipants, Comment},
+  components: {ChatParticipants, Comment, InitConfig},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected},
     userdata: function() { return this.$store.state.qiscus.userData },
     mqtt: function() { return this.$store.state.mqtt },
-    mqttData: function() { return this.$store.state.mqttData }
+    mqttData: function() { return this.$store.state.mqttData },
+    init: function() { return this.$store.state.init }
   },
   data() {
     return {
@@ -146,7 +148,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .qcw-container {
   width: 400px;
   height: 500px;
@@ -171,7 +173,7 @@ export default {
   font-weight: bold;
   text-align: center;
 }
-i.fa {
+.qcw-container i.fa {
   position: absolute;
   cursor: pointer;
   &.fa-chevron-down {
@@ -193,7 +195,7 @@ i.fa {
   margin-right: auto;
   margin-bottom: 10px;
 }
-.messages {
+.qcw-container .messages {
   flex: 3;
   display: flex;
   flex-flow: column nowrap;

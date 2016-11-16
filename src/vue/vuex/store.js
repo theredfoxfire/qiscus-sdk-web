@@ -24,7 +24,8 @@ const state = {
   mqtt: new MqttAdapter("ws://mqtt.qiscus.com:1884", callbacks),
   mqttData: {
     typing: ''
-  }
+  },
+  init: false
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -62,6 +63,9 @@ const mutations = {
     } else {
       state.mqttData.typing = '';
     }
+  },
+  TOGGLE_INIT (state, payload) {
+    state.init = !state.init 
   }
 }
 
