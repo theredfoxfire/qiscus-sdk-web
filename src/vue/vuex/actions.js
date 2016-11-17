@@ -7,5 +7,6 @@ export default {
   loadComments: ({commit}, topic_id, last_comment_id, timestamp, after) => commit('LOAD_COMMENTS', topic_id, last_comment_id, timestamp, after),
   sync: ({commit}) => commit('SYNC'),
   setTyping: ({commit}, payload) => commit('SET_TYPING', payload),
-  toggleInit: ({commit}) => commit('TOGGLE_INIT')
+  toggleInit: ({commit}) => commit('TOGGLE_INIT'),
+  updateSelected: ({commit}) => commit('UPDATE_SELECTED')
 }

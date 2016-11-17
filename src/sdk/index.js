@@ -52,6 +52,7 @@ class qiscusSDK extends EventEmitter {
     self.on('newmessages', function(data){
       // let's convert the data into something we can use
       // first we need to make sure we sort this data out based on room_id
+      console.log(JSON.parse(JSON.stringify(self.options)))
       _.map(data, (comment) => {
         let theRoom = _.find(self.rooms, {id: comment.room_id});
         if( !theRoom ){
@@ -65,7 +66,7 @@ class qiscusSDK extends EventEmitter {
         }
         // theRoom.receiveComments([comment]);
       }) 
-      if(self.options.newMessagesCallBack) self.options.newMessagesCallBack(data);
+      if(self.options.newMessagesCallback) self.options.newMessagesCallback(data);
     })
 
     /**
@@ -110,13 +111,13 @@ class qiscusSDK extends EventEmitter {
   * @param {object} options - Qiscus SDK Options
   * @return {void}
   */
-  init(options) {
-    console.info('Initializing Qiscus SDK');
+  init(config) {
+    console.info('Initializing Qiscus SDK with the config of', config);
     // Let's initialize the app based on options
-    if(options) this.options = Object.assign({}, this.options, options);
-    this.baseURL             = `//${options.AppId}.qiscus.com`;
+    if(config.options) this.options = Object.assign({}, this.options, config.options);
+    this.baseURL             = `//${config.AppId}.qiscus.com`;
 
-    if(!this.options.AppId) throw new Error('AppId Undefined');
+    if(!config.AppId) throw new Error('AppId Undefined');
 
     // Connect to Login or Register API
     this.connectToQiscus().then((response) => {
@@ -152,6 +153,7 @@ class qiscusSDK extends EventEmitter {
     let TheRoom;
     let self = this;
     self.isLoading = true;
+    options = self.options;
 
     // make sure data already loaded first
     if(this.userData.length != undefined) return false;
@@ -173,7 +175,6 @@ class qiscusSDK extends EventEmitter {
       TheRoom = new Room(response);
       console.info('created', TheRoom.id)
       self.room_name_id_map[email] = TheRoom.id;
-      console.info('room created', self.room_name_id_map)
       self.last_received_comment_id = TheRoom.last_comment_id
       self.rooms.push(TheRoom);
       self.isLoading = false;
@@ -287,11 +288,6 @@ class qiscusSDK extends EventEmitter {
       username_as: this.username,
       username_real: this.email,
       user_avatar: this.avatar_url,
-      // user_avatar: {
-      //   avatar: {
-      //     url: this.avatar
-      //   }
-      // },
       id: pendingCommentId
     }
     var pendingComment       = new Comment(commentData);
@@ -303,17 +299,14 @@ class qiscusSDK extends EventEmitter {
     // 		var uniqueId = "bq" + Date.now();
     pendingComment.attachUniqueId(uniqueId);
     pendingComment._markAsPending();
-    this.receiveComment(pendingComment, uniqueId);
+    // this.receiveComment(pendingComment, uniqueId);
     return this.userAdapter.postComment(topicId, commentMessage, uniqueId)
     .then((res) => {
       // When the posting succeeded, we mark the Comment as sent,
       // so all the interested party can be notified.
       pendingComment._markAsSent();
-      console.info('removing comment with id of ', pendingCommentId);
-      _.remove(this.selected.comments, function(cmt){
-        return cmt.id == pendingCommentId;
-      })
-      return new Promise((resolve, reject) => resolve(res));
+      _.remove(self.selected.comments, { id: pendingCommentId })
+      return new Promise((resolve, reject) => resolve(self.selected));
     }, (err) => {
       pendingComment.markAsFailed();
       return new Promise((resolve, reject) => reject(err));

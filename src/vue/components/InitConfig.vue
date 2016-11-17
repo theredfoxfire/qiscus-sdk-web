@@ -40,12 +40,17 @@
         this.$store.dispatch('toggleChatWindow');
       },
       activateChat() {
+        const self = this;
         qiscus.setUser(this.email, this.key, this.username);
         qiscus.init({
           AppId: 'dragonfly',
-          options: { description: this.description },
-          newMessagesCallback: function(Data){
-            
+          options: { 
+            email: this.email, 
+            username: this.username, 
+            description: this.description,
+            newMessagesCallback: function(Data){
+              self.$store.dispatch('updateSelected');
+            }
           }
         });
         this.$store.dispatch('toggleInit');

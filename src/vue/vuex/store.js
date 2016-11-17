@@ -47,10 +47,14 @@ const mutations = {
       state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
     })
   },
+  UPDATE_SELECTED (state) {
+    state.selected = qiscus.selected;
+  },
   BACK_TO_HOME (state) {
     state.selected = null;
   },
   SUBMIT_COMMENT (state, payload) {
+    state.selected = qiscus.selected;
     return qiscus.submitComment(payload.topic_id, payload.comment)
     .then((response) => {
       state.selected = qiscus.selected;

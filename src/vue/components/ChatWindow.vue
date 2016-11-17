@@ -50,8 +50,6 @@ import Comment from './Comment.vue'
 import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
 import InitConfig from './InitConfig.vue'
-import mqtt from 'mqtt'
-import MqttAdapter from '../../MqttAdapter.js'
 
 export default {
   components: {ChatParticipants, Comment, InitConfig},
@@ -77,10 +75,11 @@ export default {
   },
   methods: {
     publishTyping() {
-      if(this.commentInput.length > 0){
-        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/${this.userdata.email}/t`, 1);
+      const self = this;
+      if(self.commentInput.length > 0){
+        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 1);
       } else {
-        this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/${this.userdata.email}/t`, 0);
+        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 0);
       } 
     },
     backToHome() {
