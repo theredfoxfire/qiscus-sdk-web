@@ -66,7 +66,7 @@
       $(function(){
         // add listener to li
         $('.participants li').on('click', function(){
-          vStore.dispatch('chatTarget', $(this).data('email'));
+          qiscus.UI.chatTarget($(this).data('email'));
         });
       })
     </script>

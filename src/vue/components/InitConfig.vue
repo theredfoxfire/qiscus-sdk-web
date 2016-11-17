@@ -43,7 +43,10 @@
         qiscus.setUser(this.email, this.key, this.username);
         qiscus.init({
           AppId: 'dragonfly',
-          options: { description: this.description }
+          options: { description: this.description },
+          newMessagesCallback: function(Data){
+            
+          }
         });
         this.$store.dispatch('toggleInit');
         this.toggleChatWindow();

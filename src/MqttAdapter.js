@@ -11,6 +11,7 @@ export default class MqttAdapter {
       if(topic.length == 2) {
         // it's a comment message -> {token}/c
         console.info('incoming message', message);
+        qiscus.emit('newmessages', [JSON.parse(message)]);
       } else if(topic.length == 3) {
         // it's a user status message -> u/{user}/s
       } else if(topic[0] == 'r' && topic[4] == 't') {

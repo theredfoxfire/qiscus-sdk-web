@@ -27,6 +27,20 @@ class qiscusSDK extends EventEmitter {
     self.isLogin     = false;
     self.options     = {};
     self.isLoading   = false;
+    self.init        = false;
+
+    /**
+     * This code below is wrapper for vStore object
+     */
+    self.UI = {
+      chatTarget(email) {
+        if(!self.init) return;
+        vStore.dispatch('chatTarget', email)
+      },
+      toggleChatWindow() {
+        vStore.dispatch('toggleChatWindow')
+      }
+    }
 
     //////////////////////////// EVENTS OBSERVERS /////////////////////////////
     /**
@@ -292,6 +306,7 @@ class qiscusSDK extends EventEmitter {
       // When the posting succeeded, we mark the Comment as sent,
       // so all the interested party can be notified.
       pendingComment._markAsSent();
+      console.info('removing comment with id of ', pendingCommentId);
       _.remove(this.selected.comments, function(cmt){
         return cmt.id == pendingCommentId;
       })
