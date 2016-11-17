@@ -49,14 +49,12 @@ There are various options you can pass to init method. They are:
 ![qiscus SDK demo](sdk.png)
 
 # API
-This version of sdk also include the `view layer` which is written in `vuejs` and using `vuex` for the `state management`. 
-We're being introduced one more global object called `vStore` to access this view layer so you can chat different target.
-Here are methods you can access through this `vStore` object. 
+This version of sdk also include the `view layer` which is written in `vuejs`, you can access this View Layer using UI method from qiscus.
 
-| option              	| how to use 	| description                                                                                                                                                                                      	|
+| API              	| how to use 	| description                                                                                                                                                                                      	|
 |---------------------	|----------	|----------------------------------------------------------------------------	|
-| chatTarget            | `vStore.dispatch('chatTarget', 'target@email.com')` | Have a chat with target email |
-| toggleChatWindow 	    | `vStore.dispatch('toggleChatWindow')` | Toggle Chat Window Widget (maximize and minimize state) 	  |
+| UI.chatTarget            | `qiscus.UI.chatTarget('target@email.com')` | Have a chat with target email |
+| UI.toggleChatWindow 	    | `qiscus.UI.toggleChatWindow()` | Toggle Chat Window Widget (maximize and minimize state) 	  |
 
 # CSS Classes
 

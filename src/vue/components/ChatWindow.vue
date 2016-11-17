@@ -18,7 +18,7 @@
           @click="loadComments(selected_topic_id, comments[0].id)">
           <i class="fa fa-loading" v-if="isLoadingComment"></i> Load more comments
         </li> -->
-        <li v-if="selected.comments.length > 0" v-for="comment in selected.comments">
+        <li v-if="selected.comments.length > 0" v-for="comment in selected.comments" :key="comment.id">
           <comment :comment="comment" :onupdate="scrollToBottom" :userdata="userdata"></comment>
         </li>
         <li v-if="uploads.length > 0" v-for="upload in uploads">

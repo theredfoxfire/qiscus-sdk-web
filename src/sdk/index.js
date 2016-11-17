@@ -27,14 +27,14 @@ class qiscusSDK extends EventEmitter {
     self.isLogin     = false;
     self.options     = {};
     self.isLoading   = false;
-    self.init        = false;
+    self.isInit      = false;
 
     /**
      * This code below is wrapper for vStore object
      */
     self.UI = {
       chatTarget(email) {
-        if(!self.init) return;
+        if(!self.isInit) return;
         vStore.dispatch('chatTarget', email)
       },
       toggleChatWindow() {
@@ -119,7 +119,10 @@ class qiscusSDK extends EventEmitter {
     if(!this.options.AppId) throw new Error('AppId Undefined');
 
     // Connect to Login or Register API
-    this.connectToQiscus().then((response) => this.emit('login-success', response));
+    this.connectToQiscus().then((response) => {
+      this.isInit = true
+      this.emit('login-success', response)
+    }, (err) => console.error('Failed connecting', err));
   }
 
   connectToQiscus() {
@@ -157,7 +160,7 @@ class qiscusSDK extends EventEmitter {
     let roomId = self.room_name_id_map[email] || null;
     TheRoom  = _.find(self.rooms, {id: roomId});
     if(TheRoom){
-      console.info('found', TheRoom.id)
+      self.selected = null;
       self.selected = TheRoom
       self.last_received_comment_id = TheRoom.last_comment_id
       self.isLoading = false;
@@ -174,7 +177,7 @@ class qiscusSDK extends EventEmitter {
       self.last_received_comment_id = TheRoom.last_comment_id
       self.rooms.push(TheRoom);
       self.isLoading = false;
-      return this.selected = TheRoom;
+      return self.selected = TheRoom;
     })
   }
 
