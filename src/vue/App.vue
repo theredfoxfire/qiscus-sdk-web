@@ -1,5 +1,9 @@
 <template>
   <div id="qcw-app">
+    <image-modal :imageModalLink="imageModalLink" 
+      :imageModalOn="imageModalOn" 
+      :closeHandler="closeImageModal">
+    </image-modal>
     <chat-trigger :label="triggerLabel" :loading="loading"></chat-trigger>
     <chat-window></chat-window>
   </div>
@@ -16,10 +20,11 @@ import { changeRoom } from './vuex/actions'
 import { getSelected, getRooms } from './vuex/getters'
 import ChatWindow from './components/ChatWindow.vue'
 import ChatTrigger from './components/ChatTrigger.vue'
+import ImageModal from './components/ImageModal.vue'
 
 export default {
   components: {
-    ChatWindow, ChatTrigger
+    ChatWindow, ChatTrigger, ImageModal
   },
   name: 'QiscusWidget',
   computed: {
@@ -29,8 +34,19 @@ export default {
     loading() {
       if(!this.$store.state.qiscus.isLogin || this.$store.state.qiscus.isLoading) return true;
       return false;
+    },
+    imageModalOn() {
+      return this.$store.state.imageModalOn
+    },
+    imageModalLink() {
+      return this.$store.state.imageModalLink
     }
   },
-  store
+  store,
+  methods: {
+    closeImageModal() {
+      this.$store.dispatch('closeImageModal');
+    }
+  }
 }
 </script>

@@ -14,7 +14,7 @@ export default class RoomAdapter {
   getOrCreateRoom(email, options, distinct_id) {
     let params = { token: this.token, emails: email };
     if(distinct_id) params[distinct_id] = distinct_id;
-    if(options) params[options] = options;
+    if(options) params['options'] = JSON.stringify(options);
 
     return this.HTTPAdapter.post(`api/v2/sdk/get_or_create_room_with_target`, params)
     .then((res) => {

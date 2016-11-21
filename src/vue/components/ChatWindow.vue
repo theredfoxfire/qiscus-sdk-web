@@ -82,6 +82,9 @@ export default {
         self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 0);
       } 
     },
+    openImageModal(link) {
+      this.$store.dispatch('openImageModal')
+    },
     backToHome() {
       this.$store.dispatch('backToHome')
     },

@@ -26,7 +26,9 @@ const state = {
     typing: ''
   },
   init: false,
-  isLoadingComments: false
+  isLoadingComments: false,
+  imageModalLink: '',
+  imageModalOn: false
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -82,6 +84,14 @@ const mutations = {
   },
   TOGGLE_INIT (state, payload) {
     state.init = !state.init 
+  },
+  OPEN_IMAGE_MODAL (state, payload) {
+    state.imageModalOn = true;
+    state.imageModalLink = payload;
+  },
+  CLOSE_IMAGE_MODAL (state) {
+    state.imageModalLink = '';
+    state.imageModalOn = false;
   }
 }
 

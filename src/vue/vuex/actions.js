@@ -8,6 +8,8 @@ export default {
   sync: ({commit}) => commit('SYNC'),
   setTyping: ({commit}, payload) => commit('SET_TYPING', payload),
   toggleInit: ({commit}) => commit('TOGGLE_INIT'),
-  updateSelected: ({commit}) => commit('UPDATE_SELECTED')
+  updateSelected: ({commit}) => commit('UPDATE_SELECTED'),
+  openImageModal: ({commit}, payload) => commit('OPEN_IMAGE_MODAL', payload),
+  closeImageModal: ({commit}) => commit('CLOSE_IMAGE_MODAL')
 }
 // topic_id, last_comment_id, timestamp, after
