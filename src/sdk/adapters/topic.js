@@ -12,7 +12,7 @@ export default class TopicAdapter {
   }
 
   loadComments(topic_id, last_comment_id=0, timestamp, after) {
-    let params = `token=${this.token}&topic_id=${topic_id}`;
+    let params = `token=${this.token}&topic_id=${topic_id}&last_comment_id=${last_comment_id}`;
     if(timestamp) params += `&timestamp=${timestamp}`;
     if(after) params.after += `&after=${after}`;
     return this.HTTPAdapter.get(`api/v2/sdk/load_comments?${params}`, params)

@@ -10,14 +10,11 @@
     </div>
     <div v-if="init && selected">
       <div class="qcw-header">
-        {{ selected.name }}
+        {{ selected.name }} 
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <ul id="messages__comments">
-        <!-- <li v-if="selected.comments.length >= 10" class="load-more-button"
-          @click="loadComments(selected_topic_id, comments[0].id)">
-          <i class="fa fa-loading" v-if="isLoadingComment"></i> Load more comments
-        </li> -->
+        <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more> 
         <li v-if="selected.comments.length > 0" v-for="comment in selected.comments" :key="comment.id">
           <comment :comment="comment" :onupdate="scrollToBottom" :userdata="userdata"></comment>
         </li>
@@ -47,19 +44,22 @@
 
 <script>
 import Comment from './Comment.vue'
-import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
+// import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
 import InitConfig from './InitConfig.vue'
+import LoadMore from './LoadMore.vue'
 
 export default {
-  components: {ChatParticipants, Comment, InitConfig},
+  components: {ChatParticipants, Comment, InitConfig, LoadMore},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected},
     userdata: function() { return this.$store.state.qiscus.userData },
     mqtt: function() { return this.$store.state.mqtt },
     mqttData: function() { return this.$store.state.mqttData },
-    init: function() { return this.$store.state.init }
+    init: function() { return this.$store.state.init },
+    haveMoreComments: function() { return this.selected.comments.length > 0 && this.selected.comments[0].before_id > 0 },
+    isLoadingComments: function() { return this.$store.state.isLoadingComments }
   },
   data() {
     return {
@@ -91,6 +91,7 @@ export default {
     },
     unsubscribeTopic(room_id, topic_id) {
       this.mqtt.unsubscribe(`r/${room_id}/${topic_id}/t`)
+      this.mqtt.unsubscribe(`/${qiscus.userData.token}/c`)
     },
     trySubmitComment(e) {
       if(!e.shiftKey){
@@ -111,8 +112,12 @@ export default {
     sync(){
       if(this.selected) this.loadComments(this.selected.last_comment_topic_id);
     },
-    loadComments() {
-      this.$store.dispatch('loadComments', this.selected.last_comment_topic_id)
+    loadMoreComments() {
+      const payload = {
+        topic_id: this.selected.last_comment_topic_id,
+        last_comment_id: this.selected.comments[0].id
+      }
+      this.$store.dispatch('loadComments', payload);
     },
     chatTarget(id) {
       this.$store.dispatch('chatTarget', id)
@@ -182,18 +187,6 @@ export default {
   &.fa-chevron-left {
     left: 10px; top: 15px;
   }
-}
-.load-more-button {
-  background: #ccc;
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  font-size: 12px;
-  border-radius: 30px;
-  width: 170px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
 }
 .qcw-container .messages {
   flex: 3;

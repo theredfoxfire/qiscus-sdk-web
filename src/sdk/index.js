@@ -268,7 +268,7 @@ class qiscusSDK extends EventEmitter {
     return this.topicAdapter.loadComments(topic_id, last_comment_id)
     .then((response) => {
       this.selected.receiveComments(_.reverse(response));
-      console.info('Receiving Comments');
+      this.sortComments();
       return new Promise((resolve, reject) => resolve(response));
     }, (error) => {
       console.error('Error loading comments', error);
@@ -367,6 +367,12 @@ class qiscusSDK extends EventEmitter {
   sortRooms() {
     this.rooms.sort(function(leftSideRoom, rightSideRoom) {
       return rightSideRoom.lastCommentId - leftSideRoom.lastCommentId;
+    });
+  }
+
+  sortComments() {
+    this.selected.comments.sort(function(leftSideComment, rightSideComment) {
+      return leftSideComment.id - rightSideComment.id;
     });
   }
 

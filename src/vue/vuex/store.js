@@ -25,7 +25,8 @@ const state = {
   mqttData: {
     typing: ''
   },
-  init: false
+  init: false,
+  isLoadingComments: false
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -45,6 +46,16 @@ const mutations = {
       state.selected = state.qiscus.selected;
       state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
       state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
+    })
+  },
+  LOAD_COMMENTS (state, payload) {
+    state.isLoadingComments = true;
+    qiscus.loadComments(payload.topic_id, payload.last_comment_id).then((response) => {
+      state.isLoadingComments = false;
+      state.selected = qiscus.selected;
+    }, (error) => {
+      console.error('Error loading Comments', error);
+      state.isLoadingComments = false;
     })
   },
   UPDATE_SELECTED (state) {
