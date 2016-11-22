@@ -25,7 +25,7 @@ const state = {
   mqttData: {
     typing: ''
   },
-  init: false,
+  init: qiscus.isInit,
   isLoadingComments: false,
   imageModalLink: '',
   imageModalOn: false

@@ -21,7 +21,7 @@ export default {
   name: 'QiscusWidgetTrigger',
   components: { Loader },
   computed: {
-    init: function() { return this.$store.state.init; }
+    init: function() { return this.$store.state.qiscus.init; }
   },
   methods: { 
     toggleChatWindow() {

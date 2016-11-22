@@ -57,7 +57,7 @@ export default {
     userdata: function() { return this.$store.state.qiscus.userData },
     mqtt: function() { return this.$store.state.mqtt },
     mqttData: function() { return this.$store.state.mqttData },
-    init: function() { return this.$store.state.init },
+    init: function() { return this.$store.state.qiscus.isInit },
     haveMoreComments: function() { return this.selected.comments.length > 0 && this.selected.comments[0].before_id > 0 },
     isLoadingComments: function() { return this.$store.state.isLoadingComments }
   },

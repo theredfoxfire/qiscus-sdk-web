@@ -2,7 +2,7 @@
   <div class="qcw-init-config">
 
     <div class="qcw-header">
-      Set Widget Configuration
+      Chat
       <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
     </div>
 
@@ -10,16 +10,16 @@
       <label>email</label>
       <input type="email" v-model="email">
 
-      <label>password</label>
-      <input type="password" v-model="key">
+      <!--<label>password</label>
+      <input type="password" v-model="key">-->
 
-      <label>username </label>
+      <label>name</label>
       <input type="text" v-model="username">
 
       <label>description</label>
       <textarea v-model="description"></textarea>
 
-      <button @click="activateChat">Activate Chat</button>
+      <button @click="activateChat">Start Chatting</button>
     </div>
   </div>
 </template>
@@ -29,10 +29,10 @@
     name: 'InitConfig',
     data() {
       return {
-        email: 'fikri@qiscus.com',
+        email: 'guest@qiscus.com',
         key: 'password',
-        username: 'fikri',
-        description: 'A lunatic Web Developer'
+        username: 'Qiscus Demo',
+        description: 'This account is used for demo purpose only'
       }
     },
     methods: {
@@ -50,6 +50,9 @@
             description: this.description,
             newMessagesCallback: function(Data){
               self.$store.dispatch('updateSelected');
+            },
+            loginSuccessCallback: function() {
+              qiscus.UI.chatTarget('fikri@qiscus.com');
             }
           }
         });

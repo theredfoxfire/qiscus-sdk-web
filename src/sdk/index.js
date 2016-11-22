@@ -87,6 +87,7 @@ class qiscusSDK extends EventEmitter {
       self.userAdapter      = new UserAdapter(self.HTTPAdapter);
       self.roomAdapter      = new RoomAdapter(self.HTTPAdapter);
       self.topicAdapter     = new TopicAdapter(self.HTTPAdapter);
+      if(self.options.loginSuccessCallback) self.options.loginSuccessCallback(response);
     })
   }
 
