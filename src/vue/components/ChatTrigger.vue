@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ init }}
     <button class="qcw-trigger-btn" @click="toggleChatWindow" v-if="init">
       <Loader v-if="loading"></Loader>
       <i class="fa fa-comments" v-if="!loading"></i>
@@ -21,7 +22,7 @@ export default {
   name: 'QiscusWidgetTrigger',
   components: { Loader },
   computed: {
-    init: function() { return this.$store.state.qiscus.init; }
+    init: function() { return this.$store.state.qiscus.isInit; }
   },
   methods: { 
     toggleChatWindow() {

@@ -21,7 +21,7 @@ export default class RoomAdapter {
       if(res.body.status != 200) return new Promise((resolve, reject) => reject(res));
       let data      = res.body.results.room;
       data.comments = _.reverse(res.body.results.comments);
-      data.name     = email;
+      data.name     = data.participants.filter((p) => p.email == email)[0].username;
       return Promise.resolve(data);
     })
   }

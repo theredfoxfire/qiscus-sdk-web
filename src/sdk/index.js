@@ -104,6 +104,7 @@ class qiscusSDK extends EventEmitter {
     this.key        = key;
     this.username   = username;
     this.avatar_url = avatar_url;
+    this.isInit     = true;
   }
 
   /**

@@ -21,7 +21,7 @@ const state = {
   windowStatus: false,
   participants: qiscus.participants,
   // mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886", callbacks),
-  mqtt: new MqttAdapter("ws://mqtt.qiscus.com:1884/mqtt", callbacks),
+  mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886/mqtt", callbacks),
   mqttData: {
     typing: ''
   },
