@@ -4,6 +4,7 @@
 	<meta charset=utf-8>
 	<title>qiscus-sdk-web</title>
 	<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src=https://code.jquery.com/jquery-3.1.1.slim.min.js integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
 		crossorigin=anonymous></script>
 	<style>
@@ -18,7 +19,7 @@
 		.participant--info strong { display: block; } 
 		.participant--info i.fa { font-size: 24px; position: absolute; top: 10px; right: 10px; }
 	</style>
-	<link href="/static/css/qiscus-sdk.1.2.0.css" rel="stylesheet">
+	<link href="/static/css/qiscus-sdk.1.2.1.css" rel="stylesheet">
 </head>
 
 <body>
@@ -40,7 +41,7 @@
 		</div>
 	</div>
 	<div id=qiscus-widget></div>
-   <script type="text/javascript" src="/static/js/qiscus-sdk.1.2.0.js"></script>
+   <script type="text/javascript" src="/static/js/qiscus-sdk.1.2.1.js"></script>
   <script>
     $(function(){
         // connect to sdk
@@ -49,7 +50,7 @@
         // qiscus.init({AppId: 'dragonfly'});
         // add listener to li
         $('.participants li').on('click', function(){
-          vStore.dispatch('chatTarget', $(this).data('email'));
+          qiscus.UI.chatTarget($(this).data('email'));
         });
       })
   </script>

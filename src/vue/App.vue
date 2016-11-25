@@ -50,3 +50,20 @@ export default {
   }
 }
 </script>
+
+<style>
+  #qcw-app * {
+    box-sizing: border-box;
+  }
+  @media (max-width: 700px) { 
+    #qcw-app .qcw-container { 
+      width: 100%;
+      height: 100%;
+      bottom: 0;
+      right: 0;
+    }
+    ul#messages__comments {
+      height: calc(100vh - 115px) !important;
+    }
+  }
+</style>

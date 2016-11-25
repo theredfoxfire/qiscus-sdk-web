@@ -13,11 +13,14 @@
       <label>name</label>
       <input type="text" v-model="username">
 
+      <!--<label>password</label>
+      <input type="text" v-model="key">-->
+
       <label>description</label>
       <textarea v-model="description"></textarea>
 
       <label>target email</label>
-      <input type="password" v-model="target_email">
+      <input type="text" v-model="target_email">
       <small style="color: red">*) Only fill this field when you want to chat specific user after login</small>
 
       <button @click="activateChat">Start Chatting</button>
@@ -34,7 +37,7 @@
         key: 'password',
         username: 'Qiscus Demo',
         description: 'This account is used for demo purpose only',
-        target_email: ''
+        target_email: 'fikri@qiscus.com'
       }
     },
     methods: {
@@ -55,7 +58,7 @@
             },
             loginSuccessCallback: function() {
               // qiscus.UI.chatTarget('cs1@klikmami.com');
-              qiscus.UI.chatTarget(self.target_email);
+              if(self.target_email.length > 0) qiscus.UI.chatTarget(self.target_email);
             }
           }
         });

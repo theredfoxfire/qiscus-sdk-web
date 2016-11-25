@@ -16,7 +16,11 @@
       <ul id="messages__comments">
         <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more> 
         <li v-if="selected.comments.length > 0" v-for="comment in selected.comments" :key="comment.id">
-          <comment :comment="comment" :onupdate="scrollToBottom" :userdata="userdata"></comment>
+          <comment :comment="comment" 
+            :onupdate="scrollToBottom"
+            :on-click-image="openImageModal" 
+            :userdata="userdata">
+          </comment>
         </li>
         <li v-if="uploads.length > 0" v-for="upload in uploads">
           <div class="qcw-upload-info">Uploading {{ upload }} ...</div>
@@ -83,7 +87,7 @@ export default {
       } 
     },
     openImageModal(link) {
-      this.$store.dispatch('openImageModal')
+      this.$store.dispatch('openImageModal', link)
     },
     backToHome() {
       this.$store.dispatch('backToHome')
@@ -181,7 +185,7 @@ export default {
   font-weight: bold;
   text-align: center;
 }
-.qcw-container i.fa {
+.qcw-header i.fa {
   position: absolute;
   cursor: pointer;
   &.fa-chevron-down {

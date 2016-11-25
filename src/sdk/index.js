@@ -511,7 +511,7 @@ export class Comment {
     return ( this.message.substring(0, "[file]".length) == "[file]" );
   }
   isImageAttachment() {
-    return ( this.isAttachment() && this.message.match(/\.(jpg|gif|png)/i) != null );
+    return ( this.isAttachment() && this.message.match(/\.(jpg|jpeg|gif|png)/i) != null );
   }
   attachUniqueId(unique_id) {
     this.unique_id = unique_id;

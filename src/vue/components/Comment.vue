@@ -6,7 +6,12 @@
         <span class="qcw-comment__username">{{comment.username_as}}</span>
         <span class="qcw-comment__time"><i class="fa fa-check" v-if="comment.username_as == me"></i> {{comment.time}}</span>
       </div>
-      <div v-html="message"></div>
+      <image-loader v-if="comment.isAttachment()" 
+        :comment="comment" 
+        :on-click-image="onClickImage"
+        :callback="onupdate">
+      </image-loader>
+      <div v-html="message" v-if="!comment.isAttachment()"></div>
     </div>
   </div>
 </template>
@@ -14,12 +19,14 @@
 <script>
 import EmbedJS from 'embed-js';
 import marked from 'marked';
+import ImageLoader from './ImageLoader.vue';
 // import highlight from 'highlight.js';
 // import Avatar from './Avatar';
 
 export default {
   // components: { Avatar },
-  props: ['comment','onupdate'],
+  props: ['comment','onupdate', 'onClickImage'],
+  components: { ImageLoader },
   mounted(){
     this.onupdate();
   },
@@ -30,29 +37,7 @@ export default {
   },
   created() {
     const comment = this.comment;
-    if(comment.isAttachment()){
-      const self = this;
-      this.message = `<div class="image-container">Loading image ...</div>`;
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200){
-          const src = URL.createObjectURL(this.response);
-          if (comment.isImageAttachment()) {
-              self.message = `<div class="qcw-image-container"><a href="${src}" target="_blank"><img src="${src}" alt="${comment.getAttachmentURI()}" /></a></div>`
-          }else {
-              var uri = comment.getAttachmentURI();
-              var filename = uri.split('/').pop().split('#')[0].split('?')[0];
-              var ext = filename.split('.').pop();
-              self.message = `<div class="qcw-file-container"><a href="${comment.getAttachmentURI()}" target="_blank"><i class="fa fa-file-o" aria-hidden="true"><div class="ft">File</div><div class="fe">${ext}</div></i><div class="file-name">${filename}</div></a></div>`
-          }
-          self.onupdate();
-        }
-      }
-      xhr.open('GET', comment.getAttachmentURI());
-      // xhr.setRequestHeader('Authorization', 'Token token='+window.doctortoken);
-      xhr.responseType = 'blob';
-      xhr.send();
-    } else {
+    if(!comment.isAttachment()) {
       this.x.text((data) => {
         this.message = data;
         this.onupdate();
@@ -114,6 +99,7 @@ export default {
   padding: 10px;
   border-radius: 0 15px 15px 15px;
   position: relative;
+  word-break: break-word;
   .comment--me & {
     background: #8bc;
     color: #FFF;
