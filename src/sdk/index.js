@@ -65,7 +65,7 @@ class qiscusSDK extends EventEmitter {
           theRoom.receiveComments([comment])
         }
         // theRoom.receiveComments([comment]);
-      }) 
+      })
       if(self.options.newMessagesCallback) self.options.newMessagesCallback(data);
     })
 
@@ -159,7 +159,7 @@ class qiscusSDK extends EventEmitter {
 
     // make sure data already loaded first
     if(this.userData.length != undefined) return false;
-    
+
     // We need to get room id 1st, based on room_name_id_map
     let roomId = self.room_name_id_map[email] || null;
     TheRoom  = _.find(self.rooms, {id: roomId});
@@ -169,7 +169,7 @@ class qiscusSDK extends EventEmitter {
       self.last_received_comment_id = TheRoom.last_comment_id
       self.isLoading = false;
       return new Promise((resolve, reject) => resolve(TheRoom))
-    } 
+    }
 
     // If not exists, let's get or create target room
     return this.roomAdapter.getOrCreateRoom(email, options, distinct_id)

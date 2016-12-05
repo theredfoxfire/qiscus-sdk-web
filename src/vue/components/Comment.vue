@@ -1,8 +1,13 @@
 <template>
-  <div class="qcw-comment" :class="{'comment--me': comment.username_real == myemail}">
+  <div class="qcw-comment" :class="{
+    'comment--me': comment.username_real == myemail,
+    'comment--parent': isParent,
+    'comment--mid': isMid,
+    'comment--last': isLast
+  }">
     <!-- <avatar :src="comment.avatar"></avatar> -->
     <div class="qcw-comment__message">
-      <div class="qcw-comment__info">
+      <div class="qcw-comment__info" v-if="isParent">
         <span class="qcw-comment__username">{{comment.username_as}}</span>
         <span class="qcw-comment__time"><i class="fa fa-check" v-if="comment.username_as == me"></i> {{comment.time}}</span>
       </div>
@@ -25,15 +30,16 @@ import ImageLoader from './ImageLoader.vue';
 
 export default {
   // components: { Avatar },
-  props: ['comment','onupdate', 'onClickImage'],
+  props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
   mounted(){
     this.onupdate();
   },
   computed: {
-    myemail() {
-      return qiscus.email
-    }
+    myemail() { return qiscus.email },
+    isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
+    isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
+    isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; }
   },
   created() {
     const comment = this.comment;
@@ -88,24 +94,36 @@ export default {
   }
 }
 .qcw-comment__message {
-  padding-top: 5px;
   line-height: 1.7em;
   min-height: 30px;
-  padding-bottom: 15px;
-  margin-bottom: 5px;
-  width: 100%;
-  max-width: 200px;
+  margin-bottom: 1px;
   background: lighten(#8bc, 20);
-  padding: 10px;
-  border-radius: 0 15px 15px 15px;
+  padding: 3px 15px;
   position: relative;
   word-break: break-word;
   .comment--me & {
     background: #8bc;
     color: #FFF;
-    border-radius: 15px 0 15px 15px;
   }
-  .comment--me &:after{
+  .comment--parent & {
+    border-radius: 0 0 10px 0;
+    margin-top: 9px;
+    min-width: 200px;
+    padding: 10px;
+  }
+  .comment--parent.comment--me & {
+    border-radius: 10px 0 0 10px;
+  }
+  .comment--mid & {
+    border-radius: 10px 0 0 10px;
+  }
+  .comment--last & {
+    border-radius: 10px 0 10px 10px;
+  }
+  .comment--parent.comment--last & {
+    border-radius: 0 0 10px 10px;
+  }
+  .comment--parent.comment--me &:after{
     left: 100%;
     top: 0;
     border: solid transparent;
@@ -121,7 +139,7 @@ export default {
     margin-left: -23px;
     transform: rotate(-135deg);
   }
-  &:after{
+  .comment--parent &:after{
     left: -10px;
     top: 0;
     border: solid transparent;

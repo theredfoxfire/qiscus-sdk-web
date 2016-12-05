@@ -34,7 +34,6 @@
     },
     created() {
       this.loadImage();
-      console.info('isi function', this.onClickImage)
     },
     methods: {
       loadImage() {

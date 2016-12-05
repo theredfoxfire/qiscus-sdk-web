@@ -15,10 +15,12 @@
       </div>
       <ul id="messages__comments">
         <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more> 
-        <li v-if="selected.comments.length > 0" v-for="comment in selected.comments" :key="comment.id">
+        <li v-if="selected.comments.length > 0" v-for="(comment, index) in selected.comments" :key="comment.id">
           <comment :comment="comment" 
             :onupdate="scrollToBottom"
             :on-click-image="openImageModal" 
+            :comment-before="(index-1 < 0) ? null : selected.comments[index-1]"
+            :comment-after="(index+1 <= selected.comments.length-1) ? selected.comments[index+1] : null"
             :userdata="userdata">
           </comment>
         </li>
