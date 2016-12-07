@@ -2,16 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import actions from './actions'
 import MqttAdapter from '../../MqttAdapter'
+import MqttCallback from '../../MqttCallback'
 
 // Make vue aware of Vuex
 Vue.use(Vuex)
-
-// Setup Callbacks for Mqtt
-const callbacks = {
-  typing: function(topic, message){
-    vStore.dispatch('setTyping', {topic, message});
-  }
-}
 
 // Create an object to hold the initial state when
 // the app starts up
@@ -21,7 +15,7 @@ const state = {
   windowStatus: false,
   participants: qiscus.participants,
   // mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886", callbacks),
-  mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886/mqtt", callbacks),
+  mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886/mqtt", MqttCallback),
   mqttData: {
     typing: ''
   },
@@ -41,7 +35,11 @@ const mutations = {
   },
   CHAT_TARGET (state, email) {
     state.mqttData.typing = '';
-    if(state.selected) state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
+    if(state.selected) {
+      state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
+      state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
+      state.mqtt.unsubscribe(`${state.qiscus.userData.token}/c`);
+    }
     qiscus.chatTarget(email)
     .then((response) => {
       state.windowStatus = true;
@@ -67,12 +65,13 @@ const mutations = {
     state.selected = null;
   },
   SUBMIT_COMMENT (state, payload) {
-    state.selected = qiscus.selected;
-    return qiscus.submitComment(payload.topic_id, payload.comment)
-    .then((response) => {
-      state.selected = qiscus.selected;
-      return Promise.resolve(state.selected);
-    })
+    state.selected = payload;
+    // state.selected = qiscus.selected;
+    // return qiscus.submitComment(payload.topic_id, payload.comment)
+    // .then((response) => {
+    //   state.selected = qiscus.selected;
+    //   return Promise.resolve(state.selected);
+    // })
   },
   SET_TYPING (state, payload) {
     if(payload.topic == state.qiscus.email) return
@@ -81,6 +80,11 @@ const mutations = {
     } else {
       state.mqttData.typing = '';
     }
+  },
+  SET_READ (state, payload) {
+    state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/d`, `${payload.id}:${payload.unique_id}`);
+    state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/r`, `${payload.id}:${payload.unique_id}`);
+    state.selected = qiscus.selected;
   },
   TOGGLE_INIT (state, payload) {
     state.init = !state.init 

@@ -9,7 +9,7 @@
     <div class="qcw-comment__message">
       <div class="qcw-comment__info" v-if="isParent">
         <span class="qcw-comment__username">{{comment.username_as}}</span>
-        <span class="qcw-comment__time"><i class="fa fa-check" v-if="comment.username_as == me"></i> {{comment.time}}</span>
+        <span class="qcw-comment__time">{{comment.time}}</span>
       </div>
       <image-loader v-if="comment.isAttachment()" 
         :comment="comment" 
@@ -17,6 +17,16 @@
         :callback="onupdate">
       </image-loader>
       <div v-html="message" v-if="!comment.isAttachment()"></div>
+      <div v-if="comment.username_real == myemail">
+        <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
+        <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
+        <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
+          <i class="fa fa-check"></i><i class="fa fa-check"></i>
+        </div>
+        <div class="qcw-comment__state qcw-comment__state--read" v-if="comment.isRead">
+          <i class="fa fa-check"></i><i class="fa fa-check"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -106,24 +116,30 @@ export default {
     color: #FFF;
   }
   .comment--parent & {
-    border-radius: 0 0 10px 0;
+    border-radius: 10px 10px 10px 0;
     margin-top: 9px;
     min-width: 200px;
     padding: 10px;
   }
   .comment--parent.comment--me & {
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px 10px 0 10px;
   }
   .comment--mid & {
+    border-radius: 0 10px 10px 0;
+  }
+  .comment--mid.comment--me & {
     border-radius: 10px 0 0 10px;
   }
   .comment--last & {
+    border-radius: 0 10px 10px 10px;
+  }
+  .comment--last.comment--me & {
     border-radius: 10px 0 10px 10px;
   }
   .comment--parent.comment--last & {
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px 10px 10px 10px;
   }
-  .comment--parent.comment--me &:after{
+  /*.comment--parent.comment--me &:after{
     left: 100%;
     top: 0;
     border: solid transparent;
@@ -153,7 +169,7 @@ export default {
     border-width: 15px;
     margin-top: -15px;
     transform: rotate(-45deg);
-  }
+  }*/
 }
 .welcome__message {
   padding-top: 5px;
@@ -240,6 +256,21 @@ export default {
     float: left;
     padding-top: 5px;
     padding-left: 5px;
+  }
+}
+.qcw-comment__state {
+  font-size: 9px;
+  position: absolute;
+  top: 7px; left: -7px;
+  color: #ccc;
+  text-indent: -5px;
+  transition: opacity .32s ease;
+  opacity: .3;
+  .qcw-comment__message:hover & {
+    opacity: 1;
+  }
+  &--read {
+    color: #3498db;
   }
 }
 </style>

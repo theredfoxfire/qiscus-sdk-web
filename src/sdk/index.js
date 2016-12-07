@@ -52,7 +52,6 @@ class qiscusSDK extends EventEmitter {
     self.on('newmessages', function(data){
       // let's convert the data into something we can use
       // first we need to make sure we sort this data out based on room_id
-      console.log(JSON.parse(JSON.stringify(self.options)))
       _.map(data, (comment) => {
         let theRoom = _.find(self.rooms, {id: comment.room_id});
         if( !theRoom ){
@@ -61,10 +60,14 @@ class qiscusSDK extends EventEmitter {
           // self.rooms.push(theRoom);
           // console.info('room not found', theRoom.id)
           // self.room_name_id_map[]
-        } else {
+        } 
+        else {
           theRoom.receiveComments([comment])
+          // dispatch action to make this comment as read
+          vStore.dispatch('setRead', comment);
         }
         // theRoom.receiveComments([comment]);
+        // if(theRoom)
       })
       if(self.options.newMessagesCallback) self.options.newMessagesCallback(data);
     })
@@ -89,6 +92,18 @@ class qiscusSDK extends EventEmitter {
       self.topicAdapter     = new TopicAdapter(self.HTTPAdapter);
       if(self.options.loginSuccessCallback) self.options.loginSuccessCallback(response);
     })
+
+    /**
+     * Called when the comment has been delivered
+     */
+    self.on('comment-delivered', function(response) {
+      // find comment with the id or unique id listed from response
+      const commentToFind = _.find(self.selected.comments, function(comment) {
+        return comment.id == response.id || comment.uniqueId == response.uniqueId;
+      })
+    })
+
+    self.on('comment-read', function(response) {})
   }
 
   /**
@@ -277,42 +292,59 @@ class qiscusSDK extends EventEmitter {
     });
   }
 
+  /**
+   * 
+   * Step of submitting:
+   * - we need to create a new comment object
+   * - attach it with negative number id, and also the uniqueId, uniqueId is used
+   *   to target this particular comment when there's response from server (sent, delivered state)
+   * @param {Int} topicId - the topic id of comment to be submitted
+   * @param {String} commentMessage - comment to be submitted
+   * @return {Promise}
+   */
   submitComment(topicId, commentMessage, uniqueId) {
     var self = this;
     var room = self._getRoomOfTopic(topicId);
-
     self.pendingCommentId--;
-    var pendingCommentId     = self.pendingCommentId;
-    // var pendingCommentSender = room.getParticipant(store.get('qcData').email);
     var pendingCommentDate   = new Date();
     var commentData = {
       message: commentMessage,
       username_as: this.username,
       username_real: this.email,
       user_avatar: this.avatar_url,
-      id: pendingCommentId
+      id: self.pendingCommentId
     }
-    var pendingComment       = new Comment(commentData);
-    // We're gonna use timestamp for uniqueId for now.
-    // "bq" stands for "Bonjour Qiscus" by the way.
-    if(!uniqueId) {
-      uniqueId = "bq" + Date.now()
-    }
-    // 		var uniqueId = "bq" + Date.now();
-    pendingComment.attachUniqueId(uniqueId);
-    pendingComment._markAsPending();
-    // this.receiveComment(pendingComment, uniqueId);
-    return this.userAdapter.postComment(topicId, commentMessage, uniqueId)
+    var pendingComment  = self.prepareCommentToBeSubmitted(commentData);
+
+    // push this comment unto active room
+    self.selected.comments.push(pendingComment);
+
+    return this.userAdapter.postComment(topicId, commentMessage, pendingComment.unique_id)
     .then((res) => {
       // When the posting succeeded, we mark the Comment as sent,
       // so all the interested party can be notified.
-      pendingComment._markAsSent();
-      _.remove(self.selected.comments, { id: pendingCommentId })
+      pendingComment.markAsSent();
+      pendingComment.id = res.id;
+      pendingComment.before_id = res.comment_before_id;
       return new Promise((resolve, reject) => resolve(self.selected));
     }, (err) => {
       pendingComment.markAsFailed();
       return new Promise((resolve, reject) => reject(err));
     });
+  }
+
+  prepareCommentToBeSubmitted(comment) {
+    var commentToBeSubmitted, uniqueId;
+    commentToBeSubmitted = new Comment(comment);
+    // We're gonna use timestamp for uniqueId for now.
+    // "bq" stands for "Bonjour Qiscus" by the way.
+    uniqueId = "bq" + Date.now();
+    commentToBeSubmitted.attachUniqueId(uniqueId);
+    commentToBeSubmitted.markAsPending();
+    commentToBeSubmitted.isDelivered = false;
+    commentToBeSubmitted.isSent = false;
+    commentToBeSubmitted.isRead = false;
+    return commentToBeSubmitted;
   }
 
   receiveComment(comment, uniqueId) {
@@ -398,12 +430,15 @@ export class Room {
     this.count_notif                     = room_data.count_notif;
     this.isLoaded                        = false;
     this.code_en                         = room_data.code_en;
+    this.unread_comments                 = [];
     this.receiveComments(room_data.comments);
   }
 
   receiveComments(comments) {
     _.map(comments, (comment) => {
-      let Cmt = _.find(this.comments, {id: comment.id});
+      let Cmt = _.find(this.comments, function(selectedComment){
+        return (comment.unique_temp_id) ? comment.unique_temp_id == selectedComment.unique_id : comment.id == selectedComment.id;
+      });
       if(!Cmt) this.comments.push(new Comment(comment));
     })
   }
@@ -498,14 +533,16 @@ export class Comment {
     let theDate        = moment(comment.created_at);
     this.date          = theDate.format('YYYY-MM-DD');
     this.time          = theDate.format('HH:mm A');
-    this.unique_id     = comment.unique_id;
+    this.unique_id     = comment.unique_temp_id || comment.unique_id;
     // this.avatar        = comment.user_avatar.avatar.url;
     this.avatar        = comment.user_avatar;
     /* comment status */
-    this.isPending = false;
-    this.isSent    = false;
-    this.isFailed  = false;
-    this.attachment = null;
+    this.isPending   = false;
+    this.isFailed    = false;
+    this.isDelivered = true;
+    this.isRead      = true;
+    this.isSent      = true;
+    this.attachment  = null;
   }
   isAttachment() {
     return ( this.message.substring(0, "[file]".length) == "[file]" );
@@ -526,14 +563,26 @@ export class Comment {
   setAttachment(attachment) {
     this.attachment = attachment;
   }
-  _markAsPending() {
+  markAsPending() {
     this.isPending = true;
   }
-  _markAsSent() {
-    this.isSent = true;
+  markAsSent() {
+    this.isSent    = true;
+    this.isPending = false;
   }
-  _markAsFailed() {
+  markAsDelivered() {
+    this.isSent      = true;
+    this.isDelivered = true;
+  }
+  markAsRead() {
+    this.isPending = false;
+    this.isSent = true;
+    this.isDelivered = true;
+    this.isRead = true;
+  }
+  markAsFailed() {
     this.isFailed = true;
+    this.isPending = false;
   }
 
 }

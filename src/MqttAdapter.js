@@ -16,6 +16,12 @@ export default class MqttAdapter {
       } else if(topic[0] == 'r' && topic[4] == 't') {
         // it's a typing message
         callbacks.typing(topic[3], message)
+      } else if(topic[0] == 'r' && topic[4] == 'r') {
+        // it's a read event
+        callbacks.read(topic[3], message);
+      } else if(topic[0] == 'r' && topic[4] == 'd') {
+        // it's a delivered event
+        callbacks.delivered(topic[3], message);
       }
     })
   }
