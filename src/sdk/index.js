@@ -6,7 +6,7 @@ import RoomAdapter from './adapters/room';
 import TopicAdapter from './adapters/topic';
 import {EventEmitter} from 'events';
 
-class qiscusSDK extends EventEmitter {
+export class qiscusSDK extends EventEmitter {
 
   constructor() {
     super();
@@ -594,7 +594,9 @@ export class Comment {
 
 }
 
-window.qiscus = null;
+// this part is only for browsers, but we need to get around this part
+// so that build tool not complaining
+global.qiscus = null;
 export default (function QiscusStoreSingleton() {
   if (!qiscus) qiscus = new qiscusSDK();
   return qiscus;
