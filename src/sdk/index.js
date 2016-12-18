@@ -97,13 +97,16 @@ export class qiscusSDK extends EventEmitter {
      * Called when the comment has been delivered
      */
     self.on('comment-delivered', function(response) {
+      if(self.options.commentDeliverediCallback) self.options.commentDeliverediCallback(response);
       // find comment with the id or unique id listed from response
       const commentToFind = _.find(self.selected.comments, function(comment) {
         return comment.id == response.id || comment.uniqueId == response.uniqueId;
       })
     })
 
-    self.on('comment-read', function(response) {})
+    self.on('comment-read', function(response) {
+      if(self.options.commentReadCallback) self.options.commentReadCallback(response);
+    })
   }
 
   /**
