@@ -66,6 +66,12 @@ export default {
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
+        openGraphEndpoint: '//opengraph.io/api/1.0/site/${url}',
+        onOpenGraphFetch: function(data) {
+          if( !data.hybridGraph ) return data;
+          data.hybridGraph.success = data.error ? false : true;
+          return data.hybridGraph;
+        },
         // highlightCode: true,
         marked: true,
         // emoji: true,
@@ -111,6 +117,15 @@ export default {
   padding: 3px 15px;
   position: relative;
   word-break: break-word;
+  a {
+    transition: all .32s ease;
+    font-weight: bold;
+    color: #444;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .comment--me & {
     background: #8bc;
     color: #FFF;
@@ -271,6 +286,19 @@ export default {
   }
   &--read {
     color: #3498db;
+  }
+}
+// let's style the link thumbnail thingy
+.ejs-embed {
+  overflow: hidden;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  .ejs-ogp-thumb {
+    width: 50px; height: 50px;
+    float: left;
+    margin-right: 10px;
   }
 }
 </style>

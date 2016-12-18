@@ -420,6 +420,7 @@ export class Room {
     this.last_comment_message_created_at = room_data.last_comment_message_created_at;
     this.last_comment_topic_id           = room_data.last_topic_id;
     this.last_comment_topic_title        = room_data.last_comment_topic_title;
+    this.room_type                       = room_data.chat_type;
     this.avatar                          = room_data.room_avatar;
     this.name                            = room_data.name;
     this.room_type                       = room_data.room_type;
@@ -483,6 +484,12 @@ export class Room {
 
     if (existingParticipant) return existingParticipant;
     return null;
+  }
+
+  addParticipant(participant) {
+    // get if there's existing participant, if any then push
+    let participantToFind = this.getParticipant(participant.email);
+    if(!participantToFind) this.participants.push(participant); 
   }
 }
 
