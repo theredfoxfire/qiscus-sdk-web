@@ -1,4 +1,5 @@
-import _ from 'lodash'
+import reverse from 'lodash/fp/reverse'
+
 export default class RoomAdapter {
   /**
   * Params used in this class
@@ -20,7 +21,7 @@ export default class RoomAdapter {
     .then((res) => {
       if(res.body.status != 200) return new Promise((resolve, reject) => reject(res));
       let data      = res.body.results.room;
-      data.comments = _.reverse(res.body.results.comments);
+      data.comments = reverse(res.body.results.comments);
       data.name     = data.participants.filter((p) => p.email == email)[0].username;
       return Promise.resolve(data);
     })

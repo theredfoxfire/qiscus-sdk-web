@@ -1,10 +1,17 @@
-import _ from 'lodash'
+import {EventEmitter} from 'events'
+import map from 'lodash/fp/map'
+import find from 'lodash/fp/find'
+import remove from 'lodash/fp/remove'
+import compose from 'lodash/fp/compose'
+import reverse from 'lodash/fp/reverse'
+import value from 'lodash/fp/value'
+import reduce from 'lodash/fp/reduce'
 import moment from 'moment'
-import HttpAdapter from './adapters/http';
-import UserAdapter from './adapters/user';
-import RoomAdapter from './adapters/room';
-import TopicAdapter from './adapters/topic';
-import {EventEmitter} from 'events';
+
+import HttpAdapter from './adapters/http'
+import UserAdapter from './adapters/user'
+import RoomAdapter from './adapters/room'
+import TopicAdapter from './adapters/topic'
 
 export class qiscusSDK extends EventEmitter {
 
@@ -49,27 +56,18 @@ export class qiscusSDK extends EventEmitter {
      * @param {string} data - JSON Response from SYNC API
      * @return {void}
     */
-    self.on('newmessages', function(data){
+    self.on('newmessages', function (data) {
       // let's convert the data into something we can use
       // first we need to make sure we sort this data out based on room_id
-      _.map(data, (comment) => {
-        let theRoom = _.find(self.rooms, {id: comment.room_id});
-        if( !theRoom ){
-          // Code below means the room does not exist yet, let's create
-          // theRoom = new Room({id: comment.room_id, name: comment.room_name, comments: [], last_comment_id: comment.id});
-          // self.rooms.push(theRoom);
-          // console.info('room not found', theRoom.id)
-          // self.room_name_id_map[]
-        } 
-        else {
+      map((comment) => {
+        const theRoom = find({ id: comment.room_id })(self.rooms)
+        if (theRoom != null) {
           theRoom.receiveComments([comment])
-          // dispatch action to make this comment as read
-          vStore.dispatch('setRead', comment);
+          vStore.dispatch('setRead', comment)
         }
-        // theRoom.receiveComments([comment]);
-        // if(theRoom)
-      })
-      if(self.options.newMessagesCallback) self.options.newMessagesCallback(data);
+      })(data)
+
+      if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
     })
 
     /**
@@ -99,13 +97,14 @@ export class qiscusSDK extends EventEmitter {
     self.on('comment-delivered', function(response) {
       if(self.options.commentDeliverediCallback) self.options.commentDeliverediCallback(response);
       // find comment with the id or unique id listed from response
-      const commentToFind = _.find(self.selected.comments, function(comment) {
-        return comment.id == response.id || comment.uniqueId == response.uniqueId;
-      })
+      const commentToFind = find((comment) => {
+        return comment.id === response.id ||
+          comment.uniqueId === response.uniqueId
+      })(self.selected.comments)
     })
 
-    self.on('comment-read', function(response) {
-      if(self.options.commentReadCallback) self.options.commentReadCallback(response);
+    self.on('comment-read', function (response) {
+      if (self.options.commentReadCallback) self.options.commentReadCallback(response)
     })
   }
 
@@ -180,12 +179,12 @@ export class qiscusSDK extends EventEmitter {
 
     // We need to get room id 1st, based on room_name_id_map
     let roomId = self.room_name_id_map[email] || null;
-    TheRoom  = _.find(self.rooms, {id: roomId});
-    if(TheRoom){
-      self.selected = null;
+    TheRoom = find({ id: roomId })(self.rooms)
+    if (TheRoom) {
+      self.selected = null
       self.selected = TheRoom
       self.last_received_comment_id = TheRoom.last_comment_id
-      self.isLoading = false;
+      self.isLoading = false
       return new Promise((resolve, reject) => resolve(TheRoom))
     }
 
@@ -220,18 +219,16 @@ export class qiscusSDK extends EventEmitter {
   }
 
   _getRoom(room_id) {
-    return _.find(this.rooms, {id: room_id});
+    return find({ id: room_id })(this.rooms)
   }
 
   _getRoomOfTopic(topic_id) {
     // TODO: This is expensive. We need to refactor
     // it using some kind map of topicId as the key
     // and roomId as its value.
-    return _.find(this.rooms, function(room) {
-      return _.find(room.topics, function(topic) {
-        return topic.id == topic_id;
-      });
-    })
+    return find((room) =>
+      find(topic => topic.id === topic_id)(room)
+    )(this.rooms)
   }
 
   selectRoom(room_id) {
@@ -267,11 +264,11 @@ export class qiscusSDK extends EventEmitter {
     then((response) => {
 
       // let's add this topics to rooms
-      const room = this._getRoom(room_id);
-      _.map(response.topics, (res) => {
-        let topic = new Topic(res);
-        room.addTopic(new Topic(topic));
-      })
+      const room = this._getRoom(room_id)
+      map(res => {
+        let topic = new Topic(res)
+        room.addTopic(new Topic(topic))
+      })(response.topics)
 
       // now load the first topic messages
       let topic = room.topics[0];
@@ -287,7 +284,7 @@ export class qiscusSDK extends EventEmitter {
   loadComments(topic_id, last_comment_id=0) {
     return this.topicAdapter.loadComments(topic_id, last_comment_id)
     .then((response) => {
-      this.selected.receiveComments(_.reverse(response));
+      this.selected.receiveComments(reverse(response));
       this.sortComments();
       return new Promise((resolve, reject) => resolve(response));
     }, (error) => {
@@ -296,7 +293,7 @@ export class qiscusSDK extends EventEmitter {
   }
 
   /**
-   * 
+   *
    * Step of submitting:
    * - we need to create a new comment object
    * - attach it with negative number id, and also the uniqueId, uniqueId is used
@@ -353,21 +350,17 @@ export class qiscusSDK extends EventEmitter {
   receiveComment(comment, uniqueId) {
     //  var room  = this._getRoomOfTopic(topicId);
     //  var topic = room.getTopic(topicId);
-    if(uniqueId){
-      var commentWtUniqueId = _.find(this.selected.comments, function(cmt){
-        return cmt.unique_id == uniqueId;
-      });
-      //if uniqueId exist and comment id fake exist, it will delete fake comment
+    if (uniqueId) {
+      const commentWtUniqueId = find(comment => comment.unique_id === uniqueId)(this.selected.comments)
+      // if uniqueId exist and comment id fake exist, it will delete fake comment
       if(commentWtUniqueId && comment.id > 0){
-        _.remove(this.selected.comments, function(cmt){
-          return uniqueId == cmt.unique_id;
-        })
+        remove(cmt => cmt.unique_id === uniqueId)(this.selected.comments)
       }
     }
 
     // Add the comment.
-    let Cmt = _.find(this.selected.comments, {id: comment.id});
-    if(!Cmt) this.selected.comments.push(comment);
+    const Cmt = find({ id: comment.id })(this.selected.comments)
+    if (!Cmt) this.selected.comments.push(comment)
     //  topic.addComment(comment);
     // Update unread count if necessary. That is, if these two
     // conditions are met:
@@ -438,61 +431,64 @@ export class Room {
     this.receiveComments(room_data.comments);
   }
 
-  receiveComments(comments) {
-    _.map(comments, (comment) => {
-      let Cmt = _.find(this.comments, function(selectedComment){
-        return (comment.unique_temp_id) ? comment.unique_temp_id == selectedComment.unique_id : comment.id == selectedComment.id;
-      });
-      if(!Cmt) this.comments.push(new Comment(comment));
+  receiveComments (comments) {
+    map((comment) => {
+      const Cmt = find((selectedComment) => {
+        return (
+          comment.unique_temp_id
+            ? selectedComment.unique_id === comment.unique_temp_id
+            : selectedComment.unique_id === comment.id
+        )
+      })(this.comments)
+      if (!Cmt) this.comments.push(new Comment(comment))
     })
   }
 
-  countUnreadComments() {
+  countUnreadComments () {
     if(this.topics.length == 0) {
       // means that this is not loaded yet, just return the notif
       return this.count_notif;
     } else {
-      return _.chain(this.topics)
-      .map((topic) => topic.comment_unread)
-      .reduce((currentCount, topicCount) => { return currentCount + topicCount }, 0)
-      .value();
+      return compose(
+        value,
+        reduce((totalUnreadComment, unreadComment) => totalUnreadComment + unreadComment, 0),
+        map(topic => topic.comment_unread)
+      )(this.topics)
     }
   }
 
-  addTopic(Topic) {
+  addTopic (Topic) {
     // Check if we got the topic in the list
-    let topic = this.getTopic(Topic.id);
-    if( topic ){
+    let topic = this.getTopic(Topic.id)
+    if (topic) {
       // let's update the topic with new data
-      topic = Object.assign({}, topic, Topic);
+      topic = Object.assign({}, topic, Topic)
     } else {
-      this.topics.push(Topic);
+      this.topics.push(Topic)
     }
   }
 
-  getTopic(topic_id) {
-    return _.find(this.topics, (topic) => {
-      return topic.id == topic_id
-    });
+  getTopic (topicId) {
+    return find(topic => topic.id === topicId)(this.topics)
   }
 
-  removeTopic(Topic) {
-    const index = this.getTopicIndex(Topic.id);
-    if(index < 0) return false;
-    this.topics.splice(index, 1);
+  removeTopic (Topic) {
+    const index = this.getTopicIndex(Topic.id)
+    if (index < 0) return false
+    this.topics.splice(index, 1)
   }
 
-  getParticipant(email) {
-    var existingParticipant = _.find(this.participants, { 'email': participantEmail });
+  getParticipant (participantEmail) {
+    const existingParticipant = find({ email: participantEmail })(this.participants)
 
-    if (existingParticipant) return existingParticipant;
-    return null;
+    if (existingParticipant) return existingParticipant
+    return null
   }
 
-  addParticipant(participant) {
+  addParticipant (participant) {
     // get if there's existing participant, if any then push
-    let participantToFind = this.getParticipant(participant.email);
-    if(!participantToFind) this.participants.push(participant); 
+    let participantToFind = this.getParticipant(participant.email)
+    if (!participantToFind) this.participants.push(participant)
   }
 }
 
@@ -518,9 +514,7 @@ export class Topic {
     }
   }
   getComment(comment_id) {
-    return _.find(this.comments, (comment) => {
-      return comment.id == comment_id
-    });
+    return find(comment => comment.id === comment_id)(this.comments)
   }
   markAsRead() {
     this.comment_unread = 0;
