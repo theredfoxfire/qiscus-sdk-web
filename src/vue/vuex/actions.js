@@ -1,3 +1,5 @@
+import find from 'lodash/fp/find'
+
 export default {
   changeRoom: ({commit, state}, room) => commit('CHANGE_ROOM', room),
   toggleChatWindow: ({commit, state}) => commit('TOGGLE_CHAT_WINDOW'),
@@ -14,12 +16,16 @@ export default {
   sync: ({commit}) => commit('SYNC'),
   setTyping: ({commit}, payload) => commit('SET_TYPING', payload),
   setRead: ({commit}, payload) => {
-    //find the comment that need to be altered
-    var commentToFind = _.find(qiscus.selected.comments, function(commentSelected){
-      return (payload.unique_temp_id) ? commentSelected.unique_id == payload.unique_temp_id : commentSelected.id == payload.id;
-    })
-    if(commentToFind) commentToFind.markAsRead();
-    commit('SET_READ', commentToFind);
+    // find the comment that need to be altered
+    const commentToFind = find(selectedComment => {
+      return (
+        payload.unique_temp_id
+          ? selectedComment.unique_id === payload.unique_temp_id
+          : selectedComment.id === payload.id
+      )
+    })(qiscus.selected.comments)
+    if (commentToFind) commentToFind.markAsRead()
+    commit('SET_READ', commentToFind)
   },
   toggleInit: ({commit}) => commit('TOGGLE_INIT'),
   updateSelected: ({commit}) => commit('UPDATE_SELECTED'),
