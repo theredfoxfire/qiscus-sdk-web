@@ -70,7 +70,7 @@ export class qiscusSDK extends EventEmitter {
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
     })
 
-    /** 
+    /**
      * This event will be called when login is sucess
      * Basically, it sets up necessary properties for qiscusSDK
      */
@@ -104,7 +104,7 @@ export class qiscusSDK extends EventEmitter {
     })
 
     /**
-     * Called when new chatroom has been created 
+     * Called when new chatroom has been created
      */
     self.on('chat-room-created', function(response) {
       if(self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response);
@@ -141,7 +141,7 @@ export class qiscusSDK extends EventEmitter {
     console.info('Initializing Qiscus SDK with the config of', config);
     // Let's initialize the app based on options
     if(config.options) this.options = Object.assign({}, this.options, config.options);
-    this.baseURL             = `//${config.AppId}.qiscus.com`;
+    this.baseURL             = `https://${config.AppId}.qiscus.com`;
 
     if(!config.AppId) throw new Error('AppId Undefined');
 
@@ -200,6 +200,7 @@ export class qiscusSDK extends EventEmitter {
     return this.roomAdapter.getOrCreateRoom(email, options, distinct_id)
     .then((response) => {
       TheRoom = new Room(response);
+      debugger
       console.info('created', TheRoom.id)
       self.room_name_id_map[email] = TheRoom.id;
       self.last_received_comment_id = TheRoom.last_comment_id
@@ -441,16 +442,18 @@ export class Room {
   }
 
   receiveComments (comments) {
-    map((comment) => {
-      const Cmt = find((selectedComment) => {
-        return (
-          comment.unique_temp_id
-            ? selectedComment.unique_id === comment.unique_temp_id
-            : selectedComment.unique_id === comment.id
-        )
-      })(this.comments)
-      if (!Cmt) this.comments.push(new Comment(comment))
-    })(comments);
+    const currentCommentUniqueIds = this.comments.map(c => c.unique_id)
+    const filteredComments = comments
+      .filter(comment => {
+        const commentId = comment.unique_temp_id ? comment.unique_temp_id : comment.id
+        const isNotDuplicateComment = comment.unique_temp_id
+          ? !~currentCommentUniqueIds.indexOf(commentId)
+          : !~currentCommentUniqueIds.indexOf(commentId)
+        return isNotDuplicateComment
+      })
+    filteredComments.forEach(comment => {
+      this.comments.push(new Comment(comment))
+    })
   }
 
   countUnreadComments () {

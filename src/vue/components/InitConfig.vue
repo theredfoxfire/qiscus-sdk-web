@@ -48,10 +48,10 @@
         const self = this;
         qiscus.setUser(this.email, this.key, this.username);
         qiscus.init({
-          AppId: 'dragonfly',
-          options: { 
-            email: this.email, 
-            username: this.username, 
+          AppId: 'dragongo',
+          options: {
+            email: this.email,
+            username: this.username,
             description: this.description,
             newMessagesCallback: function(Data){
               self.$store.dispatch('updateSelected');
@@ -70,11 +70,11 @@
 </script>
 
 <style lang="scss">
-  .qcw-init-config { 
+  .qcw-init-config {
     label {
       display: block;
       font-size: 14px;
-    } 
+    }
     input, button, textarea {
       display: inline-block;
       width: 100%;
