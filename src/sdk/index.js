@@ -227,7 +227,7 @@ export class qiscusSDK extends EventEmitter {
     // it using some kind map of topicId as the key
     // and roomId as its value.
     return find((room) =>
-      find(topic => topic.id === topic_id)(room)
+      find(topic => topic.id === topic_id)(room.topics)
     )(this.rooms)
   }
 
