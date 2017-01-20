@@ -1,5 +1,9 @@
 <template>
-  <div class="qcw-container" :class="{'qcw-container--open': windowStatus}">
+  <div class="qcw-container" 
+    :class="{
+      'qcw-container--open': windowStatus, 
+      'qcw-container--not-init': !init
+    }">
     <init-config v-if="!selected && !init"></init-config>
     <div v-if="init && !selected">
       <div class="qcw-header">

@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ init }}
     <button class="qcw-trigger-btn" @click="toggleChatWindow" v-if="init">
       <Loader v-if="loading"></Loader>
       <i class="fa fa-comments" v-if="!loading"></i>

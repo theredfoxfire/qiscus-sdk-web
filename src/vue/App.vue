@@ -1,5 +1,8 @@
 <template>
-  <div id="qcw-app">
+  <div id="qcw-app"
+    :class="{
+      'qcw-app--not-init': !init
+    }">
     <image-modal :imageModalLink="imageModalLink" 
       :imageModalOn="imageModalOn" 
       :closeHandler="closeImageModal">
@@ -28,6 +31,7 @@ export default {
   },
   name: 'QiscusWidget',
   computed: {
+    init: function() { return this.$store.state.qiscus.isInit },
     triggerLabel() {
       return this.$store.getters.triggerLabel;
     },
