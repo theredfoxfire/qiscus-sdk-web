@@ -70,7 +70,7 @@ export class qiscusSDK extends EventEmitter {
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
     })
 
-    /**
+    /** 
      * This event will be called when login is sucess
      * Basically, it sets up necessary properties for qiscusSDK
      */
@@ -95,12 +95,19 @@ export class qiscusSDK extends EventEmitter {
      * Called when the comment has been delivered
      */
     self.on('comment-delivered', function(response) {
-      if(self.options.commentDeliverediCallback) self.options.commentDeliverediCallback(response);
+      if(self.options.commentDeliveredCallback) self.options.commentDeliveredCallback(response);
       // find comment with the id or unique id listed from response
       const commentToFind = find((comment) => {
         return comment.id === response.id ||
           comment.uniqueId === response.uniqueId
       })(self.selected.comments)
+    })
+
+    /**
+     * Called when new chatroom has been created 
+     */
+    self.on('chat-room-created', function(response) {
+      if(self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response);
     })
 
     self.on('comment-read', function (response) {
