@@ -114,6 +114,7 @@ the `config` param consist of:
 
 #### `chatTarget ( email(s) )
 create or load chat Room based on the email(s) provided and also set `qiscus.selected` property to this newly loaded or created room. If the there's more than one email provided, separate using `,`
+Whenever this API Call succeeded, the SDK will emit an event of `chat-room-created` carrying data of room
 
 #### `submitComment ( topicId, commentMessage, uniqueId )
 - `topicId (required)` each room internally have topic id, for current active room you can through `qiscus.selected.last_comment_topic_id` or you can provide other room topic id.

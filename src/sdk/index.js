@@ -185,6 +185,7 @@ export class qiscusSDK extends EventEmitter {
       self.selected = TheRoom
       self.last_received_comment_id = TheRoom.last_comment_id
       self.isLoading = false
+      self.emit('chat-room-created', { room: TheRoom });
       return new Promise((resolve, reject) => resolve(TheRoom))
     }
 
@@ -197,6 +198,7 @@ export class qiscusSDK extends EventEmitter {
       self.last_received_comment_id = TheRoom.last_comment_id
       self.rooms.push(TheRoom);
       self.isLoading = false;
+      self.emit('chat-room-created', { room: TheRoom });
       return self.selected = TheRoom;
     })
   }
@@ -441,7 +443,7 @@ export class Room {
         )
       })(this.comments)
       if (!Cmt) this.comments.push(new Comment(comment))
-    })
+    })(comments);
   }
 
   countUnreadComments () {

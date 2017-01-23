@@ -59,7 +59,7 @@ export default class HttpAdapter {
 
   setupHeaders(req, headers) {
     // let's give this default Authorization Header
-    req.set('Authorization', `Token token=${this.token}`);
+    // req.set('Authorization', `Token token=${this.token}`);
     // Return the req if no headers attached
     if(Object.keys(headers).length < 1) return req;
     // now let's process custom header
