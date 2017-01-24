@@ -42,8 +42,7 @@ export class qiscusSDK extends EventEmitter {
     self.UI = {
       chatTarget (email, options) {
         if (!self.isInit) return
-        self.chatTarget(email, options)
-        // vStore.dispatch('chatTarget', email)
+        vStore.dispatch('chatTarget', {email, options})
       },
       toggleChatWindow () {
         vStore.dispatch('toggleChatWindow')

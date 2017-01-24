@@ -14,15 +14,15 @@
     </div>
     <div v-if="init && selected">
       <div class="qcw-header">
-        {{ selected.name }} 
+        {{ selected.name }}
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <ul id="messages__comments">
-        <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more> 
+        <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more>
         <li v-if="selected.comments.length > 0" v-for="(comment, index) in selected.comments" :key="comment.id">
-          <comment :comment="comment" 
+          <comment :comment="comment"
             :onupdate="scrollToBottom"
-            :on-click-image="openImageModal" 
+            :on-click-image="openImageModal"
             :comment-before="(index-1 < 0) ? null : selected.comments[index-1]"
             :comment-after="(index+1 <= selected.comments.length-1) ? selected.comments[index+1] : null"
             :userdata="userdata">
@@ -39,7 +39,7 @@
         <textarea placeholder="type your comment here ..."
           @focus="publishTyping"
           @keyup="publishTyping"
-          @keyup.enter="trySubmitComment($event)" 
+          @keyup.enter="trySubmitComment($event)"
           v-model="commentInput">
         </textarea>
         <div class="uploader">
@@ -90,7 +90,7 @@ export default {
         self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 1);
       } else {
         self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 0);
-      } 
+      }
     },
     openImageModal(link) {
       this.$store.dispatch('openImageModal', link)
@@ -133,7 +133,7 @@ export default {
       this.$store.dispatch('loadComments', payload);
     },
     chatTarget(id) {
-      this.$store.dispatch('chatTarget', id)
+      this.$store.dispatch('chatTarget', { email: id })
     },
     scrollToBottom: function() {
       var element = document.getElementById('messages__comments');
