@@ -17,7 +17,6 @@ export default {
   setTyping: ({commit}, payload) => commit('SET_TYPING', payload),
   setRead: ({commit}, payload) => {
     // find the comment that need to be altered
-    debugger
     const commentToFind = find(selectedComment => {
       return (
         payload.unique_temp_id

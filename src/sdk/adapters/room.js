@@ -25,7 +25,6 @@ export default class RoomAdapter {
       room.comments = reverse(res.body.results.comments)
       const rivalUser = find(p => p.email === email)(room.participants)
       room.name = rivalUser ? rivalUser.username : 'Room name'
-      debugger
       return Promise.resolve(room)
     })
   }
