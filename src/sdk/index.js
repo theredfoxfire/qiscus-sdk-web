@@ -94,13 +94,8 @@ export class qiscusSDK extends EventEmitter {
     /**
      * Called when the comment has been delivered
      */
-<<<<<<< HEAD
-    self.on('comment-delivered', function(response) {
-      if(self.options.commentDeliveredCallback) self.options.commentDeliveredCallback(response);
-=======
     self.on('comment-delivered', function (response) {
-      if (self.options.commentDeliverediCallback) self.options.commentDeliverediCallback(response)
->>>>>>> Remove debugger and some formatting
+      if(self.options.commentDeliveredCallback) self.options.commentDeliveredCallback(response);
       // find comment with the id or unique id listed from response
       const commentToFind = find((comment) => {
         return comment.id === response.id ||
