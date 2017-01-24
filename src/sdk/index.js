@@ -40,9 +40,10 @@ export class qiscusSDK extends EventEmitter {
      * This code below is wrapper for vStore object
      */
     self.UI = {
-      chatTarget (email) {
+      chatTarget (email, options) {
         if (!self.isInit) return
-        vStore.dispatch('chatTarget', email)
+        self.chatTarget(email, options)
+        // vStore.dispatch('chatTarget', email)
       },
       toggleChatWindow () {
         vStore.dispatch('toggleChatWindow')
@@ -179,40 +180,55 @@ export class qiscusSDK extends EventEmitter {
    * @param distinct_id {string | optional} - unique string to differentiate chat room with same target
    * @return <Room>
    */
-  chatTarget (email, options = null, distinct_id = 0) {
+  chatTarget (email, options = {}) {
+    const initialMessage = options.message
+    const distinctId = options.distinctId
     // check if the room exists
-    let TheRoom
-    let self = this
+    const self = this
     self.isLoading = true
     options = self.options
 
     // make sure data already loaded first
-    if (this.userData.length != undefined) return false
+    if (this.userData.length != null) return false
 
     // We need to get room id 1st, based on room_name_id_map
-    let roomId = self.room_name_id_map[email] || null
-    TheRoom = find({ id: roomId })(self.rooms)
-    if (TheRoom) {
+    const roomId = self.room_name_id_map[email] || null
+    let room = find({ id: roomId })(self.rooms)
+    if (room) {
       self.selected = null
-      self.selected = TheRoom
-      self.last_received_comment_id = TheRoom.last_comment_id
+      self.selected = room
+      self.last_received_comment_id = room.last_comment_id
       self.isLoading = false
       self.emit('chat-room-created', { room: TheRoom });
-      return new Promise((resolve, reject) => resolve(TheRoom))
+      return Promise.resolve(room)
     }
 
-    // If not exists, let's get or create target room
-    return this.roomAdapter.getOrCreateRoom(email, options, distinct_id)
-    .then((response) => {
-      TheRoom = new Room(response)
-      console.info('created', TheRoom.id)
-      self.room_name_id_map[email] = TheRoom.id
-      self.last_received_comment_id = TheRoom.last_comment_id
-      self.rooms.push(TheRoom)
-      self.isLoading = false
-      self.selected = TheRoom
-      return TheRoom
-    })
+    // Create room
+    return Promise
+      .resolve(this.roomAdapter.getOrCreateRoom(email, options, distinctId))
+      .then((res) => {
+        room = new Room(res)
+        console.log('Room created', room.id)
+        self.room_name_id_map[email] = room.id
+        self.last_received_comment_id = room.last_comment_id
+        self.rooms.push(room)
+        self.isLoading = false
+        self.selected = room
+        return room
+      }, (err) => { console.error('Error when creating room', err) })
+      // Post initial comment
+      .then((room) => {
+        if (!initialMessage) return room
+        const topicId = room.id
+        const message = initialMessage
+        self.submitComment(topicId, message)
+          .then(() => console.log('Comment posted'))
+          .catch(err => {
+            console.error('Error when submit comment', err)
+          })
+        return room
+      }, (err) => console.error('Error when posting comment', err))
+      .catch((err) => console.error('Error when chatting target', err))
   }
 
   /**
