@@ -1,0 +1,25 @@
+@import "_variable.scss";
+#qcw-app * {
+  box-sizing: border-box;
+}
+#qcw-app {
+  font-family: sans-serif;
+  &--wide-mode {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+}
+@media (max-width: 700px) { 
+  #qcw-app .qcw-container { 
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    right: 0;
+  }
+  ul#messages__comments {
+    height: calc(100vh - 115px) !important;
+  }
+}
+@import '_chat-trigger.scss';
+@import '_chat-window.scss';

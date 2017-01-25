@@ -37,6 +37,8 @@ export class qiscusSDK extends EventEmitter {
     self.options = {}
     self.isLoading = false
     self.isInit = false
+    // there's two mode, widget and wide
+    self.mode = 'widget'
 
     /**
      * This code below is wrapper for vStore object
@@ -122,6 +124,10 @@ export class qiscusSDK extends EventEmitter {
      */
     self.on('chat-room-created', function (response) {
       if (self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response)
+    })
+
+    self.on('header-clicked', function (response) {
+      if (self.options.headerClickedCallback) self.options.headerClickedCallback(response)
     })
 
     self.on('comment-read', function (response) {

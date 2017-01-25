@@ -1,7 +1,7 @@
 <template>
-  <div class="qcw-container" 
+  <div class="qcw-container"
     :class="{
-      'qcw-container--open': windowStatus, 
+      'qcw-container--open': windowStatus,
       'qcw-container--not-init': !init
     }">
     <init-config v-if="!selected && !init"></init-config>
@@ -13,7 +13,7 @@
       <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
     </div>
     <div v-if="init && selected">
-      <div class="qcw-header">
+      <div class="qcw-header" @click="onHeaderClicked">
         {{ selected.name }}
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
@@ -139,6 +139,9 @@ export default {
       var element = document.getElementById('messages__comments');
       element.scrollTop = (element.scrollHeight - element.clientHeight) + 7000;
     },
+    onHeaderClicked() {
+      if(qiscus) qiscus.emit('header-clicked', 'hohohoho');
+    },
     uploadFile(e) {
       var vm       = this;
       var files    = e.target.files || e.dataTransfer.files;
@@ -165,123 +168,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.qcw-container {
-  width: 400px;
-  height: 500px;
-  position: fixed;
-  bottom: 50px; right: 5px;
-  border-radius: 5px;
-  background: #FFF;
-  box-shadow: 0 3px 15px rgba(0,0,0,.3);
-  transform: translateY(150%);
-  transition: transform 0.32s ease;
-  font-family: sans-serif;
-  &--open {
-    transform: translateY(0);
-  }
-}
-.qcw-header {
-  background: #8bc;
-  color: #ecf0f1;
-  padding: 15px;
-  border-radius: 5px 5px 0 0;
-  text-shadow: 0 -1px 0 rgba(0,0,0,.3);
-  font-weight: bold;
-  text-align: center;
-}
-.qcw-header i.fa {
-  position: absolute;
-  cursor: pointer;
-  &.fa-chevron-down {
-    right: 10px; top: 15px;
-  }
-  &.fa-chevron-left {
-    left: 10px; top: 15px;
-  }
-}
-.qcw-container .messages {
-  flex: 3;
-  display: flex;
-  flex-flow: column nowrap;
-  background: #FFF;
-}
-ul#messages__comments {
-  list-style: none;
-  background: #FFF;
-  margin:0;
-  height: 380px;
-  overflow: hidden;
-  overflow-y: auto;
-  padding: 10px 20px;
-}
-ul#messages__comments::-webkit-scrollbar {
- width: 9px; background-color: #ddd;
- opacity: 0.3;
- &:hover {
-   transition: opacity 0.32s ease;
-   opacity: 1;
- }
-}
-ul#messages__comments::-webkit-scrollbar-thumb {
- border-radius: 10px; -webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.3);	background-color: #8bc;
-}
-.qcw-comment-form {
-  display: flex;
-  flex-flow: row nowrap;
-  height: 50px;
-  padding: 10px;
-  * {
-    box-sizing: border-box;
-  }
-  i {
-    font-size: 20px; margin: 5px 0 0 15px; color: #444;
-    padding: 4px 7px 0 5px;
-    color: #eee;
-    cursor: pointer;
-    background: #8bc;
-    border-radius: 50%;
-    width: 30px; height: 30px;
-  }
-  .uploader {
-    flex-basis: 80%;
-    flex: 2.5;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    position: relative;
-    bottom: 7px; right: 7px;
-    input {
-      opacity: 0; width: 100%; height: 100%;
-      position: absolute;
-      top: 0; left: 0; cursor: pointer;
-    }
-  }
-}
-.qcw-comment-form textarea {
-  width: 330px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 12px; padding: 7px 10px;
-  max-height: 30px;
-  resize: none;
-  outline: none;
-}
-.qcw-upload-info {
-  padding: 7px 10px;
-  border-radius: 10px;
-  background: lighten(#8bc, 19);
-  color: #444;
-  font-size: 10px;
-  text-align: center;
-  max-width: 200px;
-  margin: 0 auto;
-}
-.isTypingText {
-  position: absolute;
-  text-align: left;
-  bottom: 12px;
-  font-size: 10px;
-}
-</style>
