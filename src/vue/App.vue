@@ -1,7 +1,8 @@
 <template>
   <div id="qcw-app"
     :class="{
-      'qcw-app--not-init': !init
+      'qcw-app--not-init': !init,
+      'qcw-app--wide-mode': mode === 'wide'
     }">
     <image-modal :imageModalLink="imageModalLink" 
       :imageModalOn="imageModalOn" 
@@ -24,6 +25,7 @@ import { getSelected, getRooms } from './vuex/getters'
 import ChatWindow from './components/ChatWindow.vue'
 import ChatTrigger from './components/ChatTrigger.vue'
 import ImageModal from './components/ImageModal.vue'
+import './assets/scss/base.scss';
 
 export default {
   components: {
@@ -32,6 +34,7 @@ export default {
   name: 'QiscusWidget',
   computed: {
     init: function() { return this.$store.state.qiscus.isInit },
+    mode: function() { return qiscus.mode },
     triggerLabel() {
       return this.$store.getters.triggerLabel;
     },
@@ -54,20 +57,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  #qcw-app * {
-    box-sizing: border-box;
-  }
-  @media (max-width: 700px) { 
-    #qcw-app .qcw-container { 
-      width: 100%;
-      height: 100%;
-      bottom: 0;
-      right: 0;
-    }
-    ul#messages__comments {
-      height: calc(100vh - 115px) !important;
-    }
-  }
-</style>

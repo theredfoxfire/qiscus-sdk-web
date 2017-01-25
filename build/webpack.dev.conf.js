@@ -31,6 +31,6 @@ module.exports = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: 'body'
     }),
-    new BundleAnalyzer()
+    // new BundleAnalyzer()
   ]
 })
