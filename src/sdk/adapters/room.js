@@ -29,4 +29,35 @@ export default class RoomAdapter {
     })
   }
 
+  createRoom (name, emails, options) {
+    const body = {
+      token: this.token,
+      name: name,
+      'participants[]': emails,
+      avatar_url: options.avatarURL
+    }
+
+    return this.HTTPAdapter
+      .post(`api/v2/mobile/create_room`, body)
+      .then((res) => {
+        if (res.body.status !== 200) return Promise.reject(res)
+        const room = res.body.results.room
+        room.comments = res.body.results.comments
+        return Promise.resolve({
+          id: room.id,
+          name: room.room_name,
+          lastCommentId: room.last_comment_id,
+          lastCommentMessage: room.last_comment_message,
+          lastTopicId: room.last_topic_id,
+          avatarURL: room.avatar_url,
+          options: room.options,
+          participants: room.participants.map(participant => ({
+            email: participant.email,
+            username: participant.username,
+            avatarURL: participant.avatar_url
+          }))
+        })
+      })
+      .catch(err => console.error('Error when creating room', err))
+  }
 }
