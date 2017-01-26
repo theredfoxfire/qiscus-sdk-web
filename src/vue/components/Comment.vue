@@ -66,30 +66,8 @@ export default {
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
-        openGraphEndpoint: 'http://dragongo.qiscus.com/api/v2/mobile/get_url_metadata?url=${url}',
+        openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
         onOpenGraphFetch: function(data) {
-          /*
-          "hybridGraph": {
-            "title": "Google",
-            "description": "Search the world's information...",
-            "image": "http://google.com/images/srpr/logo9w.png",
-            "url": "http://google.com",
-            "type": "site",
-            "site_name": "Google"
-          }
-          {
-            "results": {
-              "found": true,
-              "metadata": {
-                "description": "",
-                "image": "https://google.com/",
-                "title": ""
-              },
-              "url": "https://google.com"
-            },
-            "status": 200
-          }
-          */
           const title = data.results.metadata.title
           const isTitleExists = title && title.length > 0
           const isSuccess = data.results.found && isTitleExists
@@ -102,16 +80,10 @@ export default {
             success: isSuccess
           }
           return objectGraph
-          // if( !data.hybridGraph ) return data;
-          // data.hybridGraph.success = data.error ? false : true;
-          // return data.hybridGraph;
         },
-        // highlightCode: true,
         marked: true,
-        // emoji: true,
         plugins: {
           marked: marked,
-          // highlightjs: highlight
         }
       })
     }
