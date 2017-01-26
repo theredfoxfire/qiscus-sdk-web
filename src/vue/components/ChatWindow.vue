@@ -87,9 +87,9 @@ export default {
     publishTyping() {
       const self = this;
       if(self.commentInput.length > 0){
-        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 1);
+        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.username}/t`, 1);
       } else {
-        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 0);
+        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.username}/t`, 0);
       }
     },
     openImageModal(link) {
