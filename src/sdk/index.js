@@ -48,6 +48,9 @@ export class qiscusSDK extends EventEmitter {
         if (!self.isInit) return
         vStore.dispatch('chatTarget', {email, options})
       },
+      chatGroup () {
+
+      },
       toggleChatWindow () {
         vStore.dispatch('toggleChatWindow')
       }
@@ -126,8 +129,12 @@ export class qiscusSDK extends EventEmitter {
       if (self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response)
     })
 
-    self.on('header-clicked', function (response) {
-      if (self.options.headerClickedCallback) self.options.headerClickedCallback(response)
+    self.on('group-room-created', function(response) {
+      if(self.options.groupRoomCreated) self.options.groupRoomCreated(response);
+    })
+
+    self.on('header-clicked', function(response) {
+      if(self.options.headerClickedCallback) self.options.headerClickedCallback(response);
     })
 
     self.on('comment-read', function (response) {
@@ -252,10 +259,37 @@ export class qiscusSDK extends EventEmitter {
    * @returns {Promise.<Room, Error>} - Room detail
    */
   createGroupRoom (name, ...emails) {
+    const self = this;
     if (!this.isLogin) throw new Error('Please initiate qiscus SDK first')
     return new GroupChatBuilder(this.roomAdapter)
       .withName(name)
       .addParticipants(emails)
+      .create()
+      .then((res) => {
+        self.emit('group-room-created', res);
+      });
+  }
+
+  /**
+   * @param {int} id - Room Id
+   * @return {Room} Room data
+   */
+  getRoomById(id) {
+    const self = this;
+    self.roomAdapter.getRoomById(id)
+      .then((response) => {
+        // make sure the room hasn't been pushed yet
+        let room;
+        let roomToFind = find({ id: id})(self.rooms)
+        if(!roomToFind) {
+          room = new Room(response.results.room);
+          console.log('Room created', room.id)
+          self.room_name_id_map[room.room_name] = room.id
+          self.rooms.push(room);
+        }
+        self.selected = room || roomToFind;
+        self.emit('group-room-created', self.selected);
+      })
   }
 
   /**
