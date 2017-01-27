@@ -29,6 +29,13 @@ export default class RoomAdapter {
     })
   }
 
+  getRoomById(id) {
+    return this.HTTPAdapter.post(`/api/v2/mobile/get_room_by_id?token=${this.token}&id=${id}`)
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+  }
+
   createRoom (name, emails, options) {
     const body = {
       token: this.token,
@@ -58,6 +65,9 @@ export default class RoomAdapter {
           }))
         })
       })
-      .catch(err => console.error('Error when creating room', err))
+      .catch(err => {
+        console.error('Error when creating room', err)
+        return Promise.reject('Error when creating room')
+      })
   }
 }
