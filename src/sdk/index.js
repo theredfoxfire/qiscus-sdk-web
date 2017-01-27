@@ -1,3 +1,4 @@
+/* global vStore, fetch */
 import {EventEmitter} from 'events'
 import map from 'lodash/fp/map'
 import find from 'lodash/fp/find'
@@ -12,6 +13,7 @@ import HttpAdapter from './adapters/http'
 import UserAdapter from './adapters/user'
 import RoomAdapter from './adapters/room'
 import TopicAdapter from './adapters/topic'
+import {GroupChatBuilder} from './utils'
 
 export class qiscusSDK extends EventEmitter {
 
@@ -97,7 +99,7 @@ export class qiscusSDK extends EventEmitter {
      * Called when the comment has been delivered
      */
     self.on('comment-delivered', function (response) {
-      if(self.options.commentDeliveredCallback) self.options.commentDeliveredCallback(response);
+      if (self.options.commentDeliveredCallback) self.options.commentDeliveredCallback(response)
       // find comment with the id or unique id listed from response
       const commentToFind = find((comment) => {
         return comment.id === response.id ||
@@ -108,8 +110,8 @@ export class qiscusSDK extends EventEmitter {
     /**
      * Called when new chatroom has been created
      */
-    self.on('chat-room-created', function(response) {
-      if(self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response);
+    self.on('chat-room-created', function (response) {
+      if (self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response)
     })
     
     self.on('header-clicked', function(response) {
@@ -129,11 +131,11 @@ export class qiscusSDK extends EventEmitter {
   * @param {string} avatar_url - the url for chat avatar (optional)
   * @return {void}
   */
-  setUser (email, key, username, avatar_url) {
+  setUser (email, key, username, avatarURL) {
     this.email = email
     this.key = key
     this.username = username
-    this.avatar_url = avatar_url
+    this.avatar_url = avatarURL
     this.isInit = true
   }
 
@@ -199,7 +201,7 @@ export class qiscusSDK extends EventEmitter {
       self.selected = room
       self.last_received_comment_id = room.last_comment_id
       self.isLoading = false
-      self.emit('chat-room-created', { room: TheRoom });
+      self.emit('chat-room-created', { room: room })
       return Promise.resolve(room)
     }
 
@@ -229,6 +231,19 @@ export class qiscusSDK extends EventEmitter {
         return room
       }, (err) => console.error('Error when posting comment', err))
       .catch((err) => console.error('Error when chatting target', err))
+  }
+
+  /**
+   * Create group chat room
+   * @param {string} name - Chat room name
+   * @param {string[]} emails - Participant to be invited
+   * @returns {Promise.<Room, Error>} - Room detail
+   */
+  createGroupRoom (name, ...emails) {
+    if (!this.isLogin) throw new Error('Please initiate qiscus SDK first')
+    return new GroupChatBuilder(this.roomAdapter)
+      .withName(name)
+      .addParticipants(emails)
   }
 
   /**
