@@ -11,8 +11,8 @@
         <span class="qcw-comment__username">{{comment.username_as}}</span>
         <span class="qcw-comment__time">{{comment.time}}</span>
       </div>
-      <image-loader v-if="comment.isAttachment()" 
-        :comment="comment" 
+      <image-loader v-if="comment.isAttachment()"
+        :comment="comment"
         :on-click-image="onClickImage"
         :callback="onupdate">
       </image-loader>
@@ -66,11 +66,45 @@ export default {
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
-        openGraphEndpoint: '//opengraph.io/api/1.0/site/${url}',
+        openGraphEndpoint: 'http://dragongo.qiscus.com/api/v2/mobile/get_url_metadata?url=${url}',
         onOpenGraphFetch: function(data) {
-          if( !data.hybridGraph ) return data;
-          data.hybridGraph.success = data.error ? false : true;
-          return data.hybridGraph;
+          /*
+          "hybridGraph": {
+            "title": "Google",
+            "description": "Search the world's information...",
+            "image": "http://google.com/images/srpr/logo9w.png",
+            "url": "http://google.com",
+            "type": "site",
+            "site_name": "Google"
+          }
+          {
+            "results": {
+              "found": true,
+              "metadata": {
+                "description": "",
+                "image": "https://google.com/",
+                "title": ""
+              },
+              "url": "https://google.com"
+            },
+            "status": 200
+          }
+          */
+          const title = data.results.metadata.title
+          const isTitleExists = title && title.length > 0
+          const isSuccess = data.results.found && isTitleExists
+          const objectGraph = {
+            title: data.results.metadata.title,
+            description: data.results.metadata.description,
+            image: data.results.metadata.image,
+            url: data.results.url,
+            type: 'site',
+            success: isSuccess
+          }
+          return objectGraph
+          // if( !data.hybridGraph ) return data;
+          // data.hybridGraph.success = data.error ? false : true;
+          // return data.hybridGraph;
         },
         // highlightCode: true,
         marked: true,

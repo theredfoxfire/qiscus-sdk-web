@@ -3,7 +3,9 @@ import find from 'lodash/fp/find'
 export default {
   changeRoom: ({commit, state}, room) => commit('CHANGE_ROOM', room),
   toggleChatWindow: ({commit, state}) => commit('TOGGLE_CHAT_WINDOW'),
-  chatTarget: ({commit}, email) => commit('CHAT_TARGET', email),
+  chatTarget: ({commit}, {email, options = {}}) => {
+    commit('CHAT_TARGET', {email, options})
+  },
   backToHome: ({commit}) => commit('BACK_TO_HOME'),
   submitComment: ({commit}, {topic_id, comment}) => {
     return qiscus.submitComment(topic_id, comment)

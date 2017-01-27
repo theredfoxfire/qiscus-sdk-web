@@ -33,14 +33,14 @@ const mutations = {
   TOGGLE_CHAT_WINDOW (state) {
     state.windowStatus = !state.windowStatus
   },
-  CHAT_TARGET (state, email) {
+  CHAT_TARGET (state, {email, options}) {
     state.mqttData.typing = '';
     if(state.selected) {
       state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
       state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
       state.mqtt.unsubscribe(`${state.qiscus.userData.token}/c`);
     }
-    qiscus.chatTarget(email)
+    qiscus.chatTarget(email, options)
     .then((response) => {
       state.windowStatus = true;
       state.selected = state.qiscus.selected;
@@ -87,7 +87,7 @@ const mutations = {
     state.selected = qiscus.selected;
   },
   TOGGLE_INIT (state, payload) {
-    state.init = !state.init 
+    state.init = !state.init
   },
   OPEN_IMAGE_MODAL (state, payload) {
     state.imageModalOn = true;
