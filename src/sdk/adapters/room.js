@@ -30,9 +30,9 @@ export default class RoomAdapter {
   }
 
   getRoomById(id) {
-    return this.HTTPAdapter.post(`/api/v2/mobile/get_room_by_id?token=${this.token}&id=${id}`)
+    return this.HTTPAdapter.get(`api/v2/mobile/get_room_by_id?token=${this.token}&id=${id}`)
       .then((response) => {
-        return Promise.resolve(response);
+        return Promise.resolve(response.body);
       })
   }
 
