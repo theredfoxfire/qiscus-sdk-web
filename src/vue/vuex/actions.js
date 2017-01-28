@@ -6,6 +6,9 @@ export default {
   chatTarget: ({commit}, {email, options = {}}) => {
     commit('CHAT_TARGET', {email, options})
   },
+  chatGroup: ({commit}, {id, oldSelected}) => {
+    commit('CHAT_GROUP', {id, oldSelected})
+  },
   backToHome: ({commit}) => commit('BACK_TO_HOME'),
   submitComment: ({commit}, {topic_id, comment}) => {
     return qiscus.submitComment(topic_id, comment)

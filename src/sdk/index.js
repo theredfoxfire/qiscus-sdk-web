@@ -48,8 +48,13 @@ export class qiscusSDK extends EventEmitter {
         if (!self.isInit) return
         vStore.dispatch('chatTarget', {email, options})
       },
-      chatGroup () {
-
+      chatGroup (id) {
+        if (!self.isInit) return
+        const oldSelected = Object.assign({}, qiscus.selected);
+        self.getRoomById(id)
+        .then((response) => {
+          vStore.dispatch('chatGroup', {id, oldSelected});
+        })
       },
       toggleChatWindow () {
         vStore.dispatch('toggleChatWindow')
@@ -276,19 +281,22 @@ export class qiscusSDK extends EventEmitter {
    */
   getRoomById(id) {
     const self = this;
-    self.roomAdapter.getRoomById(id)
+    return self.roomAdapter.getRoomById(id)
       .then((response) => {
         // make sure the room hasn't been pushed yet
         let room;
         let roomToFind = find({ id: id})(self.rooms)
         if(!roomToFind) {
-          room = new Room(response.results.room);
-          console.log('Room created', room.id)
+          let roomData = response.results.room;
+          roomData.comments = response.results.comments.reverse();
+          room = new Room(roomData);
           self.room_name_id_map[room.room_name] = room.id
           self.rooms.push(room);
         }
         self.selected = room || roomToFind;
         self.emit('group-room-created', self.selected);
+      }, (error) => {
+        console.error('Error getting room by id', error);
       })
   }
 

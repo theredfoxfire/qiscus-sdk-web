@@ -25,7 +25,7 @@ import { getSelected, getRooms } from './vuex/getters'
 import ChatWindow from './components/ChatWindow.vue'
 import ChatTrigger from './components/ChatTrigger.vue'
 import ImageModal from './components/ImageModal.vue'
-import './assets/scss/base.scss';
+import './assets/scss/base.scss'
 
 export default {
   components: {

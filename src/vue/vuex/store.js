@@ -48,6 +48,17 @@ const mutations = {
       state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
     })
   },
+  CHAT_GROUP (state, {id, oldSelected}) {
+    if(state.selected) {
+      state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
+      state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
+      state.mqtt.unsubscribe(`${state.qiscus.userData.token}/c`);
+    }
+    state.windowStatus = true;
+    state.selected = state.qiscus.selected;
+    state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
+    state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
+  },
   LOAD_COMMENTS (state, payload) {
     state.isLoadingComments = true;
     qiscus.loadComments(payload.topic_id, payload.last_comment_id).then((response) => {
