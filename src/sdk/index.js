@@ -50,10 +50,10 @@ export class qiscusSDK extends EventEmitter {
       },
       chatGroup (id) {
         if (!self.isInit) return
-        const oldSelected = Object.assign({}, qiscus.selected);
+        const oldSelected = Object.assign({}, qiscus.selected)
         self.getRoomById(id)
         .then((response) => {
-          vStore.dispatch('chatGroup', {id, oldSelected});
+          vStore.dispatch('chatGroup', {id, oldSelected})
         })
       },
       toggleChatWindow () {
@@ -134,12 +134,11 @@ export class qiscusSDK extends EventEmitter {
       if (self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response)
     })
 
-    self.on('group-room-created', function(response) {
-      if(self.options.groupRoomCreated) self.options.groupRoomCreated(response);
+    self.on('group-room-created', function (response) {
+      if (self.options.groupRoomCreated) self.options.groupRoomCreated(response)
     })
-
-    self.on('header-clicked', function(response) {
-      if(self.options.headerClickedCallback) self.options.headerClickedCallback(response);
+    self.on('header-clicked', function (response) {
+      if (self.options.headerClickedCallback) self.options.headerClickedCallback(response)
     })
 
     self.on('comment-read', function (response) {
@@ -264,39 +263,39 @@ export class qiscusSDK extends EventEmitter {
    * @returns {Promise.<Room, Error>} - Room detail
    */
   createGroupRoom (name, ...emails) {
-    const self = this;
+    const self = this
     if (!this.isLogin) throw new Error('Please initiate qiscus SDK first')
     return new GroupChatBuilder(this.roomAdapter)
       .withName(name)
       .addParticipants(emails)
       .create()
       .then((res) => {
-        self.emit('group-room-created', res);
-      });
+        self.emit('group-room-created', res)
+      })
   }
 
   /**
    * @param {int} id - Room Id
    * @return {Room} Room data
    */
-  getRoomById(id) {
-    const self = this;
+  getRoomById (id) {
+    const self = this
     return self.roomAdapter.getRoomById(id)
       .then((response) => {
         // make sure the room hasn't been pushed yet
-        let room;
+        let room
         let roomToFind = find({ id: id})(self.rooms)
-        if(!roomToFind) {
-          let roomData = response.results.room;
-          roomData.comments = response.results.comments.reverse();
-          room = new Room(roomData);
+        if (!roomToFind) {
+          let roomData = response.results.room
+          roomData.comments = response.results.comments.reverse()
+          room = new Room(roomData)
           self.room_name_id_map[room.room_name] = room.id
-          self.rooms.push(room);
+          self.rooms.push(room)
         }
-        self.selected = room || roomToFind;
-        self.emit('group-room-created', self.selected);
+        self.selected = room || roomToFind
+        self.emit('group-room-created', self.selected)
       }, (error) => {
-        console.error('Error getting room by id', error);
+        console.error('Error getting room by id', error)
       })
   }
 
