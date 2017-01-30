@@ -72,6 +72,18 @@ export class qiscusSDK extends EventEmitter {
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
     })
 
+    self.on('newmessages', (comments) => {
+      console.log('comments', comments)
+      const roomId = comments[0].room_id
+      const lastReadCommentId = self.selected.comments[self.selected.comments.length - 1].id
+      const lastReceivedCommentId = comments[comments.length - 1].id
+      this.userAdapter.updateCommentStatus(roomId, lastReadCommentId, lastReceivedCommentId)
+        .then((res) => {
+          console.info('Success updating comment')
+        })
+        .catch(error => console.error('Error when updating comment status', error))
+    })
+
     /**
      * This event will be called when login is sucess
      * Basically, it sets up necessary properties for qiscusSDK
