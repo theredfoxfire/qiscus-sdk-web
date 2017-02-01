@@ -505,26 +505,26 @@ export class qiscusSDK extends EventEmitter {
 }
 
 export class Room {
-  constructor (room_data) {
-    this.id = room_data.id
-    this.last_comment_id = room_data.last_comment_id
-    this.last_comment_message = room_data.last_comment_message
-    this.last_comment_message_created_at = room_data.last_comment_message_created_at
-    this.last_comment_topic_id = room_data.last_topic_id
-    this.last_comment_topic_title = room_data.last_comment_topic_title
-    this.room_type = room_data.chat_type
-    this.avatar = room_data.room_avatar
-    this.name = room_data.name
-    this.room_type = room_data.room_type
-    this.secret_code = room_data.secret_code
-    this.participants = room_data.participants
+  constructor (roomData) {
+    this.id = roomData.id
+    this.last_comment_id = roomData.last_comment_id
+    this.last_comment_message = roomData.last_comment_message
+    this.last_comment_message_created_at = roomData.last_comment_message_created_at
+    this.last_comment_topic_id = roomData.last_topic_id
+    this.last_comment_topic_title = roomData.last_comment_topic_title
+    this.room_type = roomData.chat_type
+    this.avatar = roomData.room_avatar || roomData.avatarURL || roomData.avatar_url
+    this.name = roomData.name
+    this.room_type = roomData.room_type
+    this.secret_code = roomData.secret_code
+    this.participants = roomData.participants
     this.topics = []
     this.comments = []
-    this.count_notif = room_data.count_notif
+    this.count_notif = roomData.count_notif
     this.isLoaded = false
-    this.code_en = room_data.code_en
+    this.code_en = roomData.code_en
     this.unread_comments = []
-    this.receiveComments(room_data.comments)
+    this.receiveComments(roomData.comments)
   }
 
   receiveComments (comments) {

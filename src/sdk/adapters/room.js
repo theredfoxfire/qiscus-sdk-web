@@ -20,8 +20,9 @@ export default class RoomAdapter {
 
     return this.HTTPAdapter.post(`api/v2/sdk/get_or_create_room_with_target`, params)
     .then((res) => {
-      if (res.body.status !== 200) return new Promise((resolve, reject) => reject(res))
+      if (res.body.status !== 200) return Promise.reject(res)
       const room = res.body.results.room
+      room.avatar = room.avatar_url
       room.comments = reverse(res.body.results.comments)
       const rivalUser = find(p => p.email === email)(room.participants)
       room.name = rivalUser ? rivalUser.username : 'Room name'
@@ -29,11 +30,9 @@ export default class RoomAdapter {
     })
   }
 
-  getRoomById(id) {
+  getRoomById (id) {
     return this.HTTPAdapter.get(`api/v2/mobile/get_room_by_id?token=${this.token}&id=${id}`)
-      .then((response) => {
-        return Promise.resolve(response.body);
-      })
+      .then((response) => Promise.resolve(response.body))
   }
 
   createRoom (name, emails, options) {

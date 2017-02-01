@@ -14,6 +14,7 @@
     </div>
     <div v-if="init && selected">
       <div class="qcw-header" @click="onHeaderClicked">
+        <img class="qcw-room-avatar" :src="selected.avatar" alt="Room Avatar" />
         {{ selected.name }}
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
@@ -51,6 +52,17 @@
     </div>
   </div>
 </template>
+
+<style lang='scss'>
+.qcw-room-avatar {
+  max-width: 25px;
+  max-height: 25px;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+</style>
 
 <script>
 import Comment from './Comment.vue'
