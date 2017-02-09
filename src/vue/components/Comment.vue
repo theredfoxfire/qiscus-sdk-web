@@ -1,30 +1,35 @@
 <template>
-  <div class="qcw-comment" :class="{
-    'comment--me': comment.username_real == myemail,
-    'comment--parent': isParent,
-    'comment--mid': isMid,
-    'comment--last': isLast
-  }">
-    <!-- <avatar :src="comment.avatar"></avatar> -->
-    <div class="qcw-comment__message">
-      <div class="qcw-comment__info" v-if="isParent">
-        <span class="qcw-comment__username">{{comment.username_as}}</span>
-        <span class="qcw-comment__time">{{comment.time}}</span>
-      </div>
-      <image-loader v-if="comment.isAttachment()"
-        :comment="comment"
-        :on-click-image="onClickImage"
-        :callback="onupdate">
-      </image-loader>
-      <div v-html="message" v-if="!comment.isAttachment()"></div>
-      <div v-if="comment.username_real == myemail">
-        <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
-        <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
-        <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
-          <i class="fa fa-check"></i><i class="fa fa-check"></i>
+  <div class="qcw-comment-container">
+    <div class="qcw-comment-date" v-if="showDate">
+      - {{ dateToday }} -
+    </div>
+    <div class="qcw-comment" :class="{
+      'comment--me': comment.username_real == myemail,
+      'comment--parent': isParent,
+      'comment--mid': isMid,
+      'comment--last': isLast
+    }">
+      <!-- <avatar :src="comment.avatar"></avatar> -->
+      <div class="qcw-comment__message">
+        <div class="qcw-comment__info" v-if="isParent">
+          <span class="qcw-comment__username">{{comment.username_as}}</span>
+          <span class="qcw-comment__time">{{comment.time}}</span>
         </div>
-        <div class="qcw-comment__state qcw-comment__state--read" v-if="comment.isRead">
-          <i class="fa fa-check"></i><i class="fa fa-check"></i>
+        <image-loader v-if="comment.isAttachment()"
+          :comment="comment"
+          :on-click-image="onClickImage"
+          :callback="onupdate">
+        </image-loader>
+        <div v-html="message" v-if="!comment.isAttachment()"></div>
+        <div v-if="comment.username_real == myemail">
+          <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
+          <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
+          <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
+            <i class="fa fa-check"></i><i class="fa fa-check"></i>
+          </div>
+          <div class="qcw-comment__state qcw-comment__state--read" v-if="comment.isRead">
+            <i class="fa fa-check"></i><i class="fa fa-check"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -42,14 +47,22 @@ export default {
   // components: { Avatar },
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
+  data() {
+    return {
+      dateToday: ''
+    }
+  },
   mounted(){
     this.onupdate();
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    this.dateToday = new Date(this.comment.date).toLocaleString('en-US', options);
   },
   computed: {
     myemail() { return qiscus.email },
     isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
     isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
-    isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; }
+    isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; },
+    showDate() { return this.commentBefore === null || (this.commentBefore.date != this.comment.date) }
   },
   created() {
     const comment = this.comment;
