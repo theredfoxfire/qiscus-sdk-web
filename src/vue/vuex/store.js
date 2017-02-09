@@ -85,7 +85,7 @@ const mutations = {
     // })
   },
   SET_TYPING (state, payload) {
-    if(payload.topic == state.qiscus.email) return
+    if(payload.topic == state.qiscus.username) return
     if(payload.message == 1){
       state.mqttData.typing = payload.topic;
     } else {
