@@ -37,6 +37,7 @@ export class qiscusSDK extends EventEmitter {
     self.options = {}
     self.isLoading = false
     self.isInit = false
+    self.sync = 'socket' // possible values 'socket', 'http', 'both'
     // there's two mode, widget and wide
     self.mode = 'widget'
 
@@ -76,8 +77,13 @@ export class qiscusSDK extends EventEmitter {
         if (theRoom != null) {
           theRoom.receiveComments([comment])
           vStore.dispatch('setRead', comment)
+          // update last_received_comment_id
+          self.last_received_comment_id = comment.id
         }
       })(data)
+
+      // let's also update last_received_comment_id
+
 
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
     })
@@ -173,8 +179,10 @@ export class qiscusSDK extends EventEmitter {
     // Let's initialize the app based on options
     if (config.options) this.options = Object.assign({}, this.options, config.options)
     this.baseURL = `https://${config.AppId}.qiscus.com`
-
     if (!config.AppId) throw new Error('AppId Undefined')
+    // setup how sdk will sync data: socket, http, both
+    if (config.sync) this.sync = config.sync
+    if (this.sync == 'http' || this.sync == 'both') this.activateSync()
 
     // Connect to Login or Register API
     this.connectToQiscus().then((response) => {
@@ -196,6 +204,14 @@ export class qiscusSDK extends EventEmitter {
     }).then((response) => {
       return response.json()
     })
+  }
+
+  // Activate Sync Feature if `http` or `both` is chosen as sync value when init
+  activateSync () {
+    const self = this
+    window.setInterval(function(){
+      self.synchronize();
+    }, 3500)
   }
 
   /**
@@ -303,7 +319,7 @@ export class qiscusSDK extends EventEmitter {
    * This method let us get new comments from server
    * If comment count > 0 then we have new message
    */
-  sync () {
+  synchronize () {
     this.userAdapter.sync(this.last_received_comment_id)
     .then((comments) => {
       if (comments.length > 0) this.emit('newmessages', comments)

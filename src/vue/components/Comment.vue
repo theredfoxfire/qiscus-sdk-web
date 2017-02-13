@@ -1,7 +1,7 @@
 <template>
   <div class="qcw-comment-container">
     <div class="qcw-comment-date" v-if="showDate">
-      - {{ dateToday }} -
+      - {{ dateToday }} - 
     </div>
     <div class="qcw-comment" :class="{
       'comment--me': comment.username_real == myemail,
@@ -47,15 +47,8 @@ export default {
   // components: { Avatar },
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
-  data() {
-    return {
-      dateToday: ''
-    }
-  },
   mounted(){
     this.onupdate();
-    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    this.dateToday = new Date(this.comment.date).toLocaleString('en-US', options);
   },
   computed: {
     myemail() { return qiscus.email },
@@ -76,6 +69,7 @@ export default {
   data () {
     return {
       message: '',
+      dateToday: new Date(this.comment.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
