@@ -29,8 +29,10 @@ export default {
           : selectedComment.id === payload.id
       )
     })(qiscus.selected.comments)
-    if (commentToFind) commentToFind.markAsRead()
-    commit('SET_READ', commentToFind)
+    if (commentToFind){
+      commentToFind.markAsRead()
+      commit('SET_READ', commentToFind)
+    } 
   },
   toggleInit: ({commit}) => commit('TOGGLE_INIT'),
   updateSelected: ({commit}) => commit('UPDATE_SELECTED'),

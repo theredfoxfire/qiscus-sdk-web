@@ -92,6 +92,7 @@ export class qiscusSDK extends EventEmitter {
       const lastReceivedCommentId = comments[comments.length - 1].id
       this.userAdapter.updateCommentStatus(roomId, lastReadCommentId, lastReceivedCommentId)
         .then((res) => {
+          this.sortComments()
           console.info('Success updating comment')
         })
         .catch(error => console.error('Error when updating comment status', error))
@@ -301,9 +302,11 @@ export class qiscusSDK extends EventEmitter {
         let roomToFind = find({ id: id})(self.rooms)
         if (!roomToFind) {
           let roomData = response.results.room
+          roomData.name = roomData.room_name
+          roomData.room_type = 'group' 
           roomData.comments = response.results.comments.reverse()
           room = new Room(roomData)
-          self.room_name_id_map[room.room_name] = room.id
+          self.room_name_id_map[room.name] = room.id
           self.rooms.push(room)
         }
         self.selected = room || roomToFind
@@ -526,7 +529,6 @@ export class Room {
     this.last_comment_message_created_at = roomData.last_comment_message_created_at
     this.last_comment_topic_id = roomData.last_topic_id
     this.last_comment_topic_title = roomData.last_comment_topic_title
-    this.room_type = roomData.chat_type
     this.avatar = roomData.room_avatar || roomData.avatarURL || roomData.avatar_url
     this.name = roomData.name
     this.room_type = roomData.room_type
