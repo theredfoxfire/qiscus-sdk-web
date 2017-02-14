@@ -82,14 +82,11 @@ export class qiscusSDK extends EventEmitter {
         }
       })(data)
 
-      // let's also update last_received_comment_id
-
-
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
-    })
 
-    self.on('newmessages', (comments) => {
-      console.log('comments', comments)
+      // let's also update comment status, but if only self.selected isn't null
+      if(!self.selected) return;
+      const comments = data;
       const roomId = comments[0].room_id
       const lastReadCommentId = self.selected.comments[self.selected.comments.length - 1].id
       const lastReceivedCommentId = comments[comments.length - 1].id
@@ -238,7 +235,8 @@ export class qiscusSDK extends EventEmitter {
     if (room) {
       self.selected = null
       self.selected = room
-      self.last_received_comment_id = room.last_comment_id
+      // make sure we always get the highest value of last_received_comment_id
+      self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
       self.isLoading = false
       self.emit('chat-room-created', { room: room })
       return Promise.resolve(room)
