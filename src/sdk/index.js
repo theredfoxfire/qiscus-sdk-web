@@ -648,7 +648,7 @@ export class Comment {
     this.message = comment.message
     this.username_as = comment.username_as || comment.username
     this.username_real = comment.username_real || comment.email
-    let theDate = moment(comment.created_at)
+    let theDate = moment(comment.timestamp)
     this.date = theDate.format('YYYY-MM-DD')
     this.time = theDate.format('HH:mm A')
     this.unique_id = comment.unique_temp_id || comment.unique_id

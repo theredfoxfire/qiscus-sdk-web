@@ -51,7 +51,7 @@
           if (this.readyState == 4 && this.status == 200){
             self.imageSrc  = URL.createObjectURL(this.response);
             self.isLoading = false;
-            self.callback();
+            setTimeout( () => self.callback(), 0 );
           } 
         }
         xhr.open('GET', self.uri, true);

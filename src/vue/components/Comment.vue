@@ -48,7 +48,7 @@ export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
   updated(){
-    this.onupdate();
+    // this.onupdate();
   },
   computed: {
     myemail() { return qiscus.email },
@@ -86,8 +86,9 @@ export default {
             type: 'site',
             success: isSuccess
           }
+          setTimeout( () => this.onupdate(), 0 )
           return objectGraph
-        },
+        }.bind(this),
         marked: true,
         plugins: {
           marked: marked,
