@@ -21,7 +21,7 @@ You need to include the javascript and css files from the build directory. And y
   <script src="path/to/js/qiscus-sdk.js"></script>
   <script>
      qiscus.setUser('your@email.com', 'key', 'username');
-     qiscus.init({AppId: 'dragonfly'});
+     qiscus.init({AppId: 'dragongo'});
   </script>
 </body>
 </html>
