@@ -47,8 +47,8 @@ export default {
   // components: { Avatar },
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
-  mounted(){
-    // this.onupdate();
+  updated(){
+    this.onupdate();
   },
   computed: {
     myemail() { return qiscus.email },

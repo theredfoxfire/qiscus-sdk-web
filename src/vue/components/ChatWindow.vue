@@ -151,12 +151,10 @@ export default {
       // var element = document.getElementById('messages__comments');
       // element.scrollTop = (element.scrollHeight - element.clientHeight) + 7000;
       // get id of latest comment from selected room
-      return
-      const selectedRoom = qiscus.selected.comments[qiscus.selected.comments.length-1].id;
-      const element = document.getElementById(selectedRoom)
+      const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id;
+      const element = document.getElementById(latestCommentId)
       if(element) {
         element.scrollIntoView({block: 'end', behaviour: 'smooth'})
-        console.info('scrolled', selectedRoom)
       }
     },
     onHeaderClicked() {
