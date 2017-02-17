@@ -27,7 +27,7 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
   <script src="path/to/js/qiscus-sdk.js"></script>
   <script>
      qiscus.setUser('your@email.com', 'key', 'username');
-     qiscus.init({AppId: 'dragonfly'});
+     qiscus.init({AppId: 'dragongo'});
   </script>
 </body>
 </html>
@@ -39,7 +39,7 @@ The javascript file introduce a new global variable called `qiscus`. We'll use t
 // Set Current User for the Chat Widget
 qiscus.setUser('email@email.com', 'key', 'username');
 // Init the widget
-qiscus.init({AppId: 'dragonfly'});
+qiscus.init({AppId: 'dragongo'});
 ```
 
 You can get `AppId` by requesting one from [sdk.qiscus.com](http://sdk.qiscus.com)
@@ -52,7 +52,7 @@ Download the javascript file from the [release](https://github.com/qiscus/qiscus
 import qiscus from 'path/to/qiscus-sdk-core.version_number'
 
 qiscus.setUser('email@email.com','key','username');
-qiscus.init({AppId: 'dragonfly'});
+qiscus.init({AppId: 'dragongo'});
 ```
 
 ![qiscus SDK demo](sdk.png)
