@@ -35,18 +35,11 @@ const mutations = {
   },
   CHAT_TARGET (state, {email, options}) {
     state.mqttData.typing = '';
-    if(state.selected) {
-      state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
-      state.mqtt.unsubscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
-      state.mqtt.unsubscribe(`${state.qiscus.userData.token}/c`);
-    }
-    qiscus.chatTarget(email, options)
-    .then((response) => {
-      state.windowStatus = true;
-      state.selected = state.qiscus.selected;
-      state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
-      state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
-    })
+    // reset the state with new data
+    state.windowStatus = true;
+    state.selected = state.qiscus.selected;
+    state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
+    state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
   },
   CHAT_GROUP (state, {id, oldSelected}) {
     if(state.selected) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="qcw-comment-container">
+  <div class="qcw-comment-container" :id="comment.id">
     <div class="qcw-comment-date" v-if="showDate">
       - {{ dateToday }} - 
     </div>
@@ -48,7 +48,7 @@ export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
   mounted(){
-    this.onupdate();
+    // this.onupdate();
   },
   computed: {
     myemail() { return qiscus.email },

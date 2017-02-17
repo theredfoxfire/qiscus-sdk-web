@@ -4,10 +4,23 @@ export default {
   changeRoom: ({commit, state}, room) => commit('CHANGE_ROOM', room),
   toggleChatWindow: ({commit, state}) => commit('TOGGLE_CHAT_WINDOW'),
   chatTarget: ({commit}, {email, options = {}}) => {
-    commit('CHAT_TARGET', {email, options})
+    qiscus.chatTarget(email, options)
+    .then((response) => {
+      commit('CHAT_TARGET', {email, options})
+      const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
+      setTimeout(function(){
+        const elementToScroll = document.getElementById(latestCommentId)
+        elementToScroll.scrollIntoView({block: 'end', behaviour: 'smooth'})
+      }, 0)
+    })
   },
   chatGroup: ({commit}, {id, oldSelected}) => {
     commit('CHAT_GROUP', {id, oldSelected})
+    const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
+    setTimeout(function(){
+      const elementToScroll = document.getElementById(latestCommentId)
+      elementToScroll.scrollIntoView({block: 'end', behaviour: 'smooth'})
+    }, 0)
   },
   backToHome: ({commit}) => commit('BACK_TO_HOME'),
   submitComment: ({commit}, {topic_id, comment}) => {
