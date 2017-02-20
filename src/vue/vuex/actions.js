@@ -11,6 +11,8 @@ export default {
       setTimeout(function(){
         const elementToScroll = document.getElementById(latestCommentId)
         elementToScroll.scrollIntoView({block: 'end', behaviour: 'smooth'})
+        //on entering the room, wait for data processed then focus on comment form
+        document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
       }, 0)
     })
   },
