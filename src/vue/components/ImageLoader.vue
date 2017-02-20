@@ -58,7 +58,6 @@
         xhr.onerror = function() {
           self.isLoading = false;
           self.error = `Url ${self.uri} loading failed, please try again`
-          console.error('error nih', this.response, self.uri);
           self.callback();
         }
         // xhr.setRequestHeader('Authorization', 'Token token='+window.doctortoken);

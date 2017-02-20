@@ -93,7 +93,6 @@ export class qiscusSDK extends EventEmitter {
       this.userAdapter.updateCommentStatus(roomId, lastReadCommentId, lastReceivedCommentId)
         .then((res) => {
           this.sortComments()
-          console.info('Success updating comment')
         })
         .catch(error => console.error('Error when updating comment status', error))
     })
@@ -173,7 +172,6 @@ export class qiscusSDK extends EventEmitter {
   * @return {void}
   */
   init (config) {
-    console.info('Initializing Qiscus SDK with the config of', config)
     // Let's initialize the app based on options
     if (config.options) this.options = Object.assign({}, this.options, config.options)
     this.baseURL = `https://${config.AppId}.qiscus.com`
@@ -248,7 +246,6 @@ export class qiscusSDK extends EventEmitter {
       .resolve(this.roomAdapter.getOrCreateRoom(email, options, distinctId))
       .then((res) => {
         room = new Room(res)
-        console.log('Room created', room.id)
         self.room_name_id_map[email] = room.id
         self.last_received_comment_id = room.last_comment_id
         self.rooms.push(room)
