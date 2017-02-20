@@ -81,6 +81,8 @@ export class qiscusSDK extends EventEmitter {
           self.last_received_comment_id = comment.id
         }
       })(data)
+      // let's also update last_received_comment_id
+      if(data.length > 0) self.last_received_comment_id = data[data.length-1].id
 
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
 
@@ -247,7 +249,7 @@ export class qiscusSDK extends EventEmitter {
       .then((res) => {
         room = new Room(res)
         self.room_name_id_map[email] = room.id
-        self.last_received_comment_id = room.last_comment_id
+        self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
         self.rooms.push(room)
         self.isLoading = false
         self.selected = room
@@ -306,6 +308,7 @@ export class qiscusSDK extends EventEmitter {
           self.room_name_id_map[room.name] = room.id
           self.rooms.push(room)
         }
+        self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
         self.selected = room || roomToFind
         self.emit('group-room-created', self.selected)
       }, (error) => {
@@ -318,6 +321,7 @@ export class qiscusSDK extends EventEmitter {
    * If comment count > 0 then we have new message
    */
   synchronize () {
+    if(this.last_received_comment_id <= 0) return
     this.userAdapter.sync(this.last_received_comment_id)
     .then((comments) => {
       if (comments.length > 0) this.emit('newmessages', comments)
