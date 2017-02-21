@@ -307,7 +307,9 @@ export class qiscusSDK extends EventEmitter {
           room = new Room(roomData)
           self.room_name_id_map[room.name] = room.id
           self.rooms.push(room)
-        }
+        } else {
+          room = roomToFind
+        } 
         self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
         self.selected = room || roomToFind
         self.emit('group-room-created', self.selected)
