@@ -1,5 +1,5 @@
 <template>
-  <div class="qcw-modal-overlay" :class="{'qcw-modal-overlay--on': imageModalOn }">
+  <div class="qcw-modal-overlay" :class="{'qcw-modal-overlay--on': imageModalOn }" @click="closeHandler">
     <div class="qcw-image-modal">
       <img :src="imageModalLink" :alt="imageModalLink">
       <a :href="imageModalLink" target="_blank">Open in New Tab</a>
@@ -29,6 +29,7 @@
   }
   .qcw-image-modal {
     max-width: 80%;
+    max-height: 80%;
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
@@ -36,6 +37,7 @@
     box-shadow: 0 0 17px rgba(0,0,0,.5);
     img {
       max-width: 80%;
+      max-height: 80vh;
       margin: 10px auto;
       display: block;
     }
@@ -61,6 +63,8 @@
       text-decoration: none;
       border: 0;
       text-shadow: 0 1px 0 rgba(255,255,255,.5);
+      position: absolute;
+      bottom: 0;
     }
   }
 </style>

@@ -308,6 +308,7 @@ export class qiscusSDK extends EventEmitter {
           self.room_name_id_map[room.name] = room.id
           self.rooms.push(room)
         } else {
+          console.info('load existing room', room)
           room = roomToFind
         } 
         self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id

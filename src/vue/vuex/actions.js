@@ -10,7 +10,7 @@ export default {
       const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
       setTimeout(function(){
         const elementToScroll = document.getElementById(latestCommentId)
-        elementToScroll.scrollIntoView({block: 'end', behaviour: 'smooth'})
+        elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
         //on entering the room, wait for data processed then focus on comment form
         document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
       }, 0)
@@ -21,7 +21,9 @@ export default {
     const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
     setTimeout(function(){
       const elementToScroll = document.getElementById(latestCommentId)
-      elementToScroll.scrollIntoView({block: 'end', behaviour: 'smooth'})
+      elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
+      //on entering the room, wait for data processed then focus on comment form
+      document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
     }, 0)
   },
   backToHome: ({commit}) => commit('BACK_TO_HOME'),

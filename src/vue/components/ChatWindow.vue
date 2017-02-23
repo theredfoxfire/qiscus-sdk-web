@@ -122,6 +122,7 @@ export default {
       if(!e.shiftKey){
         e.preventDefault();
         e.stopPropagation();
+        debugger;
         if(this.commentInput.length < 1) return;
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
         this.commentInput = ''
