@@ -122,8 +122,7 @@ export default {
       if(!e.shiftKey){
         e.preventDefault();
         e.stopPropagation();
-        debugger;
-        if(this.commentInput.length < 1) return;
+        if(this.commentInput.trim().length < 1) return;
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
         this.commentInput = ''
         this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
