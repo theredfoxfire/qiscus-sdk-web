@@ -80,7 +80,7 @@ const mutations = {
   SET_TYPING (state, payload) {
     if(payload.topic == state.qiscus.email) return
     // let's get the email of this payload
-    const Participant = state.qiscus.selected.participants.find( (participant) => participant.email = payload.topic )
+    const Participant = state.qiscus.selected.participants.find( (participant) => participant.email == payload.topic )
     const username = (Participant) ? Participant.username : payload.topic 
 
     if(payload.message == 1){
