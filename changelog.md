@@ -1,5 +1,6 @@
 # SDK v.1.4.5
-- NO submit comment if empty string
+- No submit comment if empty string
+- Fix bad styling in attachment comment type
 
 # SDK v.1.4.4
 - Resize image with height exceeding 100% screen height
