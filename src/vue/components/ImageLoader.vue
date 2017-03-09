@@ -63,14 +63,13 @@
           if (this.readyState == 4 && this.status == 200){
             self.imageSrc  = URL.createObjectURL(this.response);
             self.isLoading = false;
-            self.callback();
+            setTimeout( () => self.callback(), 0 );
           } 
         }
         xhr.open('GET', self.uri, true);
         xhr.onerror = function() {
           self.isLoading = false;
           self.error = `Url ${self.uri} loading failed, please try again`
-          console.error('error nih', this.response, self.uri);
           self.callback();
         }
         // xhr.setRequestHeader('Authorization', 'Token token='+window.doctortoken);

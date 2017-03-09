@@ -1,3 +1,10 @@
+# SDK v.1.4.5
+- NO submit comment if empty string
+
+# SDK v.1.4.4
+- Resize image with height exceeding 100% screen height
+- Focus to textinput when changing group room
+
 # SDK v.1.2.2
 - Clicking image now open popup overlay instead of opening in new tab
 - Group comments with the same `username`

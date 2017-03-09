@@ -83,11 +83,9 @@ export default {
       formData.append('file', files[0]);
       var xhr = new XMLHttpRequest();
       xhr.open('POST', vm.uploadUrl, true);
-      console.info(vm.uploadUrl, vm.selected_topic_id)
       xhr.onload = function() {
         if(xhr.status === 200) {
           // file(s) uploaded), let's post to comment
-          console.log('file uploaded', xhr.response);
           var url = JSON.parse(xhr.response).url
           vm.submitComment(vm.selected_topic_id, `[file] ${url} [/file]`);
 

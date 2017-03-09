@@ -47,7 +47,7 @@ export default {
   // components: { Avatar },
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
   components: { ImageLoader },
-  mounted(){
+  updated(){
     // this.onupdate();
   },
   computed: {
@@ -86,8 +86,9 @@ export default {
             type: 'site',
             success: isSuccess
           }
+          setTimeout( () => this.onupdate(), 0 )
           return objectGraph
-        },
+        }.bind(this),
         marked: true,
         plugins: {
           marked: marked,

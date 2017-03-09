@@ -23,7 +23,7 @@ export default class TopicAdapter {
         return resolve(data);
       })
     }, (error) => {
-      console.info('failed loading', error);
+      // console.info('failed loading comments', error);
       return new Promise((resolve, reject) => {
         return reject(error);
       });

@@ -99,9 +99,9 @@ export default {
     publishTyping() {
       const self = this;
       if(self.commentInput.length > 0){
-        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.username}/t`, 1);
+        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 1);
       } else {
-        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.username}/t`, 0);
+        self.mqtt.publish(`r/${self.selected.id}/${self.selected.last_comment_topic_id}/${self.userdata.email}/t`, 0);
       }
     },
     openImageModal(link) {
@@ -122,7 +122,7 @@ export default {
       if(!e.shiftKey){
         e.preventDefault();
         e.stopPropagation();
-        if(this.commentInput.length < 1) return;
+        if(this.commentInput.trim().length < 1) return;
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
         this.commentInput = ''
         this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
@@ -151,12 +151,10 @@ export default {
       // var element = document.getElementById('messages__comments');
       // element.scrollTop = (element.scrollHeight - element.clientHeight) + 7000;
       // get id of latest comment from selected room
-      return
-      const selectedRoom = qiscus.selected.comments[qiscus.selected.comments.length-1].id;
-      const element = document.getElementById(selectedRoom)
+      const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id;
+      const element = document.getElementById(latestCommentId)
       if(element) {
         element.scrollIntoView({block: 'end', behaviour: 'smooth'})
-        console.info('scrolled', selectedRoom)
       }
     },
     onHeaderClicked() {
