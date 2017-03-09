@@ -1,3 +1,7 @@
+# SDK v.1.4.6
+- Add Loading indicator on chat window when loading new chat room
+- fix issue with cant open file in new tab
+
 # SDK v.1.4.5
 - No submit comment if empty string
 - Fix bad styling in attachment comment type

@@ -7,10 +7,13 @@ export default {
     qiscus.chatTarget(email, options)
     .then((response) => {
       commit('CHAT_TARGET', {email, options})
-      const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
+      const selected = qiscus.selected.comments
+      const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
       setTimeout(function(){
-        const elementToScroll = document.getElementById(latestCommentId)
-        elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
+        if(latestCommentId > 0){
+          const elementToScroll = document.getElementById(latestCommentId)
+          elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
+        }
         //on entering the room, wait for data processed then focus on comment form
         document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
       }, 0)
@@ -18,10 +21,13 @@ export default {
   },
   chatGroup: ({commit}, {id, oldSelected}) => {
     commit('CHAT_GROUP', {id, oldSelected})
-    const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
+    const selected = qiscus.selected.comments
+    const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
     setTimeout(function(){
-      const elementToScroll = document.getElementById(latestCommentId)
-      elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
+      if(latestCommentId > 0){
+        const elementToScroll = document.getElementById(latestCommentId)
+        elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
+      }
       //on entering the room, wait for data processed then focus on comment form
       document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
     }, 0)

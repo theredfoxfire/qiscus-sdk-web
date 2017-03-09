@@ -2,7 +2,7 @@
   <div class="qcw-modal-overlay" :class="{'qcw-modal-overlay--on': imageModalOn }" @click="closeHandler">
     <div class="qcw-image-modal">
       <img :src="imageModalLink" :alt="imageModalLink">
-      <a :href="imageModalLink" target="_blank">Open in New Tab</a>
+      <span class="outlink-trigger" @click="openInNewTab">Open in New Tab</span>
       <i class="fa fa-times" @click="closeHandler"></i>
     </div>
   </div>
@@ -12,6 +12,11 @@
   export default {
     name: 'ImageModal',
     props: ['imageModalLink', 'imageModalOn', 'closeHandler'],
+    methods: {
+      openInNewTab() {
+        window.open(this.imageModalLink)
+      }
+    }
   }
 </script>
 
@@ -52,7 +57,7 @@
       cursor: pointer;
       box-shadow: 0 0 17px rgba(0,0,0,.5);
     }
-    a {
+    .outlink-trigger {
       display: block;
       width: 100%;
       padding: 10px;
