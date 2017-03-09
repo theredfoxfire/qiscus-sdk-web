@@ -8,9 +8,9 @@
       <p><i class="fa fa-times fa-fw fa-2x"></i> {{ error }}</p>
       <button @click="loadImage" class="reload-image-btn">Reload Image</button>
     </div>
-    <div class="qcw-image-container" v-if="!isImage && !isLoading">
+    <div class="qcw-file-container" v-if="!isImage && !isLoading">
       <a :href="uri" target="_blank">
-        <i class="fa fa-file-o" aria-hidden="true"><div class="ft">File</div><div class="fe">{{ ext }}</div></i>
+        <i class="fa" aria-hidden="true" :class="fileClassName"></i>
         <div class="file-name">{{ filename }}</div>
       </a>
     </div>
@@ -30,6 +30,18 @@
         filename: '',
         ext: '',
         error: ''
+      }
+    },
+    computed: {
+      fileClassName() {
+        const ext = this.ext.toLowerCase()
+        const videos = ['mov','mp4','avi','mkv']
+        const images = ['jpg','jpeg','gif','webp','png']
+        const archives = ['tar', 'zip', 'rar', 'iso']
+        if ( videos.indexOf(ext) > -1 ) return 'fa-file-video-o';
+        if ( images.indexOf(ext) > -1 ) return 'fa-file-image-o';
+        if ( archives.indexOf(ext) > -1 ) return 'fa-file-archive-o';
+        return 'fa-file-text'
       }
     },
     created() {

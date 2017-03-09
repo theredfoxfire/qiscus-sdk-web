@@ -20,7 +20,7 @@
     "marked": "^0.3.6",
     "moment": "^2.14.1",
     "mqtt": "^2.0.1",
-    "node-sass": "^3.8.0",
+    "node-sass": "^4.5.0",
     "sass-loader": "^4.0.1",
     "superagent": "^2.2.0",
     "vue": "^2.0.1",
