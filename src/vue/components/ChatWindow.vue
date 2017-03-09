@@ -4,6 +4,9 @@
       'qcw-container--open': windowStatus,
       'qcw-container--not-init': !init
     }">
+    <div class="comment-loading-container" v-if="isLoading">
+      <loader width="150px" height="150px"></loader>
+    </div>
     <init-config v-if="!selected && !init"></init-config>
     <div v-if="init && !selected">
       <div class="qcw-header">
@@ -65,6 +68,7 @@
 </style>
 
 <script>
+import Loader from './Loader.vue'
 import Comment from './Comment.vue'
 // import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
@@ -72,7 +76,7 @@ import InitConfig from './InitConfig.vue'
 import LoadMore from './LoadMore.vue'
 
 export default {
-  components: {ChatParticipants, Comment, InitConfig, LoadMore},
+  components: {ChatParticipants, Comment, InitConfig, LoadMore, Loader},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected},
@@ -81,7 +85,11 @@ export default {
     mqttData: function() { return this.$store.state.mqttData },
     init: function() { return this.$store.state.qiscus.isInit },
     haveMoreComments: function() { return this.selected.comments.length > 0 && this.selected.comments[0].before_id > 0 },
-    isLoadingComments: function() { return this.$store.state.isLoadingComments }
+    isLoadingComments: function() { return this.$store.state.isLoadingComments },
+    isLoading() {
+      if(this.$store.state.qiscus.isLoading) return true;
+      return false;
+    },
   },
   data() {
     return {

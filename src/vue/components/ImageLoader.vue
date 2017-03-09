@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="image-container" v-if="isLoading">Loading image ...</div>
-    <div class="qcw-image-container" v-if="isImage && !isLoading && error==''" @click="onClickImage(imageSrc)">
+    <div class="qcw-image-container" v-if="isImage && !isLoading && error==''" @click="onClickImage(uri)">
       <img :src="imageSrc" :alt="imageSrc" />
     </div>
     <div v-if="error">
@@ -26,7 +26,7 @@
         isLoading: true,
         isImage: false,
         imageSrc: '',
-        uri: '',
+        uri: this.comment.getAttachmentURI(),
         filename: '',
         ext: '',
         error: ''

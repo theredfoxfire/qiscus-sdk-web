@@ -136,10 +136,12 @@ export class qiscusSDK extends EventEmitter {
      * Called when new chatroom has been created
      */
     self.on('chat-room-created', function (response) {
+      self.isLoading = false
       if (self.options.chatRoomCreatedCallback) self.options.chatRoomCreatedCallback(response)
     })
 
     self.on('group-room-created', function (response) {
+      self.isLoading = false
       if (self.options.groupRoomCreated) self.options.groupRoomCreated(response)
     })
     self.on('header-clicked', function (response) {
@@ -294,6 +296,7 @@ export class qiscusSDK extends EventEmitter {
    */
   getRoomById (id) {
     const self = this
+    self.isLoading = true;
     return self.roomAdapter.getRoomById(id)
       .then((response) => {
         // make sure the room hasn't been pushed yet
@@ -312,6 +315,7 @@ export class qiscusSDK extends EventEmitter {
         } 
         self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
         self.selected = room || roomToFind
+        self.isLoading = false
         self.emit('group-room-created', self.selected)
       }, (error) => {
         console.error('Error getting room by id', error)

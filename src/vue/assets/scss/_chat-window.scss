@@ -118,3 +118,17 @@ ul#messages__comments::-webkit-scrollbar-thumb {
   bottom: 12px;
   font-size: 10px;
 }
+.comment-loading-container {
+  position: absolute;
+  top: 0; left: 0;
+  background: rgba(0,0,0,.7);
+  width: 100%; height: 100%;
+  z-index: 999;
+  .loader {
+    border-width: 15px;
+    position: absolute;
+    display: block;
+    top: 35%;
+    left: 35%;
+  }
+}
