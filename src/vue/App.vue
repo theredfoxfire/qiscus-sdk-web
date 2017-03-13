@@ -4,8 +4,8 @@
       'qcw-app--not-init': !init,
       'qcw-app--wide-mode': mode === 'wide'
     }">
-    <image-modal :imageModalLink="imageModalLink" 
-      :imageModalOn="imageModalOn" 
+    <image-modal :imageModalLink="imageModalLink"
+      :imageModalOn="imageModalOn"
       :closeHandler="closeImageModal">
     </image-modal>
     <chat-trigger :label="triggerLabel" :loading="loading"></chat-trigger>
@@ -39,7 +39,7 @@ export default {
       return this.$store.getters.triggerLabel;
     },
     loading() {
-      if(this.$store.state.qiscus.isLogin || this.$store.state.qiscus.isLoading) return true;
+      if (!this.$store.state.qiscus.isLogin || this.$store.state.qiscus.isLoading) return true;
       return false;
     },
     imageModalOn() {
