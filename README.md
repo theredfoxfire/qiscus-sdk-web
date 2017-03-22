@@ -44,6 +44,12 @@ qiscus.init({AppId: 'dragongo'});
 
 You can get `AppId` by requesting one from [sdk.qiscus.com](http://sdk.qiscus.com)
 
+
+
+### -- ADVANCED SECTION BELOW --
+
+
+
 ## SDK Core Only Version
 Download the javascript file from the [release](https://github.com/qiscus/qiscus-sdk-web/releases) page, then include in your main `js` file.
 
