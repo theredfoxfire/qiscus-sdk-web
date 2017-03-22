@@ -39,18 +39,39 @@
           {{ mqttData.typing }} is typing ...
         </li>
       </ul>
+      <!-- actions untuk attachment -->
+      <ul class="qcw-attachment__actions" :class="{'qcw-attachment__actions--active': showActions}">
+        <li>
+          <span class="qcw-attachment__label">Location</span>
+          <i class="fa fa-map"></i>
+        </li>
+        <li>
+          <span class="qcw-attachment__label">Image</span>
+          <i class="fa fa-image"></i>
+          <input class="uploader__input" name="file" type="file" accept="image/*" @change="uploadFile" v-if="commentInput.length <= 0">
+        </li>
+        <li>
+          <span class="qcw-attachment__label">File</span>
+          <i class="fa fa-file-text"></i>
+          <input class="uploader__input" name="file" type="file" @change="uploadFile" v-if="commentInput.length <= 0">
+        </li>
+      </ul>
+      <!-- form untuk postcomment -->
       <div class="qcw-comment-form">
         <textarea placeholder="type your comment here ..."
+          row="2"
           @focus="publishTyping"
           @keyup="publishTyping"
           @keyup.enter="trySubmitComment($event)"
           v-model="commentInput">
         </textarea>
-        <div class="uploader">
-          <i class="fa fa-paper-plane" v-if="commentInput.length > 0" @click="trySubmitComment($event)"></i>
-          <i class="fa fa-paperclip" v-if="commentInput.length <= 0"></i>
-          <input class="uploader__input" name="file" type="file" @change="uploadFile" v-if="commentInput.length <= 0">
-        </div>
+        <ul class="qcw-form-actions">
+          <li @click="toggleActions">
+            <i class="fa fa-paperclip" v-if="!showActions"></i>
+            <i class="fa fa-times" v-if="showActions"></i>
+          </li>
+          <li><i class="fa fa-paper-plane" @click="trySubmitComment($event)"></i></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -94,7 +115,8 @@ export default {
   data() {
     return {
       commentInput: '',
-      uploads: []
+      uploads: [],
+      showActions: false
     }
   },
   created() {
@@ -104,6 +126,9 @@ export default {
     // }, 5000);
   },
   methods: {
+    toggleActions() {
+      this.showActions = !this.showActions
+    },
     publishTyping() {
       const self = this;
       if(self.commentInput.length > 0){
@@ -134,6 +159,7 @@ export default {
         this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
         this.commentInput = ''
         this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
+        this.showActions = false;
       }
     },
     submitComment(topic_id, comment) {

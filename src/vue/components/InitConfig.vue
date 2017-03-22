@@ -37,6 +37,7 @@
         key: 'password',
         username: 'Qiscus Demo',
         description: 'This account is used for demo purpose only',
+        // target_email: 'fikri@qiscus.com'
         target_email: 'fikri@qiscus.com'
       }
     },
@@ -49,6 +50,7 @@
         qiscus.setUser(this.email, this.key, this.username);
         qiscus.init({
           AppId: 'dragongo',
+          plugins: ['emoji'],
           options: {
             email: this.email,
             username: this.username,

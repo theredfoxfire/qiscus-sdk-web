@@ -27,6 +27,8 @@ export default class RoomAdapter {
       const rivalUser = find(p => p.email === email)(room.participants)
       room.name = rivalUser ? rivalUser.username : 'Room name'
       return Promise.resolve(room)
+    }, (err) => {
+      return Promise.reject(err)
     })
   }
 

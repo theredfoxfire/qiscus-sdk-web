@@ -15,20 +15,30 @@
           <span class="qcw-comment__username">{{comment.username_as}}</span>
           <span class="qcw-comment__time">{{comment.time}}</span>
         </div>
-        <image-loader v-if="comment.isAttachment()"
-          :comment="comment"
-          :on-click-image="onClickImage"
-          :callback="onupdate">
-        </image-loader>
-        <div v-html="message" v-if="!comment.isAttachment()"></div>
-        <div v-if="comment.username_real == myemail">
-          <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
-          <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
-          <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
-            <i class="fa fa-check"></i><i class="fa fa-check"></i>
-          </div>
-          <div class="qcw-comment__state qcw-comment__state--read" v-if="comment.isRead">
-            <i class="fa fa-check"></i><i class="fa fa-check"></i>
+        <!-- CommentType: "TEXT" -->
+        <div v-if="comment.type == 'text'">
+          <image-loader v-if="comment.isAttachment()"
+            :comment="comment"
+            :on-click-image="onClickImage"
+            :callback="onupdate">
+          </image-loader>
+          <div v-html="message" v-if="!comment.isAttachment()"></div>
+          <div v-if="comment.username_real == myemail">
+            <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
+            <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
+            <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
+              <i class="fa fa-check"></i><i class="fa fa-check"></i>
+            </div>
+            <div class="qcw-comment__state qcw-comment__state--read" v-if="comment.isRead">
+              <i class="fa fa-check"></i><i class="fa fa-check"></i>
+            </div>
+          </div> <!-- end of comment icons -->
+        </div>
+        <!-- CommentType: "ACCOUNT_LINKING" -->
+        <div v-if="comment.type == 'account_linking'">
+          {{ comment.message }}
+          <div class="action_buttons">
+            <button @click="openAccountBox">LOGIN &rang;</button>
           </div>
         </div>
       </div>
@@ -66,6 +76,11 @@ export default {
       });
     }
   },
+  methods: {
+    openAccountBox() {
+      window.open(this.comment.payload.url, 'AccountLinkingPopup', 'width=500,height=400')
+    }
+  },
   data () {
     return {
       message: '',
@@ -90,6 +105,7 @@ export default {
           return objectGraph
         }.bind(this),
         marked: true,
+        emoji: true,
         plugins: {
           marked: marked,
         }

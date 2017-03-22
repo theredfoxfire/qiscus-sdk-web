@@ -1,8 +1,9 @@
 {
   "name": "qiscus-sdk-web",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Qiscus Javascript SDK For Web",
   "author": "contact.us@qiscus.com",
+  "homepage": "sdk.qiscus.com",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",

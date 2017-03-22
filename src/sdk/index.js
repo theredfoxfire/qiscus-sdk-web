@@ -26,6 +26,7 @@ export class qiscusSDK extends EventEmitter {
     self.selected = null
     self.pendingCommentId = 0
     self.last_received_comment_id = 0
+    self.mqtt = null // I'll look into this later, basically we'll move mqtt from vuex to core
 
     // User Properties
     self.userData = {}
@@ -40,6 +41,7 @@ export class qiscusSDK extends EventEmitter {
     self.sync = 'both' // possible values 'socket', 'http', 'both'
     // there's two mode, widget and wide
     self.mode = 'widget'
+    self.plugins = []
 
     /**
      * This code below is wrapper for vStore object
@@ -183,6 +185,8 @@ export class qiscusSDK extends EventEmitter {
     // setup how sdk will sync data: socket, http, both
     if (config.sync) this.sync = config.sync
     if (this.sync == 'http' || this.sync == 'both') this.activateSync()
+    // add plugins
+    if (config.plugins && config.plugins.length>0) config.plugins.forEach(plugin => this.plugins.push(plugin))
 
     // Connect to Login or Register API
     this.connectToQiscus().then((response) => {
@@ -256,7 +260,11 @@ export class qiscusSDK extends EventEmitter {
         self.isLoading = false
         self.selected = room
         return room
-      }, (err) => { console.error('Error when creating room', err) })
+      }, (err) => { 
+        console.error('Error when creating room', err) 
+        self.isLoading = false
+        return false
+      })
       // Post initial comment
       .then((room) => {
         if (!initialMessage) return room
@@ -668,6 +676,8 @@ export class Comment {
     this.isRead = true
     this.isSent = true
     this.attachment = null
+    this.payload = comment.payload
+    this.type = comment.type || 'text'
   }
   isAttachment () {
     return (this.message.substring(0, '[file]'.length) == '[file]')

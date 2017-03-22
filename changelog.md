@@ -1,6 +1,16 @@
+# SDK v.1.4.8
+- Editing Documentation
+- Updating Example
+- Change Attachment Styling
+
+# SDK v.1.4.7
+- Add support for account_linking comment type for bots
+- Refining design bubble, colour, etc
+
 # SDK v.1.4.6
 - Add Loading indicator on chat window when loading new chat room
 - fix issue with cant open file in new tab
+- fix styling on emoji and links
 
 # SDK v.1.4.5
 - No submit comment if empty string

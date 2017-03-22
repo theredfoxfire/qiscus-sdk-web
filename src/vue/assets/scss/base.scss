@@ -1,4 +1,6 @@
 @import "_variable.scss";
+@import "node_modules/embed-js/src/css/embed.scss";
+
 #qcw-app * {
   box-sizing: border-box;
 }
@@ -18,7 +20,7 @@
     right: 0;
   }
   ul#messages__comments {
-    height: calc(100vh - 115px) !important;
+    height: calc(100vh - 98px) !important;
   }
 }
 @import '_chat-trigger.scss';
