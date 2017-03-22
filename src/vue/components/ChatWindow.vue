@@ -19,6 +19,9 @@
       <div class="qcw-header" @click="onHeaderClicked">
         <img class="qcw-room-avatar" :src="selected.avatar" alt="Room Avatar" />
         {{ selected.name }}
+        <div v-if="mqttData.typing != ''" class="isTypingText">
+          {{ mqttData.typing }} is typing ...
+        </div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <ul id="messages__comments">
@@ -35,16 +38,9 @@
         <li v-if="uploads.length > 0" v-for="upload in uploads">
           <div class="qcw-upload-info">Uploading {{ upload }} ...</div>
         </li>
-        <li v-if="mqttData.typing != ''" class="isTypingText">
-          {{ mqttData.typing }} is typing ...
-        </li>
       </ul>
       <!-- actions untuk attachment -->
       <ul class="qcw-attachment__actions" :class="{'qcw-attachment__actions--active': showActions}">
-        <li>
-          <span class="qcw-attachment__label">Location</span>
-          <i class="fa fa-map"></i>
-        </li>
         <li>
           <span class="qcw-attachment__label">Image</span>
           <i class="fa fa-image"></i>

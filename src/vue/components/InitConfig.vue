@@ -38,7 +38,7 @@
         username: 'Qiscus Demo',
         description: 'This account is used for demo purpose only',
         // target_email: 'fikri@qiscus.com'
-        target_email: 'fikri@qiscus.com'
+        target_email: 'guest2@qiscus.com'
       }
     },
     methods: {

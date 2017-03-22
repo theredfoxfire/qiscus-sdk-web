@@ -21,11 +21,10 @@
 .qcw-header {
   background: $primary-color;
   color: #ecf0f1;
-  padding: 15px;
+  padding: 12px 20px 18px 45px;
   border-radius: 5px 5px 0 0;
   text-shadow: 0 -1px 0 rgba(0,0,0,.3);
   font-weight: bold;
-  text-align: center;
   position: relative;
 }
 .qcw-header i.fa {
@@ -101,8 +100,9 @@ ul#messages__comments::-webkit-scrollbar-thumb {
 .isTypingText {
   position: absolute;
   text-align: left;
-  bottom: 12px;
+  bottom: 5px;
   font-size: 10px;
+  text-shadow: none;
 }
 .comment-loading-container {
   position: absolute;

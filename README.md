@@ -20,11 +20,11 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
-  <link rel="stylesheet" type="text/css" href="path/to/css/qiscus-sdk.css"> 
+  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.5.0/css/qiscus-sdk.1.5.0.css"> 
 </head>
 <body>
   <div id="qiscus-widget"></div>
-  <script src="path/to/js/qiscus-sdk.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.5.0/js/qiscus-sdk.1.5.0.js"></script>
   <script>
      qiscus.setUser('your@email.com', 'key', 'username');
      qiscus.init({AppId: 'dragongo'});
