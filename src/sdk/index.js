@@ -185,6 +185,8 @@ export class qiscusSDK extends EventEmitter {
     // setup how sdk will sync data: socket, http, both
     if (config.sync) this.sync = config.sync
     if (this.sync == 'http' || this.sync == 'both') this.activateSync()
+    // setup how sdk will set the layout, widget or wide 
+    if (config.mode) this.mode = config.mode
     // add plugins
     if (config.plugins && config.plugins.length>0) config.plugins.forEach(plugin => this.plugins.push(plugin))
 

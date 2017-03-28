@@ -89,6 +89,8 @@ export default {
       x: new EmbedJS({
         input: this.comment.message,
         openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
+        googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
+        inlineEmbed: 'all',
         onOpenGraphFetch: function(data) {
           const title = data.results.metadata.title
           const isTitleExists = title && title.length > 0
