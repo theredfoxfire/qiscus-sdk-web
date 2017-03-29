@@ -151,8 +151,10 @@ export default {
       if(!e.shiftKey){
         e.preventDefault();
         e.stopPropagation();
+        let message = this.commentInput.trim()
+        if(typeof emojione != "undefined") message = emojione.shortnameToUnicode(message)
         if(this.commentInput.trim().length < 1) return;
-        this.submitComment(this.selected.last_comment_topic_id, this.commentInput.trim());
+        this.submitComment(this.selected.last_comment_topic_id, message);
         this.commentInput = ''
         this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
         this.showActions = false;

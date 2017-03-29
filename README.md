@@ -20,6 +20,8 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
   <title>Document</title>
   <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
   <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.5.0/css/qiscus-sdk.1.5.0.css">
+  <!-- add this CDN for emojione if you intend to support emoji -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
 </head>
 <body>
   <div id="qiscus-widget"></div>

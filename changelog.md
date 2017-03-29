@@ -1,3 +1,13 @@
+# SDK v.1.5.1
+- Fix styling issue when widget mode activated
+- SDK now convert emoji shortname to unicode to support android and iOS
+- SDK can now read unicode and convert it back to shortname
+- Updated documentation
+
+# SDK v.1.5.0
+- Updating styling
+- Add widget mode on initiation
+
 # SDK v.1.4.8
 - Editing Documentation
 - Updating Example

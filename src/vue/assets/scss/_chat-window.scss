@@ -15,7 +15,9 @@
   .qcw-app--wide-mode & {
     width: 100%; height: 100%;
     position: relative;
-    top: 0; left: 0;
+    top: 0; left: 0; bottom: auto;
+    transform: translateY(0);
+    overflow: hidden;
   }
 }
 .qcw-header {
@@ -148,12 +150,10 @@ ul#messages__comments::-webkit-scrollbar-thumb {
 .qcw-attachment__actions {
   position: absolute;
   bottom: 50px;
-  right: 10px;
+  right: -150%;
   list-style: none;
   margin: 0;
   transition: all .32s ease;
-  transform: translateY(300%);
-  
   li {
     position: relative;
     width: 35px; height: 35px;
@@ -181,7 +181,7 @@ ul#messages__comments::-webkit-scrollbar-thumb {
   }
 }
 .qcw-attachment__actions.qcw-attachment__actions--active {
-  transform: translateY(0);
+  right: 20px;
 }
 .qcw-attachment__label {
   opacity: 0;

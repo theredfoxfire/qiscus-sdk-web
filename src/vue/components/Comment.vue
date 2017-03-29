@@ -36,7 +36,7 @@
         </div>
         <!-- CommentType: "ACCOUNT_LINKING" -->
         <div v-if="comment.type == 'account_linking'">
-          {{ comment.message }}
+          {{ message }}
           <div class="action_buttons">
             <button @click="openAccountBox">LOGIN &rang;</button>
           </div>
@@ -65,11 +65,11 @@ export default {
     isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
     isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
     isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; },
-    showDate() { return this.commentBefore === null || (this.commentBefore.date != this.comment.date) }
+    showDate() { return this.commentBefore === null || (this.commentBefore.date != this.comment.date) },
+    renderedComment() { return (typeof emojione != "undefined") ? emojione.toShort(this.comment.message) : this.comment.message }
   },
   created() {
-    const comment = this.comment;
-    if(!comment.isAttachment()) {
+    if(!this.comment.isAttachment()) {
       this.x.text((data) => {
         this.message = data;
         this.onupdate();
@@ -87,7 +87,7 @@ export default {
       dateToday: new Date(this.comment.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
       me: qiscus.email,
       x: new EmbedJS({
-        input: this.comment.message,
+        input: (typeof emojione != 'undefined') ? emojione.toShort(this.comment.message) : this.comment.message,
         openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
         googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
         inlineEmbed: 'all',
