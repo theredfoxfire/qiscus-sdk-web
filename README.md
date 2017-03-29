@@ -1,9 +1,3 @@
-# Introduction
-
-> Qiscus Javascript SDK For Web
-
-**Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
-There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 
 # Quick Start
 ### 1. Create a new SDK application in the Dashboard and get app_id 
@@ -63,6 +57,13 @@ There's two version of the SDK. The SDK Core Only version which you can use to b
 
 # Miscellaneous 
 # Change Log 
+
+# Introduction
+
+> Qiscus Javascript SDK For Web
+
+**Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
+There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 
 # Installation and Usage
 
