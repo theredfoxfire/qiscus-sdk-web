@@ -5,6 +5,65 @@
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 
+# Quick Start
+### 1. Create a new SDK application in the Dashboard and get app_id 
+### 2. When integrating SDK with an existing app 
+### 3. Running the 3.0 sample in React Native → Web (ini hanya contoh dari sendbird,nggak tahu diisi apa yang khusus web)
+
+# Authentication 
+### Initializing with APP_ID 
+### Login or register
+### Disconnecting/logout
+### Updating a User Profile and Avatar 
+
+# Room Types 
+### Group Channel 
+### 1 on 1 
+
+# 1-to-1 Chat 
+### Creating and starting 1-to-1 chat
+
+# Group Room 
+### Creating a Group Room 
+### Getting a Group Room instance with room id
+### Inviting users to an existing channel 
+### Leaving a Group Room
+### Advanced 
+#### Getting a list of all channel members
+#### Getting participants' online statuses 
+#### Typing indicators 
+#### Read Receipts
+#### Admin messages 
+#### Channel cover images 
+#### Custom channel types 
+#### Custom message types 
+#### Message auto-translation 
+#### File Message thumbnails 
+
+# Messaging
+### Sending messages 
+### Receiving messages
+### Loading previous messages 
+### Loading messages by timestamp
+### Getting a list of participants in a room
+### Getting participants' online statuses 
+### Getting a list of banned or muted users in a room 
+### Deleting messages 
+    
+# Room Metadata
+### MetaData
+### MetaCounter 
+
+# Event Handler
+### Room Handler 
+
+# UI Customization
+### Theme Customization 
+### UI Source code? 
+
+# Miscellaneous 
+# Change Log 
+
 # Installation and Usage
 
 ## SDK with Integrated Widget View
