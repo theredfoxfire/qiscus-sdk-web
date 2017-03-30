@@ -1,8 +1,14 @@
+# Introduction
+
+> Qiscus Javascript SDK For Web
+
+**Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
+There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 
 # Quick Start
 ### 1. Create a new SDK application in the Dashboard and get app_id 
 ### 2. When integrating SDK with an existing app 
-### 3. Running the 3.0 sample in React Native → Web (ini hanya contoh dari sendbird,nggak tahu diisi apa yang khusus web)
+### 3. Running the 3.0 sample in React Native 
 
 # Authentication 
 ### Initializing with APP_ID 
@@ -11,7 +17,7 @@
 ### Updating a User Profile and Avatar 
 
 # Room Types 
-### Group Channel 
+### Group Room 
 ### 1 on 1 
 
 # 1-to-1 Chat 
@@ -20,16 +26,16 @@
 # Group Room 
 ### Creating a Group Room 
 ### Getting a Group Room instance with room id
-### Inviting users to an existing channel 
+### Inviting users to an existing room 
 ### Leaving a Group Room
 ### Advanced 
-#### Getting a list of all channel members
+#### Getting a list of all room members
 #### Getting participants' online statuses 
 #### Typing indicators 
 #### Read Receipts
 #### Admin messages 
-#### Channel cover images 
-#### Custom channel types 
+#### Room cover images 
+#### Custom room types 
 #### Custom message types 
 #### Message auto-translation 
 #### File Message thumbnails 
@@ -53,17 +59,9 @@
 
 # UI Customization
 ### Theme Customization 
-### UI Source code? 
 
 # Miscellaneous 
 # Change Log 
-
-# Introduction
-
-> Qiscus Javascript SDK For Web
-
-**Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
-There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 
 # Installation and Usage
 
