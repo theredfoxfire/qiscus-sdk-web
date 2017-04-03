@@ -70,6 +70,7 @@ export default {
   },
   created() {
     if(!this.comment.isAttachment()) {
+      this.message = this.comment.message
       this.x.text((data) => {
         this.message = data;
         this.onupdate();

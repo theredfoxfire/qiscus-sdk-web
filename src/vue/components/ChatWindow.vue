@@ -17,11 +17,11 @@
     </div>
     <div v-if="init && selected">
       <div class="qcw-header" @click="onHeaderClicked">
-        <img class="qcw-room-avatar" :src="selected.avatar" alt="Room Avatar" />
-        {{ selected.name }}
-        <div v-if="mqttData.typing != ''" class="isTypingText">
-          {{ mqttData.typing }} is typing ...
-        </div>
+        <img class="qcw-room-avatar" :src="selected.avatar || 'https://qiscuss3.s3.amazonaws.com/uploads/55c0c6ee486be6b686d52e5b9bbedbbf/2.png'" alt="Room Avatar" />
+        <div v-if="!selected.custom_title">{{ selected.name }}</div>
+        <div v-if="selected.custom_title">{{ selected.custom_title }}</div>
+        <div v-if="mqttData.typing != ''" class="isTypingText">{{ mqttData.typing }} is typing ...</div>
+        <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <ul id="messages__comments">

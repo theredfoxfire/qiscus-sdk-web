@@ -60,6 +60,7 @@ export default class RoomAdapter {
           avatarURL: room.avatar_url,
           options: room.options,
           participants: room.participants.map(participant => ({
+            id: participant.id,
             email: participant.email,
             username: participant.username,
             avatarURL: participant.avatar_url

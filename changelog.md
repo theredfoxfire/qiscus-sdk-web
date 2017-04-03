@@ -1,3 +1,7 @@
+# SDK v.1.5.2
+- Add `setTitle` and `setSubTitle` method on `room` Object
+- render unprocessed message while waiting for rendering process on message (link, image, etc)
+
 # SDK v.1.5.1
 - Fix styling issue when widget mode activated
 - SDK now convert emoji shortname to unicode to support android and iOS

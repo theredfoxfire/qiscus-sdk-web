@@ -144,7 +144,7 @@ export class qiscusSDK extends EventEmitter {
 
     self.on('group-room-created', function (response) {
       self.isLoading = false
-      if (self.options.groupRoomCreated) self.options.groupRoomCreated(response)
+      if (self.options.groupRoomCreatedCallback) self.options.groupRoomCreatedCallback(response)
     })
     self.on('header-clicked', function (response) {
       if (self.options.headerClickedCallback) self.options.headerClickedCallback(response)
@@ -326,7 +326,7 @@ export class qiscusSDK extends EventEmitter {
         self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
         self.selected = room || roomToFind
         self.isLoading = false
-        self.emit('group-room-created', self.selected)
+        // self.emit('group-room-created', self.selected)
       }, (error) => {
         console.error('Error getting room by id', error)
       })
@@ -557,7 +557,18 @@ export class Room {
     this.isLoaded = false
     this.code_en = roomData.code_en
     this.unread_comments = []
+    this.custom_title = null
+    this.custom_subtitle = null
+    this.test = 'aaaa'
     this.receiveComments(roomData.comments)
+  }
+
+  setTitle ( title ) {
+    this.custom_title = title
+  }
+
+  setSubTitle ( subtitle ) {
+    this.custom_subtitle = subtitle
   }
 
   receiveComments (comments) {
