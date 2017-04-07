@@ -8,8 +8,9 @@ There's two version of the SDK. The SDK Core Only version which you can use to b
 # Quick Start
 ### Create a new SDK application in the Dashboard and get app_id 
 You can get `AppId` by requesting one from [sdk.qiscus.com](http://sdk.qiscus.com)
+
 ### When integrating SDK with an existing app 
-## SDK with Integrated Widget View
+###### SDK with Integrated Widget View
 
 This version let you add a chat widget directly into your existing HTML web pages. 
 You just need to include the javascript and css files from the build directory. 
