@@ -1,7 +1,4 @@
-# Introduction
-
-> Qiscus Javascript SDK For Web
-
+# Qiscus SDK
 
 
 ![qiscus SDK demo](sdk-show.png)
