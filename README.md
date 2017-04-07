@@ -2,6 +2,12 @@
 
 > Qiscus Javascript SDK For Web
 
+
+
+![qiscus SDK demo](sdk-show.png)
+
+
+
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 
@@ -46,7 +52,6 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
 Example Demo App [qiscus-sdk-web.herokuapp.com](http://qiscus-sdk-web.herokuapp.com)
 
 
-![qiscus SDK demo](sdk-show.png)
 # Authentication 
 ### Initializing with APP_ID 
 The javascript file introduce a new global variable called `qiscus`. We'll use that to initiate our chat widget.
