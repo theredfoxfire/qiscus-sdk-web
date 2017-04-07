@@ -52,60 +52,30 @@ Example Demo App [qiscus-sdk-web.herokuapp.com](http://qiscus-sdk-web.herokuapp.
 The javascript file introduce a new global variable called `qiscus`. We'll use that to initiate our chat widget.
 
 ``` javascript
-// Set Current User for the Chat Widget
-qiscus.setUser('email@email.com', 'key', 'username');
-// Init the widget
-qiscus.init({AppId: 'dragongo'});
-// start chat with target
-qiscus.UI.chatTarget('guest2@qiscus.com')
+     qiscus.init({
+        AppId: 'DRAGONGO',
+        options: {
+              loginSuccessCallback(data) { },
+              newMessagesCallback(data) { }
+        }
+     });
+
 ```
 ### Login or register
-### Disconnecting/logout
-### Updating a User Profile and Avatar 
+``` javascript
+     qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
+```
 
-# Room Types 
-### Group Room 
-### 1 on 1 
+### Updating a User Profile and Avatar 
+```javascript
+     qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo', 'https://imageurl.com/image.png);
+```
 
 # 1-to-1 Chat 
 ### Creating and starting 1-to-1 chat
-
-# Group Room 
-### Creating a Group Room 
-### Getting a Group Room instance with room id
-### Inviting users to an existing room 
-### Leaving a Group Room
-### Advanced 
-#### Getting a list of all room members
-#### Getting participants' online statuses 
-#### Typing indicators 
-#### Read Receipts
-#### Admin messages 
-#### Room cover images 
-#### Custom room types 
-#### Custom message types 
-#### Message auto-translation 
-#### File Message thumbnails 
-
-# Messaging
-### Sending messages 
-### Receiving messages
-### Loading previous messages 
-### Loading messages by timestamp
-### Getting a list of participants in a room
-### Getting participants' online statuses 
-### Getting a list of banned or muted users in a room 
-### Deleting messages 
-    
-# Room Metadata
-### MetaData
-### MetaCounter 
-
-# Event Handler
-### Room Handler 
-
-# UI Customization
-### Theme Customization 
+```javascript
+  qiscus.UI.chatTarget('guest2@qiscus.com')
+```
 
 # Miscellaneous 
 # Change Log 
