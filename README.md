@@ -68,7 +68,7 @@ The javascript file introduce a new global variable called `qiscus`. We'll use t
 
 ### Updating a User Profile and Avatar 
 ```javascript
-     qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo', 'https://imageurl.com/image.png);
+     qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo', 'https://imageurl.com/image.png');
 ```
 
 # 1-to-1 Chat 
