@@ -79,9 +79,6 @@ The javascript file introduce a new global variable called `qiscus`. We'll use t
   qiscus.UI.chatTarget('guest2@qiscus.com')
 ```
 
-# Miscellaneous 
-# Change Log 
-
 
 
 
