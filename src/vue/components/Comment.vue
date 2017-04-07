@@ -13,7 +13,7 @@
       <div class="qcw-comment__message">
         <div class="qcw-comment__info" v-if="isParent">
           <span class="qcw-comment__username">{{comment.username_as}}</span>
-          <span class="qcw-comment__time">{{comment.time}}</span>
+          <span class="qcw-comment__time" v-if="isParent">{{comment.time}}</span>
         </div>
         <!-- CommentType: "TEXT" -->
         <div v-if="comment.type == 'text'">
@@ -22,8 +22,11 @@
             :on-click-image="onClickImage"
             :callback="onupdate">
           </image-loader>
-          <div v-html="message" v-if="!comment.isAttachment()"></div>
-          <div v-if="comment.username_real == myemail">
+          <div v-html="message" v-if="!comment.isAttachment()" class="qcw-comment__content"></div>
+          <span class="qcw-comment__time qcw-comment__time--children" i
+            v-if="!isParent"
+            :class="{'qcw-comment__time--attachment': comment.isAttachment}">{{comment.time}}</span>
+          <div v-if="isMe">
             <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
             <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
             <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
@@ -36,9 +39,9 @@
         </div>
         <!-- CommentType: "ACCOUNT_LINKING" -->
         <div v-if="comment.type == 'account_linking'">
-          {{ message }}
+          <div v-html="message" class="qcw-comment__content"></div>
           <div class="action_buttons">
-            <button @click="openAccountBox">LOGIN &rang;</button>
+            <button @click="openAccountBox">{{ comment.payload.params.button_text }} &rang;</button>
           </div>
         </div>
       </div>
@@ -65,6 +68,7 @@ export default {
     isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
     isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
     isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; },
+    isMe () { return this.comment.username_real == this.myemail },
     showDate() { return this.commentBefore === null || (this.commentBefore.date != this.comment.date) },
     renderedComment() { return (typeof emojione != "undefined") ? emojione.toShort(this.comment.message) : this.comment.message }
   },
@@ -79,7 +83,7 @@ export default {
   },
   methods: {
     openAccountBox() {
-      window.open(this.comment.payload.url, 'AccountLinkingPopup', 'width=500,height=400')
+      window.open(this.comment.payload.url, 'AccountLinkingPopup', 'width=500,height=400,location=no,menubar=no,resizable=1,status=no,toolbar=no')
     }
   },
   data () {

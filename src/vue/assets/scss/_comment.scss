@@ -20,6 +20,9 @@
     justify-content: flex-end;
   }
 }
+.qcw-comment__content {
+  padding-right: 50px;
+}
 .qcw-comment__message {
   line-height: 1.7em;
   min-height: 30px;
@@ -32,12 +35,8 @@
   color: #444;
   a {
     transition: all .32s ease;
-    font-weight: bold;
-    color: #444;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
+    color: #039be5;
+    text-decoration: underline;
   }
   .comment--me & {
     background: $mybubble-color;
@@ -114,14 +113,20 @@
 }
 .qcw-comment__time {
   font-size: 10px;
-  color: #444;
-  .comment--me & {
-    color: #FFF;
+  color: #888;
+  &--children {
+    position: absolute;
+    bottom: 10px; right: 10px;
+  }
+  &--attachment {
+    position: absolute;
+    bottom: -5px; right: 10px;
   }
 }
 .qcw-image-container {
   height: 100px; overflow: hidden;
   border-radius: 0 0 5px 5px;
+  
   img {
     min-width: 200px;
     min-height: 110px;
@@ -185,9 +190,15 @@
 .ejs-embed {
   overflow: hidden;
   margin-top: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
+  min-width: 250px;
 //   border: 1px solid #ccc;
 //   padding: 5px;
+  .ejs-ogp-title a {
+    color: #444;
+    text-decoration: none;
+    font-weight: bold;
+  }
   .ejs-ogp-thumb {
     width: 100px; height: 100px;
     float: left;
@@ -196,6 +207,14 @@
   .ejs-ogp-details {
     left: 110px;
   }
+}
+.ejs-ogb-details {
+  line-height: 1.2em;
+  max-height: 3.6em;
+  overflow: hidden;
+  position: relative;
+  margin-right: -1.5em;
+  padding-right: 1em;
 }
 pre {
   background: #ccc;
@@ -208,7 +227,6 @@ code {
   background: #e5e5e5;
   padding: 10px;
   margin: 10px -10px -10px -10px;
-  border-radius: 0 0 $border-radius $border-radius;
   display: flex;
   justify-content: space-between;
   button {

@@ -1,3 +1,8 @@
+# SDK v.1.5.3
+- Refine link preview Style
+- Fix account linking displaying html, and show the button label based on payload
+- Display time for children bubble message
+
 # SDK v.1.5.2
 - Add `setTitle` and `setSubTitle` method on `room` Object
 - render unprocessed message while waiting for rendering process on message (link, image, etc)
