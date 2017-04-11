@@ -47,7 +47,6 @@
       },
       activateChat() {
         const self = this;
-        qiscus.setUser(this.email, this.key, this.username);
         qiscus.init({
           AppId: 'dragongo',
           // AppId: 'kiwari-prod',
@@ -65,6 +64,7 @@
             }
           }
         });
+        qiscus.setUser(this.email, this.key, this.username);
         this.$store.dispatch('toggleInit');
         this.toggleChatWindow();
       }

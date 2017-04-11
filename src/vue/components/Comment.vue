@@ -51,7 +51,7 @@
 
 <script>
 import EmbedJS from 'embed-js';
-import marked from 'marked';
+// import marked from 'marked';
 import ImageLoader from './ImageLoader.vue';
 // import highlight from 'highlight.js';
 // import Avatar from './Avatar';
@@ -111,10 +111,10 @@ export default {
           setTimeout( () => this.onupdate(), 0 )
           return objectGraph
         }.bind(this),
-        marked: true,
+        // marked: true,
         emoji: true,
         plugins: {
-          marked: marked,
+          // marked: marked,
         }
       })
     }

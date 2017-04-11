@@ -168,7 +168,12 @@ export class qiscusSDK extends EventEmitter {
     this.key = key
     this.username = username
     this.avatar_url = avatarURL
-    this.isInit = true
+
+    // Connect to Login or Register API
+    this.connectToQiscus().then((response) => {
+      this.isInit = true
+      this.emit('login-success', response)
+    }, (err) => console.error('Failed connecting', err))
   }
 
   /**
@@ -189,12 +194,6 @@ export class qiscusSDK extends EventEmitter {
     if (config.mode) this.mode = config.mode
     // add plugins
     if (config.plugins && config.plugins.length>0) config.plugins.forEach(plugin => this.plugins.push(plugin))
-
-    // Connect to Login or Register API
-    this.connectToQiscus().then((response) => {
-      this.isInit = true
-      this.emit('login-success', response)
-    }, (err) => console.error('Failed connecting', err))
   }
 
   connectToQiscus () {
