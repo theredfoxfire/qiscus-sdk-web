@@ -228,7 +228,7 @@ export default {
           vm.submitComment(vm.selected.last_comment_topic_id, `[file] ${url} [/file]`);
         } else {
           alert('File Uploading failed');
-          vm.uplods.splice(vm.uploads.indexOf(files[0].name), 1)
+          vm.uploads.splice(vm.uploads.indexOf(files[0].name), 1)
         }
       }
       xhr.send(formData);
