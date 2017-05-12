@@ -54,6 +54,9 @@ ul#messages__comments {
   overflow-y: auto;
   padding: 10px 20px;
 }
+.qcw-app--wide-mode ul#messages__comments {
+  height: calc(100% - 100px);
+}
 ul#messages__comments::-webkit-scrollbar {
  width: 9px; background-color: #ddd;
  opacity: 0.3;
@@ -196,4 +199,30 @@ ul#messages__comments::-webkit-scrollbar-thumb {
   .qcw-attachment__actions li:hover & {
     opacity: 1;
   }
+}
+.qcw-goto-bottom i {
+    color: #8a8a8a;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 30px;
+    cursor: pointer;
+}
+.qcw-goto-bottom {
+    background: #FFF;
+    color: #444;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0 3px 5px rgba(0,0,0,.3);
+    border: 1px solid #ececec;
+    position: absolute;
+    z-index: 400;
+    bottom: 70px;
+    right: 15px;
+    text-align: center;
+    transition: all .32s ease;
+    transform: translateX(250%);
+}
+.widget-chat-wrapper:hover .qcw-goto-bottom {
+    transform: translateX(0);
 }

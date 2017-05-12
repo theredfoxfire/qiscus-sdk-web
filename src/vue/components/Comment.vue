@@ -23,9 +23,9 @@
             :callback="onupdate">
           </image-loader>
           <div v-html="message" v-if="!comment.isAttachment()" class="qcw-comment__content"></div>
-          <span class="qcw-comment__time qcw-comment__time--children" i
+          <span class="qcw-comment__time qcw-comment__time--children" 
             v-if="!isParent"
-            :class="{'qcw-comment__time--attachment': comment.isAttachment}">{{comment.time}}</span>
+            :class="{'qcw-comment__time--attachment': comment.isAttachment()}">{{comment.time}}</span>
           <div v-if="isMe">
             <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
             <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
@@ -42,6 +42,15 @@
           <div v-html="message" class="qcw-comment__content"></div>
           <div class="action_buttons">
             <button @click="openAccountBox">{{ comment.payload.params.button_text }} &rang;</button>
+          </div>
+        </div>
+        <!-- CommentType: "BUTTON" -->
+        <div v-if="comment.type == 'buttons'">
+          <div v-html="comment.payload.text || message" class="qcw-comment__content"></div>
+          <div class="action_buttons" v-for="button in comment.payload.buttons">
+            <button @click="postbackSubmit(button)" v-if="button.type == 'postback'">
+              {{ button.label }}
+            </button>
           </div>
         </div>
       </div>
@@ -77,14 +86,19 @@ export default {
       this.message = this.comment.message
       this.x.text((data) => {
         this.message = data;
-        this.onupdate();
+        // this.onupdate();
       });
     }
   },
   methods: {
     openAccountBox() {
       window.open(this.comment.payload.url, 'AccountLinkingPopup', 'width=500,height=400,location=no,menubar=no,resizable=1,status=no,toolbar=no')
-    }
+    },
+    postbackSubmit(button) {
+      const topicId = qiscus.selected.id
+      qiscus.submitComment(topicId, button.label, null, 'button_postback_response', JSON.stringify(button.payload))
+    },
+
   },
   data () {
     return {
@@ -95,7 +109,7 @@ export default {
         input: (typeof emojione != 'undefined') ? emojione.toShort(this.comment.message) : this.comment.message,
         openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
         googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
-        inlineEmbed: 'all',
+        // inlineEmbed: 'all',
         onOpenGraphFetch: function(data) {
           const title = data.results.metadata.title
           const isTitleExists = title && title.length > 0
@@ -108,7 +122,8 @@ export default {
             type: 'site',
             success: isSuccess
           }
-          setTimeout( () => this.onupdate(), 0 )
+          // setTimeout( () => this.onupdate(), 0 )
+          if(!objectGraph.image) return false
           return objectGraph
         }.bind(this),
         // marked: true,

@@ -63,7 +63,7 @@
           if (this.readyState == 4 && this.status == 200){
             self.imageSrc  = URL.createObjectURL(this.response);
             self.isLoading = false;
-            setTimeout( () => self.callback(), 0 );
+            // setTimeout( () => self.callback(), 0 );
           } 
         }
         xhr.open('GET', self.uri, true);
@@ -81,6 +81,7 @@
 </script>
 
 <style lang="scss">
+  .image-container { height: 100px; }
   .reload-image-btn {
     display: block;
     width: 100%;

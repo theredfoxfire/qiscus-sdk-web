@@ -1,3 +1,19 @@
+# SDK v.1.7.0
+- Do Scroll but only when the scrollTop position doesn't exceed 90%
+- Add scrollToBottom for UI method
+- Add payload param to submit comment, so user can post custom comment type
+- Add buttons comment type
+
+# SDK v.1.6.1
+- Change scrolling behavior so that load more comment working as expected
+- Style refinement
+- Omit link preview when no meta image attached
+
+# SDK v.1.6.0
+- Change behavior of `init` and `setUser`, now user need to init first then call setUser next.
+- Disable markdown
+- Change styling for comment
+
 # SDK v.1.5.3
 - Refine link preview Style
 - Fix account linking displaying html, and show the button label based on payload

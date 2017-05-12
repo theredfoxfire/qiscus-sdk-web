@@ -37,6 +37,16 @@ export default {
     return qiscus.submitComment(topic_id, comment)
     .then((response) => {
       commit('SUBMIT_COMMENT', qiscus.selected)
+      const selected = qiscus.selected.comments
+      const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
+      setTimeout(function(){
+        if(latestCommentId > 0){
+          const elementToScroll = document.getElementById(latestCommentId)
+          elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
+        }
+        //on entering the room, wait for data processed then focus on comment form
+        document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
+      }, 0)
       return Promise.resolve(qiscus.selected);
     })
   },

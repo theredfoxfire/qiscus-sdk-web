@@ -15,7 +15,7 @@
       </div>
       <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
     </div>
-    <div v-if="init && selected">
+    <div v-if="init && selected" class="widget-chat-wrapper">
       <div class="qcw-header" @click="onHeaderClicked">
         <img class="qcw-room-avatar" :src="selected.avatar || 'https://qiscuss3.s3.amazonaws.com/uploads/55c0c6ee486be6b686d52e5b9bbedbbf/2.png'" alt="Room Avatar" />
         <div v-if="!selected.custom_title">{{ selected.name }}</div>
@@ -24,6 +24,7 @@
         <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
+      <div class="qcw-goto-bottom" @click="scrollToBottom" v-if="!scrollable && !showActions"><i class="fa fa-angle-double-down"></i></div>
       <ul id="messages__comments">
         <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more>
         <li v-if="selected.comments.length > 0" v-for="(comment, index) in selected.comments" :key="comment.id">
@@ -112,7 +113,8 @@ export default {
     return {
       commentInput: '',
       uploads: [],
-      showActions: false
+      showActions: false,
+      scrollable: false
     }
   },
   created() {
@@ -120,6 +122,22 @@ export default {
     // setInterval(function(){
     //   if(qiscus.selected) qiscus.sync()
     // }, 5000);
+  },
+  updated () {
+    // this is basically UI business but we need to put default behaviour
+    // ---- autoscroll if the screen height is not exceeding 30% of the scrollTop -----
+    let commentContainer = document.getElementById('messages__comments')
+    if (!commentContainer) return
+    let commentContainerHeight = commentContainer.scrollHeight - commentContainer.clientHeight
+    let scrollTop = commentContainer.scrollTop
+    let scrollTreshold = commentContainerHeight * 90 / 100
+    this.scrollable = (scrollTop >= scrollTreshold) || false
+    
+    if(this.scrollable) {
+      window.setTimeout(function(){ 
+        commentContainer.scrollTop = commentContainerHeight 
+      }, 0)
+    } 
   },
   methods: {
     toggleActions() {
@@ -183,7 +201,7 @@ export default {
       // var element = document.getElementById('messages__comments');
       // element.scrollTop = (element.scrollHeight - element.clientHeight) + 7000;
       // get id of latest comment from selected room
-      const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id;
+      const latestCommentId = qiscus.selected.comments[qiscus.selected.comments.length-1].id
       const element = document.getElementById(latestCommentId)
       if(element) {
         element.scrollIntoView({block: 'end', behaviour: 'smooth'})
@@ -208,6 +226,9 @@ export default {
           var url = JSON.parse(xhr.response).results.file.url
           vm.uploads.splice(vm.uploads.indexOf(files[0].name),1)
           vm.submitComment(vm.selected.last_comment_topic_id, `[file] ${url} [/file]`);
+        } else {
+          alert('File Uploading failed');
+          vm.uplods.splice(vm.uploads.indexOf(files[0].name), 1)
         }
       }
       xhr.send(formData);

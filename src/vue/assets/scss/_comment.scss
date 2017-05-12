@@ -22,7 +22,9 @@
 }
 .qcw-comment__content {
   white-space: pre-wrap;
+  word-break: break-word;
   padding-right: 50px;
+  font-size: 13.6px;
 }
 .qcw-comment__message {
   line-height: 1.7em;
@@ -117,7 +119,7 @@
   color: #888;
   &--children {
     position: absolute;
-    bottom: 10px; right: 10px;
+    bottom: 9px; right: 10px;
   }
   &--attachment {
     position: absolute;
@@ -195,18 +197,19 @@
   min-width: 250px;
 //   border: 1px solid #ccc;
 //   padding: 5px;
+  .ejs-ogp-title { margin: 0 0 6px 0; }
   .ejs-ogp-title a {
     color: #444;
     text-decoration: none;
     font-weight: bold;
   }
   .ejs-ogp-thumb {
-    width: 100px; height: 100px;
+    width: 50px; height: 50px;
     float: left;
     margin-right: 10px;
   }
   .ejs-ogp-details {
-    left: 110px;
+    left: 55px;
   }
 }
 .ejs-ogb-details {

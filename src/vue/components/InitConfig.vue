@@ -51,6 +51,7 @@
           AppId: 'dragongo',
           // AppId: 'kiwari-prod',
           plugins: ['emoji'],
+          mode: 'wide',
           options: {
             email: this.email,
             username: this.username,

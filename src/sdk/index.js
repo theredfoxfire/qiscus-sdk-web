@@ -61,6 +61,13 @@ export class qiscusSDK extends EventEmitter {
       },
       toggleChatWindow () {
         vStore.dispatch('toggleChatWindow')
+      },
+      scrollToBottom () {
+        const latestCommentId = this.selected.comments[qiscus.selected.comments.length-1].id
+        const element = document.getElementById(latestCommentId)
+        if(element) {
+          element.scrollIntoView({block: 'end', behaviour: 'smooth'})
+        }
       }
     }
 
@@ -431,7 +438,7 @@ export class qiscusSDK extends EventEmitter {
    * @param {String} commentMessage - comment to be submitted
    * @return {Promise}
    */
-  submitComment (topicId, commentMessage, uniqueId) {
+  submitComment (topicId, commentMessage, uniqueId, type, payload) {
     var self = this
     var room = self._getRoomOfTopic(topicId)
     self.pendingCommentId--
@@ -448,7 +455,7 @@ export class qiscusSDK extends EventEmitter {
     // push this comment unto active room
     self.selected.comments.push(pendingComment)
 
-    return this.userAdapter.postComment(topicId, commentMessage, pendingComment.unique_id)
+    return this.userAdapter.postComment(topicId, commentMessage, pendingComment.unique_id, type, payload)
     .then((res) => {
       // When the posting succeeded, we mark the Comment as sent,
       // so all the interested party can be notified.
