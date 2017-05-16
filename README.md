@@ -29,12 +29,11 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
   <div id="qiscus-widget"></div>
   <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.7.0/js/qiscus-sdk.1.7.0.js"></script>
   <script>
-     qiscus.setUser('guest2@qiscus.com', 'password', 'Qiscus Demo 2');
      qiscus.init({
         AppId: 'DRAGONGO',
         options: {
-              loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
-              newMessagesCallback(data) { console.log("new message : ", data) }
+//              loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+//              newMessagesCallback(data) { console.log("new message : ", data) }
         }
      });
      qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
