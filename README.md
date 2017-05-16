@@ -1,5 +1,4 @@
 # Qiscus SDK
-![qiscus SDK demo](sdk-show.png)
 
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
@@ -30,6 +29,7 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
   <div id="qiscus-widget"></div>
   <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.7.0/js/qiscus-sdk.1.7.0.js"></script>
   <script>
+     qiscus.setUser('guest2@qiscus.com', 'password', 'Qiscus Demo 2');
      qiscus.init({
         AppId: 'DRAGONGO',
         options: {
