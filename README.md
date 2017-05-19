@@ -6,7 +6,7 @@ The other version is the one with `View` layer already integrated in it (in this
 You can download files you need by navigating to the [release](https://github.com/qiscus/qiscus-sdk-web/releases) section.
 
 # Quick Start
-### Create a new SDK application in the Dashboard and get app_id 
+### Create a new app 
 You can get `AppId` by registering one from [dashboard.qiscus.com](https://dashboard.qiscus.com)
 
 ### Integrating SDK with an existing app 
