@@ -7,7 +7,7 @@ You can download files you need by navigating to the [release](https://github.co
 
 # Quick Start
 ### Create a new SDK application in the Dashboard and get app_id 
-You can get `AppId` by requesting one from [sdk.qiscus.com](http://sdk.qiscus.com)
+You can get `AppId` by registering one from [dashboard.qiscus.com](https://dashboard.qiscus.com)
 
 ### Integrating SDK with an existing app 
 ###### SDK with Integrated Widget View
@@ -32,8 +32,8 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
      qiscus.init({
         AppId: 'DRAGONGO',
         options: {
-//              loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
-//              newMessagesCallback(data) { console.log("new message : ", data) }
+              loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+              newMessagesCallback(data) { console.log("new message : ", data) }
         }
      });
      qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
