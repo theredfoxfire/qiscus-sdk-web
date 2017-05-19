@@ -1,4 +1,4 @@
-# Qiscus SDK
+# Qiscus SDK Web
 
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
