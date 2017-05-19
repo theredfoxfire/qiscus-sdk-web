@@ -43,8 +43,6 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
 ```
 We're using two CDN here, one for emoji support and one for the icon, in this case we're using FontAwesome. The *emojione* is optional though.
 
-Example Demo App [qiscus-sdk-web.herokuapp.com](http://qiscus-sdk-web.herokuapp.com)
-
 
 # Authentication 
 ### Initializing with APP_ID 
