@@ -1,3 +1,8 @@
+# SDK v.1.7.1
+- Scrolling treshold converted to 170px instead of percentage base
+- Fix issue with enter key creating new line when submitting comment
+- ScrollToBottom button only showing up when out of treshold range
+
 # SDK v.1.7.0
 - Do Scroll but only when the scrollTop position doesn't exceed 90%
 - Add scrollToBottom for UI method

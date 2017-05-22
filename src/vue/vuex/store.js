@@ -41,6 +41,7 @@ const mutations = {
     state.selected = state.qiscus.selected;
     state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
     state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
+    state.mqttData.typing = '';
   },
   CHAT_GROUP (state, {id, oldSelected}) {
     if(state.selected) {
@@ -50,6 +51,7 @@ const mutations = {
     }
     state.windowStatus = true;
     state.selected = state.qiscus.selected;
+    state.mqttData.typing = '';
     state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
     state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
   },
@@ -79,10 +81,10 @@ const mutations = {
     // })
   },
   SET_TYPING (state, payload) {
-    if(payload.topic == state.qiscus.email) return
+    if(payload.topic.username == state.qiscus.email || payload.topic.room_id != state.selected.id) return
     // let's get the email of this payload
-    const Participant = state.qiscus.selected.participants.find( (participant) => participant.email == payload.topic )
-    const username = (Participant) ? Participant.username : payload.topic 
+    const Participant = state.qiscus.selected.participants.find( (participant) => participant.email == payload.topic.username )
+    const username = (Participant) ? Participant.username : payload.topic.username 
 
     if(payload.message == 1){
       state.mqttData.typing = username;

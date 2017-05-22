@@ -25,7 +25,7 @@
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <div class="qcw-goto-bottom" @click="scrollToBottom" v-if="!scrollable && !showActions"><i class="fa fa-angle-double-down"></i></div>
-      <ul id="messages__comments">
+      <ul id="messages__comments" @scroll="handleScroll">
         <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more>
         <li v-if="selected.comments.length > 0" v-for="(comment, index) in selected.comments" :key="comment.id">
           <comment :comment="comment"
@@ -59,7 +59,7 @@
           row="2"
           @focus="publishTyping"
           @keyup="publishTyping"
-          @keyup.enter="trySubmitComment($event)"
+          @keydown.enter="trySubmitComment($event)"
           v-model="commentInput">
         </textarea>
         <ul class="qcw-form-actions">
@@ -130,7 +130,8 @@ export default {
     if (!commentContainer) return
     let commentContainerHeight = commentContainer.scrollHeight - commentContainer.clientHeight
     let scrollTop = commentContainer.scrollTop
-    let scrollTreshold = commentContainerHeight * 90 / 100
+    // let scrollTreshold = commentContainerHeight * 90 / 100
+    let scrollTreshold = commentContainerHeight - 170
     this.scrollable = (scrollTop >= scrollTreshold) || false
     
     if(this.scrollable) {
@@ -209,6 +210,14 @@ export default {
     },
     onHeaderClicked() {
       if(qiscus) qiscus.emit('header-clicked', 'hohohoho');
+    },
+    handleScroll(e) {
+      let commentContainer = document.getElementById('messages__comments')
+      if (!commentContainer) return
+      let commentContainerHeight = commentContainer.scrollHeight - commentContainer.clientHeight
+      let scrollTop = commentContainer.scrollTop
+      let scrollTreshold = commentContainerHeight - 170
+      this.scrollable = (scrollTop >= scrollTreshold) || false
     },
     uploadFile(e) {
       var vm       = this;
