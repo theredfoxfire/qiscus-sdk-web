@@ -47,9 +47,13 @@
   <script>
     $(function(){
         // connect to sdk
-				// use this if you want to init programmatically
-        // qiscus.init({AppId: 'dragonfly'});
-        // qiscus.setUser('juang@qiscus.com', 'password', 'juang');
+        qiscus.init({
+					AppId: 'dragongo',  
+					options: {
+						mode: 'wide'
+					}
+				});
+        qiscus.setUser('guest@qiscus.com', 'password', 'guest');
         // add listener to li
         $('.participants li').on('click', function(){
           qiscus.UI.chatTarget($(this).data('email'));

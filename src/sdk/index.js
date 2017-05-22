@@ -160,6 +160,10 @@ export class qiscusSDK extends EventEmitter {
     self.on('comment-read', function (response) {
       if (self.options.commentReadCallback) self.options.commentReadCallback(response)
     })
+
+    self.on('login-error', function(error) {
+      console.error('Error login', error)
+    })
   }
 
   /**
@@ -178,9 +182,10 @@ export class qiscusSDK extends EventEmitter {
 
     // Connect to Login or Register API
     this.connectToQiscus().then((response) => {
+      if(response.status != 200) return this.emit('login-error', response.error)
       this.isInit = true
       this.emit('login-success', response)
-    }, (err) => console.error('Failed connecting', err))
+    })
   }
 
   /**
@@ -199,6 +204,8 @@ export class qiscusSDK extends EventEmitter {
     if (this.sync == 'http' || this.sync == 'both') this.activateSync()
     // setup how sdk will set the layout, widget or wide 
     if (config.mode) this.mode = config.mode
+    // initconfig for developer
+    this.dev_mode = config.dev_mode || false
     // add plugins
     if (config.plugins && config.plugins.length>0) config.plugins.forEach(plugin => this.plugins.push(plugin))
   }
@@ -213,9 +220,7 @@ export class qiscusSDK extends EventEmitter {
     return fetch(`${this.baseURL}/api/v2/sdk/login_or_register`, {
       method: 'POST',
       body: formData
-    }).then((response) => {
-      return response.json()
-    })
+    }).then((response) => response.json() , (err) => err)
   }
 
   // Activate Sync Feature if `http` or `both` is chosen as sync value when init

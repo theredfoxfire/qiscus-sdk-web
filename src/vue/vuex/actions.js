@@ -1,6 +1,7 @@
 import find from 'lodash/fp/find'
 
 export default {
+  toggleDevMode: ({commit, state}) => commit('TOGGLE_DEV_MODE'),
   changeRoom: ({commit, state}, room) => commit('CHANGE_ROOM', room),
   toggleChatWindow: ({commit, state}) => commit('TOGGLE_CHAT_WINDOW'),
   chatTarget: ({commit}, {email, options = {}}) => {

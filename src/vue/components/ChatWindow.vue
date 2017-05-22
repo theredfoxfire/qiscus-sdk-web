@@ -7,7 +7,14 @@
     <div class="comment-loading-container" v-if="isLoading">
       <loader width="150px" height="150px"></loader>
     </div>
-    <init-config v-if="!selected && !init"></init-config>
+    <init-config v-if="!selected && !init && dev_mode"></init-config>
+    <div v-if="!selected && !init && !dev_mode">
+      <div class="qcw-header">
+        Widget not yet initialized
+        <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
+      </div>
+      <h3 style="text-align: center">Please login first</h3>
+    </div>
     <div v-if="init && !selected">
       <div class="qcw-header">
         Welcome, <strong>{{ userdata.username }}</strong>
@@ -97,11 +104,12 @@ export default {
   components: {ChatParticipants, Comment, InitConfig, LoadMore, Loader},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
-    selected: function() { return this.$store.state.qiscus.selected},
+    selected: function() { return this.$store.state.qiscus.selected || false},
     userdata: function() { return this.$store.state.qiscus.userData },
     mqtt: function() { return this.$store.state.mqtt },
     mqttData: function() { return this.$store.state.mqttData },
     init: function() { return this.$store.state.qiscus.isInit },
+    dev_mode: function() { return this.$store.state.dev_mode || false },
     haveMoreComments: function() { return this.selected.comments.length > 0 && this.selected.comments[0].before_id > 0 },
     isLoadingComments: function() { return this.$store.state.isLoadingComments },
     isLoading() {

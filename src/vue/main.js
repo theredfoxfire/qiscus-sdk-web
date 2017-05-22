@@ -9,15 +9,15 @@ Vue.use(Toasted, {
 })
 
 // QiscusSDK.mode = 'wide';
-// QiscusSDK.setUser('fikri@qiscus.com', 'password', 'fikri');
 // QiscusSDK.init({
-//   AppId: 'dragongo',
+//   AppId: 'dragongooooo',
 //   options: {
 //     headerClickedCallback(response) {
 //       console.info('header di click', response);
 //     }
 //   }
 // });
+// QiscusSDK.setUser('fikri@qiscus.com', 'password', 'fikri');
 
 /* let's render the view layer */
 window.vm = new Vue({

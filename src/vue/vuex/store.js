@@ -23,11 +23,15 @@ const state = {
   init: qiscus.isInit,
   isLoadingComments: false,
   imageModalLink: '',
-  imageModalOn: false
+  imageModalOn: false,
+  dev_mode: false
 }
 
 // Create an object storing various mutations. We will write the mutation
 const mutations = {
+  TOGGLE_DEV_MODE (state) {
+    state.dev_mode = !state.dev_mode
+  },
   CHANGE_ROOM (state, room) {
     state.selected = room
   },
