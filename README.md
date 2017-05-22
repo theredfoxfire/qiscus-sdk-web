@@ -1,5 +1,4 @@
-# Qiscus SDK
-![qiscus SDK demo](sdk-show.png)
+# Qiscus SDK Web
 
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
@@ -7,8 +6,8 @@ The other version is the one with `View` layer already integrated in it (in this
 You can download files you need by navigating to the [release](https://github.com/qiscus/qiscus-sdk-web/releases) section.
 
 # Quick Start
-### Create a new SDK application in the Dashboard and get app_id 
-You can get `AppId` by requesting one from [sdk.qiscus.com](http://sdk.qiscus.com)
+### Create a new app 
+You can get `AppId` by registering one from [dashboard.qiscus.com](https://dashboard.qiscus.com)
 
 ### Integrating SDK with an existing app 
 ###### SDK with Integrated Widget View
@@ -43,8 +42,6 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
 </html>
 ```
 We're using two CDN here, one for emoji support and one for the icon, in this case we're using FontAwesome. The *emojione* is optional though.
-
-Example Demo App [qiscus-sdk-web.herokuapp.com](http://qiscus-sdk-web.herokuapp.com)
 
 
 # Authentication 
