@@ -15,25 +15,30 @@ This version let you add a chat widget directly into your existing HTML web page
 You just need to include the javascript and css files from the build directory. 
 And you also need to append `<div id="qiscus-widget"></div>` tag before closing body tag. Here's sample HTML:
 
+You can just copy and paste this into your html file and it'll work directly.
+
 ``` html
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
   <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.7.0/css/qiscus-sdk.1.7.0.css">
+  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.7.2/css/qiscus-sdk.1.7.2.css">
   <!-- add this CDN for emojione if you intend to support emoji -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
 </head>
 <body>
   <div id="qiscus-widget"></div>
-  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.7.0/js/qiscus-sdk.1.7.0.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v1.7.2/js/qiscus-sdk.1.7.2.js"></script>
   <script>
      qiscus.init({
         AppId: 'DRAGONGO',
         options: {
-              loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
-              newMessagesCallback(data) { console.log("new message : ", data) }
+          // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
+          // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
+          loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+          // function below will be called when there's new message
+          newMessagesCallback(data) { console.log("new message : ", data) }
         }
      });
      qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
@@ -42,6 +47,8 @@ And you also need to append `<div id="qiscus-widget"></div>` tag before closing 
 </html>
 ```
 We're using two CDN here, one for emoji support and one for the icon, in this case we're using FontAwesome. The *emojione* is optional though.
+
+If you already registered for your own AppId, just replace `dragongo` with your own `AppId`. In the example above we automatically open a chat roow with `guest2@qiscus.com` assuming that user already registered on `dragongo` AppId, if the user is not registered then it will be failed. 
 
 
 # Authentication 

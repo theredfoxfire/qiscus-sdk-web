@@ -1,3 +1,7 @@
+# SDK v.1.7.2
+- Add notification for SDK events
+- Fix broken example when adding wide and widget mode
+
 # SDK v.1.7.1
 - Scrolling treshold converted to 170px instead of percentage base
 - Fix issue with enter key creating new line when submitting comment

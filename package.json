@@ -1,6 +1,6 @@
 {
   "name": "qiscus-sdk-web",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Qiscus Javascript SDK For Web",
   "author": "contact.us@qiscus.com",
   "homepage": "sdk.qiscus.com",
@@ -25,6 +25,7 @@
     "sass-loader": "^4.0.1",
     "superagent": "^2.2.0",
     "vue": "^2.0.1",
+    "vue-toasted": "^1.0.27",
     "vuex": "^2.0.0"
   },
   "devDependencies": {

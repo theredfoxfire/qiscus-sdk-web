@@ -258,6 +258,30 @@ export class qiscusSDK extends EventEmitter {
     }
 
     // Create room
+    return this.roomAdapter.getOrCreateRoom(email, options, distinctId)
+      .then((response) => {
+        room = new Room(response)
+        self.room_name_id_map[email] = room.id
+        self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
+        self.rooms.push(room)
+        self.isLoading = false
+        self.selected = room
+
+        if (!initialMessage) return room
+        const topicId = room.id
+        const message = initialMessage
+        self.submitComment(topicId, message)
+          .then(() => console.log('Comment posted'))
+          .catch(err => {
+            console.error('Error when submit comment', err)
+          })
+        return Promise.resolve(room)
+      }, (err) => {
+        console.error('Error when creating room', err) 
+        self.isLoading = false
+        return Promise.reject(err)
+      })
+
     return Promise
       .resolve(this.roomAdapter.getOrCreateRoom(email, options, distinctId))
       .then((res) => {
@@ -269,9 +293,6 @@ export class qiscusSDK extends EventEmitter {
         self.selected = room
         return room
       }, (err) => { 
-        console.error('Error when creating room', err) 
-        self.isLoading = false
-        return false
       })
       // Post initial comment
       .then((room) => {

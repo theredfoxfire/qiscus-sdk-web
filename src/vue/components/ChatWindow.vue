@@ -236,7 +236,7 @@ export default {
           vm.uploads.splice(vm.uploads.indexOf(files[0].name),1)
           vm.submitComment(vm.selected.last_comment_topic_id, `[file] ${url} [/file]`);
         } else {
-          alert('File Uploading failed');
+          vm.$toasted.error('File uploading failed')
           vm.uploads.splice(vm.uploads.indexOf(files[0].name), 1)
         }
       }

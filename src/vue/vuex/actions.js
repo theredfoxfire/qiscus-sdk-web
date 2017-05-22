@@ -4,7 +4,7 @@ export default {
   changeRoom: ({commit, state}, room) => commit('CHANGE_ROOM', room),
   toggleChatWindow: ({commit, state}) => commit('TOGGLE_CHAT_WINDOW'),
   chatTarget: ({commit}, {email, options = {}}) => {
-    qiscus.chatTarget(email, options)
+    return qiscus.chatTarget(email, options)
     .then((response) => {
       commit('CHAT_TARGET', {email, options})
       const selected = qiscus.selected.comments
@@ -17,6 +17,10 @@ export default {
         //on entering the room, wait for data processed then focus on comment form
         document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
       }, 0)
+      return Promise.resolve(qiscus.selected)
+    }, (error) => {
+      vm.$toasted.error('Error getting chat room. Please make sure the target is valid')
+      return Promise.reject(error)
     })
   },
   chatGroup: ({commit}, {id, oldSelected}) => {

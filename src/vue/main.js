@@ -1,6 +1,12 @@
 import QiscusSDK from '../sdk'
 import Vue from 'vue'
 import QiscusWidget from './App'
+import Toasted from 'vue-toasted';
+
+Vue.use(Toasted, {
+  position: 'bottom-right',
+  duration: 2000
+})
 
 // QiscusSDK.mode = 'wide';
 // QiscusSDK.setUser('fikri@qiscus.com', 'password', 'fikri');
