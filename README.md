@@ -62,7 +62,7 @@ Here are list of available callbacks:
 - headerClickedCallback
 
 Here's a video showing how you can set up sample app for qiscus SDK
-[![Qiscus-SDK Howto](qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
+[![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
 
 # Authentication 
 ### Initializing with APP_ID 
