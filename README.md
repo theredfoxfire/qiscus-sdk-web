@@ -61,6 +61,9 @@ Here are list of available callbacks:
 - groupRoomCreatedCallback
 - headerClickedCallback
 
+Here's a video showing how you can set up sample app for qiscus SDK
+[![Qiscus-SDK Howto](qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
+
 # Authentication 
 ### Initializing with APP_ID 
 The javascript file introduce a new global variable called `qiscus`. We'll use that to initiate our chat widget.
