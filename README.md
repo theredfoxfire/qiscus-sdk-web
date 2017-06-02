@@ -64,6 +64,24 @@ Here are list of available callbacks:
 Here's a video showing how you can set up sample app for qiscus SDK
 [![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
 
+In case you don't want to have the sdk displaying on a widget view, we can put the Chat inside a container by setting `mode` to `wide` on `init` as a parameter like this example.
+
+```
+  qiscus.init({
+      AppId: 'DRAGONGO',
+      mode: 'wide',
+      options: {
+        // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
+        // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
+        loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+        // function below will be called when there's new message
+        newMessagesCallback(data) { console.log("new message : ", data) }
+      }
+   });
+ ```
+ 
+ The code above will put qiscus chat inside a container. Here's a working example on [codepen](https://codepen.io/desertlion/pen/MmdRBd)
+
 # Authentication 
 ### Initializing with APP_ID 
 The javascript file introduce a new global variable called `qiscus`. We'll use that to initiate our chat widget.
