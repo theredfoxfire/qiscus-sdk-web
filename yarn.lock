@@ -1718,9 +1718,11 @@ ejs@~0.8.3:
   version "0.8.8"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-0.8.8.tgz#ffdc56dcc35d02926dd50ad13439bbc54061d598"
 
-embed-js@^4.1.4:
-  version "4.1.10"
-  resolved "https://registry.yarnpkg.com/embed-js/-/embed-js-4.1.10.tgz#fa6b251a461d7c87de14d5ac54aca35883ee4d3d"
+embed-js@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/embed-js/-/embed-js-4.2.3.tgz#13fa555a8da982c14de0d9bbe6c8305bc1bef0b2"
+  dependencies:
+    unfetch "^2.0.0"
 
 emojis-list@^2.0.0:
   version "2.1.0"
@@ -5335,6 +5337,10 @@ ultron@1.0.x:
 underscore@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
+
+unfetch@^2.0.0:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-2.1.2.tgz#684fee4d8acdb135bdb26c0364c642fc326ca95b"
 
 uniq@^1.0.1:
   version "1.0.1"

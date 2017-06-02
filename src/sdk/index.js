@@ -495,12 +495,41 @@ export class qiscusSDK extends EventEmitter {
     })
   }
 
+  resendComment(comment) {
+    var self = this
+    var room = self.selected
+    var pendingCommentDate = new Date()
+    var commentData = {
+      message: comment.message,
+      username_as: self.username,
+      username_real: self.email,
+      user_avatar: self.avatar_url,
+      id: comment.id,
+      unique_id: comment.unique_id
+    }
+    var pendingComment = qiscus.selected.comments.find( cmtToFind => cmtToFind.id == comment.id )
+
+    return this.userAdapter.postComment(qiscus.selected.id, pendingComment.message, pendingComment.unique_id, comment.type, comment.payload)
+    .then((res) => {
+      // When the posting succeeded, we mark the Comment as sent,
+      // so all the interested party can be notified.
+      pendingComment.markAsSent()
+      pendingComment.id = res.id
+      pendingComment.before_id = res.comment_before_id
+      return new Promise((resolve, reject) => resolve(self.selected))
+    }, (err) => {
+      pendingComment.markAsFailed()
+      return new Promise((resolve, reject) => reject(err))
+    })
+  }
+
   prepareCommentToBeSubmitted (comment) {
     var commentToBeSubmitted, uniqueId
     commentToBeSubmitted = new Comment(comment)
     // We're gonna use timestamp for uniqueId for now.
     // "bq" stands for "Bonjour Qiscus" by the way.
     uniqueId = 'bq' + Date.now()
+    if(comment.unique_id) uniqueId = comment.unique_id
     commentToBeSubmitted.attachUniqueId(uniqueId)
     commentToBeSubmitted.markAsPending()
     commentToBeSubmitted.isDelivered = false
@@ -749,6 +778,7 @@ export class Comment {
   markAsSent () {
     this.isSent = true
     this.isPending = false
+    this.isFailed = false
   }
   markAsDelivered () {
     this.isSent = true

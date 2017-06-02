@@ -29,6 +29,7 @@
           <div v-if="isMe">
             <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
             <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
+            <i class="qcw-comment__state fa fa-times-circle" v-if="comment.isFailed" @click="resend(comment)"></i>
             <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
               <i class="fa fa-check"></i><i class="fa fa-check"></i>
             </div>
@@ -98,7 +99,9 @@ export default {
       const topicId = qiscus.selected.id
       qiscus.submitComment(topicId, button.label, null, 'button_postback_response', JSON.stringify(button.payload))
     },
-
+    resend(comment){
+      this.$store.dispatch('resendComment', comment)
+    },
   },
   data () {
     return {
@@ -107,27 +110,31 @@ export default {
       me: qiscus.email,
       x: new EmbedJS({
         input: (typeof emojione != 'undefined') ? emojione.toShort(this.comment.message) : this.comment.message,
-        openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
         googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
-        // inlineEmbed: 'all',
-        onOpenGraphFetch: function(data) {
-          const title = data.results.metadata.title
-          const isTitleExists = title && title.length > 0
-          const isSuccess = data.results.found && isTitleExists
-          const objectGraph = {
-            title: data.results.metadata.title,
-            description: data.results.metadata.description,
-            image: data.results.metadata.image,
-            url: data.results.url,
-            type: 'site',
-            success: isSuccess
-          }
-          // setTimeout( () => this.onupdate(), 0 )
-          if(!objectGraph.image) return false
-          return objectGraph
-        }.bind(this),
+        // openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
+        excludeEmbed: ['github','youtube'],
+        // inlineText: false,
+        // onOpenGraphFetch: function(data) {
+        //   if(!data.results || !data.results.found) return data
+        //   const title = data.results.metadata.title
+        //   const isTitleExists = title && title.length > 0
+        //   const isSuccess = data.results.found && isTitleExists
+        //   const objectGraph = {
+        //     title: data.results.metadata.title,
+        //     description: data.results.metadata.description,
+        //     image: data.results.metadata.image,
+        //     url: data.results.url,
+        //     type: 'site',
+        //     success: isSuccess
+        //   }
+        //   if(!objectGraph.image) return false
+        //   return objectGraph
+        // }.bind(this),
         // marked: true,
         emoji: true,
+        linkOptions: {
+          target: '_blank'
+        },
         plugins: {
           // marked: marked,
         }
