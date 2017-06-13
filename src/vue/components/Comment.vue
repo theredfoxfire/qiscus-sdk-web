@@ -16,16 +16,25 @@
           <span class="qcw-comment__time" v-if="isParent">{{comment.time}}</span>
         </div>
         <!-- CommentType: "TEXT" -->
-        <div v-if="comment.type == 'text'">
+        <div v-if="comment.type == 'text' || comment.type == 'reply'">
           <image-loader v-if="comment.isAttachment()"
             :comment="comment"
             :on-click-image="onClickImage"
             :callback="onupdate">
           </image-loader>
-          <div v-html="message" v-if="!comment.isAttachment()" class="qcw-comment__content"></div>
+          <div v-if="comment.type == 'reply'">
+            <div class="reply-wrapper" :class="{'reply-wrapper--me': isMe }">
+              <div v-html="replied_comment_sender" class="reply-sender"></div>
+              <div v-html="replied_comment_message"></div>
+            </div>
+            <div v-html="replied_comment_text"></div>
+          </div>
+          <div v-html="message" v-if="!comment.isAttachment() && comment.type=='text'" class="qcw-comment__content"></div>
           <span class="qcw-comment__time qcw-comment__time--children" 
             v-if="!isParent"
-            :class="{'qcw-comment__time--attachment': comment.isAttachment()}">{{comment.time}}</span>
+            :class="{'qcw-comment__time--attachment': comment.isAttachment()}">
+            {{comment.time}}
+          </span>
           <div v-if="isMe">
             <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
             <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
@@ -89,6 +98,20 @@ export default {
         this.message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
       });
     }
+    if(this.comment.type == 'reply') {
+      this.y.text((data) => {
+        this.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
+      })
+      new EmbedJS({
+        input: this.comment.payload.text,
+        excludeEmbed: ['github','youtube'],
+        emoji: false,
+        inlineText: false,
+        linkOptions: { target: '_blank' }
+      }).text( data => {
+        this.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
+      })
+    }
   },
   methods: {
     openAccountBox() {
@@ -105,38 +128,27 @@ export default {
   data () {
     return {
       message: '',
+      replied_comment_message: '',
+      replied_comment_text: '',
+      replied_comment_sender: (this.comment.type=='reply') ? this.comment.payload.replied_comment_sender_username : '',
       dateToday: new Date(this.comment.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
         googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
-        // openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
         excludeEmbed: ['github','youtube'],
-        // onOpenGraphFetch: function(data) {
-        //   if(!data.results || !data.results.found) return data
-        //   const title = data.results.metadata.title
-        //   const isTitleExists = title && title.length > 0
-        //   const isSuccess = data.results.found && isTitleExists
-        //   const objectGraph = {
-        //     title: data.results.metadata.title,
-        //     description: data.results.metadata.description,
-        //     image: data.results.metadata.image,
-        //     url: data.results.url,
-        //     type: 'site',
-        //     success: isSuccess
-        //   }
-        //   if(!objectGraph.image) return false
-        //   return objectGraph
-        // }.bind(this),
-        // marked: true,
         emoji: false,
         inlineText: false,
         linkOptions: {
           target: '_blank'
         },
-        plugins: {
-          // marked: marked,
-        }
+      }),
+      y: new EmbedJS({
+        input: (this.comment.type == 'reply') ? this.comment.payload.replied_comment_message : '.',
+        excludeEmbed: ['github','youtube'],
+        emoji: false,
+        inlineText: false,
+        linkOptions: { target: '_blank' }
       })
     }
   }

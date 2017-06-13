@@ -766,7 +766,10 @@ export class Comment {
     this.isSent = true
     this.attachment = null
     this.payload = comment.payload
-    this.type = comment.type || 'text'
+    // manage comment type
+    // supported comment type text, account_linking, buttons
+    let supported_comment_type = ['text','account_linking','buttons','reply']
+    this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text'
   }
   isAttachment () {
     return (this.message.substring(0, '[file]'.length) == '[file]')

@@ -250,3 +250,33 @@ code {
     }
   }
 }
+
+// reply comment
+.reply-wrapper {
+  border-radius: 4px;
+  background-color: #f4f2cc;
+  padding: 10px 10px 10px 20px;
+  position: relative;
+  font-size: 12px;
+  text-align: left;
+  color: #757575;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 4px;
+    height: calc(100% - 20px);
+    background: #009688;
+    border-radius: 100px;
+  }
+  &.reply-wrapper--me:after {
+    left: auto;
+    right: 10px;
+  }
+}
+.reply-sender {
+  font-size: 14px;
+  text-align: left;
+  color: #009688;
+}
