@@ -88,24 +88,29 @@ export class qiscusSDK extends EventEmitter {
           vStore.dispatch('setRead', comment)
           // update last_received_comment_id
           self.last_received_comment_id = comment.id
+
+          // update comment status, if only self.selected isn't null and it is the correct room
+          if(self.selected && self.selected.id == comment.room_id) {
+            self.userAdapter.updateCommentStatus(self.selected.id, comment.id, comment.id)
+            .then( res => {
+              self.sortComments()
+            })
+          }
         }
       })(data)
-      // let's also update last_received_comment_id
-      if(data.length > 0) self.last_received_comment_id = data[data.length-1].id
-
+      
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
 
-      // let's also update comment status, but if only self.selected isn't null
-      if(!self.selected) return;
-      const comments = data;
-      const roomId = comments[0].room_id
-      const lastReadCommentId = self.selected.comments[self.selected.comments.length - 1].id
-      const lastReceivedCommentId = comments[comments.length - 1].id
-      this.userAdapter.updateCommentStatus(roomId, lastReadCommentId, lastReceivedCommentId)
-        .then((res) => {
-          this.sortComments()
-        })
-        .catch(error => console.error('Error when updating comment status', error))
+    //   if(!self.selected) return;
+    //   const comments = data;
+    //   const roomId = comments[0].room_id
+    //   const lastReadCommentId = self.selected.comments[self.selected.comments.length - 1].id
+    //   const lastReceivedCommentId = comments[comments.length - 1].id
+    //   this.userAdapter.updateCommentStatus(roomId, lastReadCommentId, lastReceivedCommentId)
+    //     .then((res) => {
+    //       this.sortComments()
+    //     })
+    //     .catch(error => console.error('Error when updating comment status', error))
     })
 
     /**
@@ -730,11 +735,18 @@ export class Topic {
 /**
 * Qiscus Base Comment Class
 */
+function searchAndReplace(text, target, replacement) {
+  return text.split(target).join(replacement);
+}
+function escapeHTML(text) {
+  return searchAndReplace(text, '<', '&lt;') + searchAndReplace(text, '>', '&gt;');
+}
 export class Comment {
   constructor (comment) {
+    let escaped_message = escapeHTML(comment.message)
     this.id = comment.id
     this.before_id = comment.comment_before_id
-    this.message = comment.message
+    this.message = escaped_message
     this.username_as = comment.username_as || comment.username
     this.username_real = comment.username_real || comment.email
     let theDate = moment(comment.timestamp)

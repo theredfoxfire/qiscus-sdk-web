@@ -40,14 +40,14 @@
         </div>
         <!-- CommentType: "ACCOUNT_LINKING" -->
         <div v-if="comment.type == 'account_linking'">
-          <div v-html="message" class="qcw-comment__content"></div>
+          <div class="qcw-comment__content" v-html="message"></div>
           <div class="action_buttons">
             <button @click="openAccountBox">{{ comment.payload.params.button_text }} &rang;</button>
           </div>
         </div>
         <!-- CommentType: "BUTTON" -->
         <div v-if="comment.type == 'buttons'">
-          <div v-html="comment.payload.text || message" class="qcw-comment__content"></div>
+          <div class="qcw-comment__content" v-html="comment.payload.text || message"></div>
           <div class="action_buttons" v-for="button in comment.payload.buttons">
             <button @click="postbackSubmit(button)" v-if="button.type == 'postback'">
               {{ button.label }}
@@ -86,8 +86,7 @@ export default {
     if(!this.comment.isAttachment()) {
       this.message = this.comment.message
       this.x.text((data) => {
-        this.message = data;
-        // this.onupdate();
+        this.message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
       });
     }
   },
@@ -109,11 +108,10 @@ export default {
       dateToday: new Date(this.comment.date).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
       me: qiscus.email,
       x: new EmbedJS({
-        input: (typeof emojione != 'undefined') ? emojione.toShort(this.comment.message) : this.comment.message,
+        input: this.comment.message,
         googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
         // openGraphEndpoint: `${qiscus.baseURL}/api/v2/mobile/get_url_metadata?url=$\{url\}`,
         excludeEmbed: ['github','youtube'],
-        // inlineText: false,
         // onOpenGraphFetch: function(data) {
         //   if(!data.results || !data.results.found) return data
         //   const title = data.results.metadata.title
@@ -131,7 +129,8 @@ export default {
         //   return objectGraph
         // }.bind(this),
         // marked: true,
-        emoji: true,
+        emoji: false,
+        inlineText: false,
         linkOptions: {
           target: '_blank'
         },

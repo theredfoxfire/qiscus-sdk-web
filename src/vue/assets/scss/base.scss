@@ -12,6 +12,9 @@
     position: relative;
   }
 }
+.ejs-image.ejs-embed {
+    display: none;
+}
 .widget-chat-wrapper { height: 100%; }
 @media (max-width: 700px) { 
   #qcw-app .qcw-container { 

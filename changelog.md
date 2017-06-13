@@ -1,3 +1,8 @@
+# SDK v.2.2.5
+- fix rendering issue in chat message
+- fix emoji incorrectly rendered
+- some minor ui refinement
+
 # SDK v.1.7.2
 - Add notification for SDK events
 - Fix broken example when adding wide and widget mode
