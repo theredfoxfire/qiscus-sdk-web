@@ -735,11 +735,14 @@ export class Topic {
 /**
 * Qiscus Base Comment Class
 */
-function searchAndReplace(text, target, replacement) {
-  return text.split(target).join(replacement);
+function searchAndReplace(str, find, replace) {
+  return str.split(find).join(replace);
 }
 function escapeHTML(text) {
-  return searchAndReplace(text, '<', '&lt;') + searchAndReplace(text, '>', '&gt;');
+  let comment;
+  comment = searchAndReplace(text, '<', '&lt;');
+  comment = searchAndReplace(comment, '>', '&gt;');
+  return comment;
 }
 export class Comment {
   constructor (comment) {

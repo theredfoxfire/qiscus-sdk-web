@@ -1,3 +1,7 @@
+# SDK v.2.2.6
+- Updated readme
+- Fix message view doubled
+
 # SDK v.2.2.5
 - fix rendering issue in chat message
 - fix emoji incorrectly rendered
