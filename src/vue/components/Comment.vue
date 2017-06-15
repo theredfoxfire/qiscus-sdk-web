@@ -27,7 +27,7 @@
               <div v-html="replied_comment_sender" class="reply-sender"></div>
               <div v-html="replied_comment_message"></div>
             </div>
-            <div v-html="replied_comment_text"></div>
+            <div v-html="replied_comment_text" class="qcw-comment__content"></div>
           </div>
           <div v-html="message" v-if="!comment.isAttachment() && comment.type=='text'" class="qcw-comment__content"></div>
           <span class="qcw-comment__time qcw-comment__time--children" 
