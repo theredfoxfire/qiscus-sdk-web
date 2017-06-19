@@ -38,6 +38,7 @@
           <comment :comment="comment"
             :onupdate="scrollToBottom"
             :on-click-image="openImageModal"
+            :replyHandler="setReply"
             :comment-before="(index-1 < 0) ? null : selected.comments[index-1]"
             :comment-after="(index+1 <= selected.comments.length-1) ? selected.comments[index+1] : null"
             :userdata="userdata">
@@ -60,6 +61,15 @@
           <input class="uploader__input" name="file" type="file" @change="uploadFile" v-if="commentInput.length <= 0">
         </li>
       </ul>
+      <!-- untuk preview klo reply -->
+      <div v-if="replied_comment !== null" class="reply-preview">
+        <div class="reply-wrapper">
+          <div v-html="replied_comment.username" class="reply-sender"></div>
+          <div v-html="replied_comment.message"></div>
+        </div>
+        <i class="fa fa-times reply-preview__close-btn" @click="cancelReply"></i>
+      </div>
+      <!-- end of reply -->
       <!-- form untuk postcomment -->
       <div class="qcw-comment-form">
         <textarea placeholder="type your comment here ..."
@@ -123,16 +133,11 @@ export default {
       uploads: [],
       showActions: false,
       scrollable: false,
-      reply_id: null,
-      reply_sender: null,
-      reply_message: null
+      replied_comment: null,
     }
   },
   created() {
     let self = this;
-    // setInterval(function(){
-    //   if(qiscus.selected) qiscus.sync()
-    // }, 5000);
   },
   updated () {
     // this is basically UI business but we need to put default behaviour
@@ -191,10 +196,15 @@ export default {
       }
     },
     submitComment(topic_id, comment) {
-      if(this.reply.id == null) {
+      if(this.replied_comment == null) {
         this.$store.dispatch('submitComment', {topic_id, comment})
       } else {
-        this.$store.dispatch('submitReply', {topic_id, comment, reply})
+        let payload = {
+          text: comment,
+          replied_comment_id: this.replied_comment.id
+        }
+        this.$store.dispatch('submitCommentWithPayload', {topic_id, comment, payload_type: 'reply', payload})
+        this.replied_comment = null
       }
     },
     toggleChatWindow() {
@@ -225,6 +235,16 @@ export default {
     },
     onHeaderClicked() {
       if(qiscus) qiscus.emit('header-clicked', 'hohohoho');
+    },
+    setReply(comment) {
+      this.replied_comment = {
+        id: comment.id,
+        username: comment.username_as,
+        message: comment.message
+      }
+    },
+    cancelReply() {
+      this.replied_comment = null
     },
     handleScroll(e) {
       let commentContainer = document.getElementById('messages__comments')

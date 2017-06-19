@@ -15,6 +15,7 @@
           <span class="qcw-comment__username">{{comment.username_as}}</span>
           <span class="qcw-comment__time" v-if="isParent">{{comment.time}}</span>
         </div>
+        <i class="fa fa-reply reply-btn" @click="replyHandler(comment)" :class="{'reply-btn--me': isMe}"></i>
         <!-- CommentType: "TEXT" -->
         <div v-if="comment.type == 'text' || comment.type == 'reply'">
           <image-loader v-if="comment.isAttachment()"
@@ -77,7 +78,7 @@ import ImageLoader from './ImageLoader.vue';
 
 export default {
   // components: { Avatar },
-  props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter'],
+  props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
   components: { ImageLoader },
   updated(){
     // this.onupdate();

@@ -276,3 +276,35 @@ code {
   text-align: left;
   color: #009688;
 }
+.reply-preview {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+}
+.reply-preview__close-btn {
+  position: absolute;
+  top: 9px; right: 5px;
+  cursor: pointer;
+  font-size: 24px;
+  color: #aaa;
+}
+.reply-btn {
+  position: absolute;
+  right: -40px;
+  background: #b1c7c5;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  color: #FFF;
+  line-height: 20px;
+  padding-left: 3px;
+  top: 7px;
+  display: none;
+  cursor: pointer;
+  &.reply-btn--me {
+    right: auto;
+    left: -40px;
+  }
+}
+.qcw-comment-container:hover .reply-btn {
+  display: block;
+}

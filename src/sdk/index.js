@@ -479,8 +479,10 @@ export class qiscusSDK extends EventEmitter {
       username_as: this.username,
       username_real: this.email,
       user_avatar: this.avatar_url,
-      id: self.pendingCommentId
+      id: self.pendingCommentId,
+      type: type || 'text'
     }
+    if(type != 'text') commentData.payload = payload
     var pendingComment = self.prepareCommentToBeSubmitted(commentData)
 
     // push this comment unto active room
