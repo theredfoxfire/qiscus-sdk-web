@@ -122,7 +122,10 @@ export default {
       commentInput: '',
       uploads: [],
       showActions: false,
-      scrollable: false
+      scrollable: false,
+      reply_id: null,
+      reply_sender: null,
+      reply_message: null
     }
   },
   created() {
@@ -188,7 +191,11 @@ export default {
       }
     },
     submitComment(topic_id, comment) {
-      this.$store.dispatch('submitComment', {topic_id, comment})
+      if(this.reply.id == null) {
+        this.$store.dispatch('submitComment', {topic_id, comment})
+      } else {
+        this.$store.dispatch('submitReply', {topic_id, comment, reply})
+      }
     },
     toggleChatWindow() {
       this.$store.dispatch('toggleChatWindow')
