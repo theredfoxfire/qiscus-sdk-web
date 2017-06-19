@@ -24,7 +24,7 @@
             :callback="onupdate">
           </image-loader>
           <div v-if="comment.type == 'reply'">
-            <div class="reply-wrapper" :class="{'reply-wrapper--me': isMe }">
+            <div class="reply-wrapper" :class="{'reply-wrapper--me': isMe }" @click="gotoComment">
               <div v-html="replied_comment_sender" class="reply-sender"></div>
               <div v-html="replied_comment_message"></div>
             </div>
@@ -115,6 +115,11 @@ export default {
     }
   },
   methods: {
+    gotoComment() {
+      let element = document.getElementById(this.comment.payload.replied_comment_id)
+      if(!element) return
+      element.scrollIntoView({block: 'end',  behaviour: 'smooth'})
+    },
     openAccountBox() {
       window.open(this.comment.payload.url, 'AccountLinkingPopup', 'width=500,height=400,location=no,menubar=no,resizable=1,status=no,toolbar=no')
     },
