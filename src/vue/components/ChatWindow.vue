@@ -201,7 +201,12 @@ export default {
       } else {
         let payload = {
           text: comment,
-          replied_comment_id: this.replied_comment.id
+          replied_comment_id: this.replied_comment.id,
+          replied_comment_message:this.replied_comment.message,
+          replied_comment_payload:null,
+          replied_comment_sender_email:this.replied_comment.username,
+          replied_comment_sender_username:this.replied_comment.username,
+          replied_comment_type:comment.text,
         }
         this.$store.dispatch('submitCommentWithPayload', {topic_id, comment, payload_type: 'reply', payload})
         this.replied_comment = null
@@ -240,7 +245,7 @@ export default {
       this.replied_comment = {
         id: comment.id,
         username: comment.username_as,
-        message: comment.message
+        message: (comment.type != 'reply') ? comment.message : comment.payload.text
       }
     },
     cancelReply() {

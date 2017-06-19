@@ -482,7 +482,7 @@ export class qiscusSDK extends EventEmitter {
       id: self.pendingCommentId,
       type: type || 'text'
     }
-    if(type != 'text') commentData.payload = payload
+    if(type != 'text') commentData.payload = JSON.parse(payload)
     var pendingComment = self.prepareCommentToBeSubmitted(commentData)
 
     // push this comment unto active room
