@@ -55,8 +55,8 @@ If you already registered for your own AppId, just replace `dragongo` with your 
 
 On the code snippet above, we can pass several callbacks to init options, in the example we're using `loginSuccessCallback` which will be called when login is success. It'll automatically open 1-1 chat room with `guest2@qiscus.com`. There's also `newMessagesCallback` where in the example it just log what the messages are.
 
-#Authentication
-##Init with APP ID
+# Authentication
+## Init with APP ID
 We can initialize **qis**cus SDK by using this line of code:
 ```
 qiscus.init({
@@ -91,24 +91,24 @@ You can use the previous login code to update your data:
 - `username` username to be displayed to other participant
 - `avatar_url` user avatar, fallback to default avatar if not provided
 
-#Room Types
-##Creating and starting 1-to-1 chat
+# Room Types
+## Creating and starting 1-to-1 chat
 To create a 1-to-1 chat use this code:
 `qiscus.chatTarget('[email / unique identifier]')`
 
-##Creating a Group Room
+## Creating a Group Room
 `qiscus.createGroupRoom (name, ...emails)`
 where `email(s)` is in the type of `array`
 
-##Start Group Chat
+## Start Group Chat
 `qiscus.chatGroup('group_room_id')`
 
-#Resources
-##Video
+# Resources
+## Video
 Here's a video showing how you can set up sample app for qiscus SDK
 [![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
 
-#UI Customization
+# UI Customization
 In case you don't want to have the sdk displaying on a widget view, we can put the Chat inside a container by setting `mode` to `wide` on `init` as a parameter like this example.
 
 ```
