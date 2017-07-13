@@ -56,6 +56,16 @@
         $('.participants li').on('click', function(){
           qiscus.UI.chatTarget($(this).data('email'));
         });
+        
+        QiscusSDK.init({
+          AppId: 'dragongo',
+          options: {
+            headerClickedCallback(response) {
+              console.info('header di click', response);
+            }
+          }
+        });
+        QiscusSDK.setUser('fikri@qiscus.com', 'password', 'fikri');
         // qiscus.init({
         //   AppId: 'dragongo',
         //   plugins: ['emoji'],
