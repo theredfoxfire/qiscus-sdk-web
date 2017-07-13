@@ -127,6 +127,21 @@ In case you don't want to have the sdk displaying on a widget view, we can put t
  
  The code above will put qiscus chat inside a container. Here's a working example on [codepen](https://codepen.io/desertlion/pen/MmdRBd)
 
+The widget is built using vuejs and divided into several components. We also use fontawesome for the icon, so you can target fontawesome css class directly. You can change the appearance of the widget by using these css selectors below.
+
+Widget components have namespaces of `qcw...`
+
+| css properties | description |
+|----- | ---- |
+| .qcw-trigger-button | Button for toggling the chat window | 
+| .qcw-container | Widget Window Wrapper div |
+| .qcw-header | Widget Header containing active chat title |
+| ul#messages__comments | Messages list container |
+| .qcw-comment-form | Comment Form container |
+| .qcw-comment-form textarea | Comment Text Input Field |
+| .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
+| .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
+
 
 
 
