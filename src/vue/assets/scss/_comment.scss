@@ -260,6 +260,7 @@ code {
   font-size: 12px;
   text-align: left;
   color: #757575;
+  margin-bottom: 10px;
   &:after {
     content: '';
     position: absolute;
@@ -278,8 +279,9 @@ code {
 }
 .reply-preview {
   position: absolute;
-  bottom: 50px;
+  bottom: 40px;
   width: 100%;
+  line-height: 1.7em;
 }
 .reply-preview__close-btn {
   position: absolute;
@@ -288,7 +290,7 @@ code {
   font-size: 24px;
   color: #aaa;
 }
-.reply-btn {
+.fa.reply-btn {
   position: absolute;
   right: -40px;
   background: #b1c7c5;
@@ -307,4 +309,17 @@ code {
 }
 .qcw-comment-container:hover .reply-btn {
   display: block;
+}
+.reply-image-preview {
+  overflow: hidden;
+  img {
+    float: left;
+    width: 90px;
+  }
+  span {
+    display: block;
+    overflow: hidden;
+    padding-left: 10px;
+    text-overflow: ellipsis;
+  }
 }

@@ -31,7 +31,7 @@
         <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
-      <div class="qcw-goto-bottom" @click="scrollToBottom" v-if="!scrollable && !showActions"><i class="fa fa-angle-double-down"></i></div>
+      <div class="qcw-goto-bottom" @click="scrollToBottom" v-if="!scrollable && !showActions && replied_comment == null"><i class="fa fa-angle-double-down"></i></div>
       <ul id="messages__comments" @scroll="handleScroll">
         <load-more v-if="haveMoreComments" :isLoadingComments="isLoadingComments" :clickHandler="loadMoreComments"></load-more>
         <li v-if="selected.comments.length > 0" v-for="(comment, index) in selected.comments" :key="comment.id">
@@ -62,13 +62,11 @@
         </li>
       </ul>
       <!-- untuk preview klo reply -->
-      <div v-if="replied_comment !== null" class="reply-preview">
-        <div class="reply-wrapper">
-          <div v-html="replied_comment.username" class="reply-sender"></div>
-          <div v-html="replied_comment.message"></div>
-        </div>
-        <i class="fa fa-times reply-preview__close-btn" @click="cancelReply"></i>
-      </div>
+      <reply-preview 
+        :replied_comment="replied_comment" 
+        v-if="replied_comment !== null"
+        :onDismiss="cancelReply">
+      </reply-preview>
       <!-- end of reply -->
       <!-- form untuk postcomment -->
       <div class="qcw-comment-form">
@@ -109,9 +107,10 @@ import Comment from './Comment.vue'
 import ChatParticipants from './ChatParticipants.vue'
 import InitConfig from './InitConfig.vue'
 import LoadMore from './LoadMore.vue'
+import ReplyPreview from './ReplyPreview.vue'
 
 export default {
-  components: {ChatParticipants, Comment, InitConfig, LoadMore, Loader},
+  components: {ChatParticipants, Comment, InitConfig, LoadMore, Loader, ReplyPreview},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected || false},
@@ -245,7 +244,7 @@ export default {
       this.replied_comment = {
         id: comment.id,
         username: comment.username_as,
-        message: (comment.type != 'reply') ? comment.message : comment.payload.text
+        message: (comment.type == 'reply') ? comment.payload.text : comment.message
       }
     },
     cancelReply() {

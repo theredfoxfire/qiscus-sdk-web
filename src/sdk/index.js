@@ -486,6 +486,14 @@ export class qiscusSDK extends EventEmitter {
     var pendingComment = self.prepareCommentToBeSubmitted(commentData)
 
     // push this comment unto active room
+    if(type == 'reply') {
+      // change payload for pendingComment
+      // get the comment for current replied id
+      var parsedPayload = JSON.parse(payload)
+      var replied_message = self.selected.comments.find(cmt => cmt.id == parsedPayload.replied_comment_id).message
+      parsedPayload.replied_comment_message = replied_message
+      pendingComment.payload = parsedPayload
+    }
     self.selected.comments.push(pendingComment)
 
     return this.userAdapter.postComment(topicId, commentMessage, pendingComment.unique_id, type, payload)

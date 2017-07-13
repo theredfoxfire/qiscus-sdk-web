@@ -55,8 +55,8 @@ If you already registered for your own AppId, just replace `dragongo` with your 
 
 On the code snippet above, we can pass several callbacks to init options, in the example we're using `loginSuccessCallback` which will be called when login is success. It'll automatically open 1-1 chat room with `guest2@qiscus.com`. There's also `newMessagesCallback` where in the example it just log what the messages are.
 
-#Authentication
-##Init with APP ID
+# Authentication
+## Init with APP ID
 We can initialize **qis**cus SDK by using this line of code:
 ```
 qiscus.init({
@@ -91,24 +91,24 @@ You can use the previous login code to update your data:
 - `username` username to be displayed to other participant
 - `avatar_url` user avatar, fallback to default avatar if not provided
 
-#Room Types
-##Creating and starting 1-to-1 chat
+# Room Types
+## Creating and starting 1-to-1 chat
 To create a 1-to-1 chat use this code:
 `qiscus.chatTarget('[email / unique identifier]')`
 
-##Creating a Group Room
+## Creating a Group Room
 `qiscus.createGroupRoom (name, ...emails)`
 where `email(s)` is in the type of `array`
 
-##Start Group Chat
+## Start Group Chat
 `qiscus.chatGroup('group_room_id')`
 
-#Resources
-##Video
+# Resources
+## Video
 Here's a video showing how you can set up sample app for qiscus SDK
 [![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
 
-#UI Customization
+# UI Customization
 In case you don't want to have the sdk displaying on a widget view, we can put the Chat inside a container by setting `mode` to `wide` on `init` as a parameter like this example.
 
 ```
@@ -126,6 +126,21 @@ In case you don't want to have the sdk displaying on a widget view, we can put t
  ```
  
  The code above will put qiscus chat inside a container. Here's a working example on [codepen](https://codepen.io/desertlion/pen/MmdRBd)
+
+The widget is built using vuejs and divided into several components. We also use fontawesome for the icon, so you can target fontawesome css class directly. You can change the appearance of the widget by using these css selectors below.
+
+Widget components have namespaces of `qcw...`
+
+| css properties | description |
+|----- | ---- |
+| .qcw-trigger-button | Button for toggling the chat window | 
+| .qcw-container | Widget Window Wrapper div |
+| .qcw-header | Widget Header containing active chat title |
+| ul#messages__comments | Messages list container |
+| .qcw-comment-form | Comment Form container |
+| .qcw-comment-form textarea | Comment Text Input Field |
+| .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
+| .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 
 
 
