@@ -8,20 +8,29 @@ Vue.use(Toasted, {
   duration: 2000
 })
 
-// QiscusSDK.mode = 'wide';
-// QiscusSDK.init({
-//   AppId: 'dragongo',
-//   options: {
-//     headerClickedCallback(response) {
-//       console.info('header di click', response);
-//     }
-//   }
-// });
-// QiscusSDK.setUser('fikri@qiscus.com', 'password', 'fikri');
-
 /* let's render the view layer */
-window.vm = new Vue({
-  render(h) {
-    return h(QiscusWidget)
-  }
-}).$mount('#qiscus-widget')
+// let renderWidget = function() {
+//   return new Vue({
+//     render(h) {
+//       return h(QiscusWidget)
+//     }
+//   }).$mount('#qiscus-widget')
+// };
+
+// if (typeof module === "object" && exports) {
+//   module.exports = renderWidget;
+// } else if (typeof define === 'function' && define.amd) {
+//   define('qiscus_vm', [], function() {
+//     return qiscus_vm = renderWidget();
+//   });
+// } else {
+//   window.vm = renderWidget();
+// }
+
+export default function renderSDK() {
+  new Vue({
+    render(h) {
+      return h(QiscusWidget)
+    }
+  }).$mount('#qiscus-widget')
+};
