@@ -1,3 +1,9 @@
+# SDK v.2.3.2
+- Fix emoji rendering issue
+- Fix scroll issue
+- UMD Support
+- Reactivate avatar on comment
+
 # SDK v.2.2.6
 - Updated readme
 - Fix message view doubled

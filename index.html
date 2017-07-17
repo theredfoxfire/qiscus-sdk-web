@@ -54,10 +54,10 @@
       $(function(){
         // add listener to li
         $('.participants li').on('click', function(){
-          qiscus.UI.chatTarget($(this).data('email'));
+          QiscusSDK.core.UI.chatTarget($(this).data('email'));
         });
         
-        QiscusSDK.init({
+        QiscusSDK.core.init({
           AppId: 'dragongo',
           options: {
             headerClickedCallback(response) {
@@ -65,7 +65,8 @@
             }
           }
         });
-        QiscusSDK.setUser('fikri@qiscus.com', 'password', 'fikri');
+        QiscusSDK.core.setUser('fikri@qiscus.com', 'password', 'fikri');
+        QiscusSDK.render();
         // qiscus.init({
         //   AppId: 'dragongo',
         //   plugins: ['emoji'],

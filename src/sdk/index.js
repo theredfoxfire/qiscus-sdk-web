@@ -469,7 +469,7 @@ export class qiscusSDK extends EventEmitter {
    * @param {String} commentMessage - comment to be submitted
    * @return {Promise}
    */
-  submitComment (topicId, commentMessage, uniqueId, type, payload) {
+  submitComment (topicId, commentMessage, uniqueId, type = 'text', payload) {
     var self = this
     var room = self._getRoomOfTopic(topicId)
     self.pendingCommentId--

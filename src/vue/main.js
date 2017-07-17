@@ -1,4 +1,4 @@
-import QiscusSDK from '../sdk'
+import qiscusCore from '../sdk'
 import Vue from 'vue'
 import QiscusWidget from './App'
 import Toasted from 'vue-toasted';
@@ -27,10 +27,15 @@ Vue.use(Toasted, {
 //   window.vm = renderWidget();
 // }
 
-export default function renderSDK() {
+function renderSDK() {
   new Vue({
     render(h) {
       return h(QiscusWidget)
     }
   }).$mount('#qiscus-widget')
 };
+
+module.exports = {
+  core: qiscusCore,
+  render: renderSDK
+}

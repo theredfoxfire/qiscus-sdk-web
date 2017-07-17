@@ -9,7 +9,7 @@
       'comment--mid': isMid,
       'comment--last': isLast
     }">
-      <!-- <avatar :src="comment.avatar"></avatar> -->
+      <avatar :src="comment.avatar" v-if="isParent && !isMe"></avatar> 
       <div class="qcw-comment__message">
         <div class="qcw-comment__info" v-if="isParent">
           <span class="qcw-comment__username">{{comment.username_as}}</span>
@@ -65,6 +65,7 @@
           </div>
         </div>
       </div>
+      <avatar :src="comment.avatar" v-if="isMe" :class="{'avatar--hide': !isParent}"></avatar> 
     </div>
   </div>
 </template>
@@ -74,12 +75,11 @@ import EmbedJS from 'embed-js';
 // import marked from 'marked';
 import ImageLoader from './ImageLoader.vue';
 // import highlight from 'highlight.js';
-// import Avatar from './Avatar';
+import Avatar from './Avatar';
 
 export default {
-  // components: { Avatar },
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
-  components: { ImageLoader },
+  components: { Avatar, ImageLoader },
   updated(){
     // this.onupdate();
   },
