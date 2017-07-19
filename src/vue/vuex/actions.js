@@ -20,7 +20,7 @@ export default {
       }, 0)
       return Promise.resolve(qiscus.selected)
     }, (error) => {
-      vm.$toasted.error('Error getting chat room. Please make sure the target is valid')
+      // vm.$toasted.error('Error getting chat room. Please make sure the target is valid')
       return Promise.reject(error)
     })
   },

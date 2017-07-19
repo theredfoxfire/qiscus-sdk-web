@@ -1,6 +1,6 @@
 <template>
-  <div class="avatar">
-    <img :src="src.avatar.url" />
+  <div class="qcw-avatar">
+    <img :src="src" />
   </div>
 </template>
 

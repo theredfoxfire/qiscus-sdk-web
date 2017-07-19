@@ -29,19 +29,24 @@ export class qiscusSDK extends EventEmitter {
     self.mqtt = null // I'll look into this later, basically we'll move mqtt from vuex to core
 
     // User Properties
-    self.userData = {}
+    self.userData    = {}
+
+    // Default options
+    self.options     = {
+      avatar: true,
+      mode: 'widget',
+    }
 
     // SDK Configuration
-    self.baseURL = null
+    self.baseURL     = null
     self.HTTPAdapter = null
-    self.isLogin = false
-    self.options = {}
-    self.isLoading = false
-    self.isInit = false
-    self.sync = 'both' // possible values 'socket', 'http', 'both'
+    self.isLogin     = false
+    self.isLoading   = false
+    self.isInit      = false
+    self.sync        = 'both' // possible values 'socket', 'http', 'both'
     // there's two mode, widget and wide
-    self.mode = 'widget'
-    self.plugins = []
+    self.mode        = 'widget'
+    self.plugins     = []
 
     /**
      * This code below is wrapper for vStore object
@@ -100,17 +105,6 @@ export class qiscusSDK extends EventEmitter {
       })(data)
       
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
-
-    //   if(!self.selected) return;
-    //   const comments = data;
-    //   const roomId = comments[0].room_id
-    //   const lastReadCommentId = self.selected.comments[self.selected.comments.length - 1].id
-    //   const lastReceivedCommentId = comments[comments.length - 1].id
-    //   this.userAdapter.updateCommentStatus(roomId, lastReadCommentId, lastReceivedCommentId)
-    //     .then((res) => {
-    //       this.sortComments()
-    //     })
-    //     .catch(error => console.error('Error when updating comment status', error))
     })
 
     /**
@@ -158,6 +152,7 @@ export class qiscusSDK extends EventEmitter {
       self.isLoading = false
       if (self.options.groupRoomCreatedCallback) self.options.groupRoomCreatedCallback(response)
     })
+
     self.on('header-clicked', function (response) {
       if (self.options.headerClickedCallback) self.options.headerClickedCallback(response)
     })
@@ -180,9 +175,9 @@ export class qiscusSDK extends EventEmitter {
   * @return {void}
   */
   setUser (email, key, username, avatarURL) {
-    this.email = email
-    this.key = key
-    this.username = username
+    this.email      = email
+    this.key        = key
+    this.username   = username
     this.avatar_url = avatarURL
 
     // Connect to Login or Register API
@@ -226,6 +221,12 @@ export class qiscusSDK extends EventEmitter {
       method: 'POST',
       body: formData
     }).then((response) => response.json() , (err) => err)
+  }
+
+  disconnect () {
+    this.isInit = false;
+    this.userData = {};
+    this.selected = null;
   }
 
   // Activate Sync Feature if `http` or `both` is chosen as sync value when init
@@ -478,7 +479,7 @@ export class qiscusSDK extends EventEmitter {
       message: commentMessage,
       username_as: this.username,
       username_real: this.email,
-      user_avatar: this.avatar_url,
+      user_avatar_url: this.userData.avatar_url,
       id: self.pendingCommentId,
       type: type || 'text'
     }
@@ -757,46 +758,44 @@ function escapeHTML(text) {
 }
 export class Comment {
   constructor (comment) {
-    let escaped_message = escapeHTML(comment.message)
-    this.id = comment.id
-    this.before_id = comment.comment_before_id
-    this.message = escaped_message
-    this.username_as = comment.username_as || comment.username
-    this.username_real = comment.username_real || comment.email
-    let theDate = moment(comment.timestamp)
-    this.date = theDate.format('YYYY-MM-DD')
-    this.time = theDate.format('HH:mm A')
-    this.unique_id = comment.unique_temp_id || comment.unique_id
-    // this.avatar        = comment.user_avatar.avatar.url;
-    this.avatar = comment.user_avatar
+    this.id                    = comment.id
+    this.before_id             = comment.comment_before_id
+    this.message               = escapeHTML(comment.message)
+    this.username_as           = comment.username_as || comment.username
+    this.username_real         = comment.username_real || comment.email
+    let theDate                = moment(comment.timestamp)
+    this.date                  = theDate.format('YYYY-MM-DD')
+    this.time                  = theDate.format('HH:mm A')
+    this.unique_id             = comment.unique_temp_id || comment.unique_id
+    this.avatar                = comment.user_avatar_url
     /* comment status */
-    this.isPending = false
-    this.isFailed = false
-    this.isDelivered = true
-    this.isRead = true
-    this.isSent = true
-    this.attachment = null
-    this.payload = comment.payload
+    this.isPending             = false
+    this.isFailed              = false
+    this.isDelivered           = true
+    this.isRead                = true
+    this.isSent                = true
+    this.attachment            = null
+    this.payload               = comment.payload
     // manage comment type
     // supported comment type text, account_linking, buttons
     let supported_comment_type = ['text','account_linking','buttons','reply']
     this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text'
   }
-  isAttachment () {
-    return (this.message.substring(0, '[file]'.length) == '[file]')
+  isAttachment (message) {
+    return (message.substring(0, '[file]'.length) == '[file]')
   }
-  isImageAttachment () {
-    return (this.isAttachment() && this.message.match(/\.(jpg|jpeg|gif|png)/i) != null)
+  isImageAttachment (message) {
+    return (this.isAttachment(message) && message.match(/\.(jpg|jpeg|gif|png)/i) != null)
   }
   attachUniqueId (unique_id) {
     this.unique_id = unique_id
   }
-  getAttachmentURI () {
-    if (!this.isAttachment()) return
-    const messageLength = this.message.length
+  getAttachmentURI (message) {
+    if (!this.isAttachment(message)) return
+    const messageLength = message.length
     const beginIndex = '[file]'.length
     const endIndex = messageLength - '[/file]'.length
-    return this.message.substring(beginIndex, endIndex).trim()
+    return message.substring(beginIndex, endIndex).trim()
   }
   setAttachment (attachment) {
     this.attachment = attachment

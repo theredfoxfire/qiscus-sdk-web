@@ -1,3 +1,12 @@
+# SDK v.2.3.5
+- add init options to disable avatar
+- resize avatar default size to 36px
+- fix image rendering in reply
+
+# SDK v.2.3.4
+- Add disconnect function
+- add avatar
+
 # SDK v.2.3.2
 - Fix emoji rendering issue
 - Fix scroll issue

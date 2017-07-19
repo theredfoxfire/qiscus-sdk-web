@@ -1,24 +1,24 @@
-.qcw-comment .avatar {
-  border: 2px solid darken($primary-color, 10);
+.qcw-comment .qcw-avatar {
+  // border: 2px solid darken($primary-color, 10);
   min-width: 30px;
   margin-right: 5px;
   position: relative;
   z-index: 2;
-  width: 50px !important; height: 50px !important;
+  width: 36px !important; height: 36px !important;
   border-radius: 50%;
-  &.avatar--hide {
+  &.qcw-avatar--hide {
     visibility: hidden;
   }
 }
-.comment--parent .avatar {
+.comment--parent .qcw-avatar {
   top: 9px;
 }
-.qcw-comment.comment--me .avatar {
+.qcw-comment.comment--me .qcw-avatar {
   margin-right: 0;
   margin-left: 5px;
 }
-.qcw-comment .avatar img {
-  width: 50px !important; height: 50px !important;
+.qcw-comment .qcw-avatar img {
+  width: 36px !important; height: 36px !important;
 }
 .qcw-comment {
   display: flex;

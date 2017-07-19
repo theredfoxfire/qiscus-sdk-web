@@ -9,8 +9,9 @@
       'comment--mid': isMid,
       'comment--last': isLast
     }">
-      <avatar :src="comment.avatar" v-if="isParent && !isMe"></avatar> 
+      <avatar :src="comment.avatar" v-if="options.avatar && !isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar> 
       <div class="qcw-comment__message">
+        <!-- Comment Time -->
         <div class="qcw-comment__info" v-if="isParent">
           <span class="qcw-comment__username">{{comment.username_as}}</span>
           <span class="qcw-comment__time" v-if="isParent">{{comment.time}}</span>
@@ -18,22 +19,48 @@
         <i class="fa fa-reply reply-btn" @click="replyHandler(comment)" :class="{'reply-btn--me': isMe}"></i>
         <!-- CommentType: "TEXT" -->
         <div v-if="comment.type == 'text' || comment.type == 'reply'">
-          <image-loader v-if="comment.isAttachment()"
+          <image-loader v-if="comment.isAttachment(comment.message)"
             :comment="comment"
+            :message="comment.message"
             :on-click-image="onClickImage"
             :callback="onupdate">
           </image-loader>
-          <div v-if="comment.type == 'reply'">
+          <comment-reply v-if="comment.type =='reply'"
+            :comment="comment"
+            :isMe="isMe"
+            :clickHandler="gotoComment"
+            :repliedCommentSender="replied_comment_sender"
+            :repliedCommentMessage="replied_comment_message"
+            :repliedCommentText="replied_comment_text"
+            :onClickImage="onClickImage"
+            :callback="onupdate"
+          ></comment-reply>
+          <!--<div v-if="comment.type == 'reply'">
             <div class="reply-wrapper" :class="{'reply-wrapper--me': isMe }" @click="gotoComment">
               <div v-html="replied_comment_sender" class="reply-sender"></div>
-              <div v-html="replied_comment_message"></div>
+              <image-loader v-if="comment.isAttachment(comment.payload.replied_comment_message)"
+                :comment="comment"
+                :message="comment.payload.replied_comment_message"
+                :on-click-image="onClickImage"
+                :callback="onupdate">
+              </image-loader>
+              <div v-html="replied_comment_message" v-if="!comment.isAttachment(comment.payload.replied_comment_message)"></div>
             </div>
-            <div v-html="replied_comment_text" class="qcw-comment__content"></div>
-          </div>
-          <div v-html="message" v-if="!comment.isAttachment() && comment.type=='text'" class="qcw-comment__content"></div>
+            <image-loader v-if="comment.isAttachment(comment.payload.text)"
+              :comment="comment"
+              :message="comment.payload.text"
+              :on-click-image="onClickImage"
+              :callback="onupdate">
+            </image-loader>
+            <div v-html="replied_comment_text" 
+              class="qcw-comment__content"
+              v-if="!comment.isAttachment(comment.payload.text)"
+            ></div>
+          </div>-->
+          <div v-html="message" v-if="!comment.isAttachment(comment.message) && comment.type=='text'" class="qcw-comment__content"></div>
           <span class="qcw-comment__time qcw-comment__time--children" 
             v-if="!isParent"
-            :class="{'qcw-comment__time--attachment': comment.isAttachment()}">
+            :class="{'qcw-comment__time--attachment': comment.isAttachment(comment.message)}">
             {{comment.time}}
           </span>
           <div v-if="isMe">
@@ -65,7 +92,7 @@
           </div>
         </div>
       </div>
-      <avatar :src="comment.avatar" v-if="isMe" :class="{'avatar--hide': !isParent}"></avatar> 
+      <avatar :src="comment.avatar" v-if="options.avatar && isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar> 
     </div>
   </div>
 </template>
@@ -76,14 +103,16 @@ import EmbedJS from 'embed-js';
 import ImageLoader from './ImageLoader.vue';
 // import highlight from 'highlight.js';
 import Avatar from './Avatar';
+import CommentReply from './CommentReply';
 
 export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
-  components: { Avatar, ImageLoader },
+  components: { Avatar, ImageLoader, CommentReply },
   updated(){
     // this.onupdate();
   },
   computed: {
+    options() { return qiscus.options },
     myemail() { return qiscus.email },
     isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
     isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
@@ -93,7 +122,7 @@ export default {
     renderedComment() { return (typeof emojione != "undefined") ? emojione.toShort(this.comment.message) : this.comment.message }
   },
   created() {
-    if(!this.comment.isAttachment()) {
+    if(!this.comment.isAttachment(this.comment.message)) {
       this.message = this.comment.message
       this.x.text((data) => {
         this.message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;

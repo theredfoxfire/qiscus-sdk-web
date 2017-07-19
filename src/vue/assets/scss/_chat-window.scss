@@ -83,12 +83,12 @@ ul#messages__comments::-webkit-scrollbar-thumb {
   }
 }
 .qcw-comment-form textarea {
-  width: calc(100% - 30px);
+  width: calc(100% - 70px);
   border: 0;
   font-family: inherit;
   font-size: 12px; 
   padding: 7px 10px;
-  max-height: 50px;
+  max-height: 100%;
   resize: none;
   outline: none;
 }

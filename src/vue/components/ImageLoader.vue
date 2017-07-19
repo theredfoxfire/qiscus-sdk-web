@@ -20,13 +20,13 @@
 <script>
   export default {
     name: 'ImageLoader',
-    props: ['comment', 'callback', 'onClickImage'],
+    props: ['comment', 'message', 'callback', 'onClickImage'],
     data() {
       return {
         isLoading: true,
         isImage: false,
         imageSrc: '',
-        uri: this.comment.getAttachmentURI(),
+        uri: this.comment.getAttachmentURI(this.message),
         filename: '',
         ext: '',
         error: ''
@@ -51,8 +51,8 @@
       loadImage() {
         const self    = this;
         const comment = this.comment;
-        self.isImage  = (comment.isImageAttachment()) ? true: false;
-        self.uri      = comment.getAttachmentURI();
+        self.isImage  = (comment.isImageAttachment(this.message)) ? true: false;
+        self.uri      = comment.getAttachmentURI(this.message);
         self.filename = self.uri.split('/').pop().split('#')[0].split('?')[0];
         self.ext      = self.filename.split('.').pop();
         self.isLoading = true;
