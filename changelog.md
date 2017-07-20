@@ -1,3 +1,7 @@
+# SDK v.2.4.0
+- Add system event functionality
+- Fix comment sometimes not updating
+
 # SDK v.2.3.5
 - add init options to disable avatar
 - resize avatar default size to 36px

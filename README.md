@@ -26,13 +26,13 @@ You can just copy and paste this into your html file and it'll work directly.
   <meta charset="UTF-8">
   <title>Document</title>
   <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.3.5/css/qiscus-sdk.2.3.5.css">
+  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.4.0/css/qiscus-sdk.2.4.0.css">
   <!-- add this CDN for emojione if you intend to support emoji -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.3.5/lib/js/emojione.min.js"></script>
 </head>
 <body>
   <div id="qiscus-widget"></div>
-  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.3.5/js/qiscus-sdk.2.3.5.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.4.0/js/qiscus-sdk.2.4.0.js"></script>
   <script>
      QiscusSDK.core.init({
         AppId: 'DRAGONGO',

@@ -47,7 +47,7 @@
       },
       activateChat() {
         const self = this;
-        qiscus.init({
+        QiscusSDK.core.init({
           AppId: 'dragongo',
           // AppId: 'kiwari-prod',
           plugins: ['emoji'],
@@ -61,11 +61,11 @@
             },
             loginSuccessCallback: function() {
               // qiscus.UI.chatTarget('cs1@klikmami.com');
-              if(self.target_email.length > 0) qiscus.UI.chatTarget(self.target_email);
+              if(self.target_email.length > 0) QiscusSDK.core.UI.chatTarget(self.target_email);
             }
           }
         });
-        qiscus.setUser(this.email, this.key, this.username);
+        QiscusSDK.core.setUser(this.email, this.key, this.username);
         this.$store.dispatch('toggleInit');
         this.toggleChatWindow();
       }

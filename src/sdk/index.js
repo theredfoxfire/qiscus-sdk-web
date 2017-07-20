@@ -58,7 +58,7 @@ export class qiscusSDK extends EventEmitter {
       },
       chatGroup (id) {
         if (!self.isInit) return
-        const oldSelected = Object.assign({}, qiscus.selected)
+        const oldSelected = Object.assign({}, QiscusSDK.core.selected)
         self.getRoomById(id)
         .then((response) => {
           vStore.dispatch('chatGroup', {id, oldSelected})
@@ -68,7 +68,7 @@ export class qiscusSDK extends EventEmitter {
         vStore.dispatch('toggleChatWindow')
       },
       scrollToBottom () {
-        const latestCommentId = this.selected.comments[qiscus.selected.comments.length-1].id
+        const latestCommentId = this.selected.comments[QiscusSDK.core.selected.comments.length-1].id
         const element = document.getElementById(latestCommentId)
         if(element) {
           element.scrollIntoView({block: 'end', behaviour: 'smooth'})
@@ -524,9 +524,9 @@ export class qiscusSDK extends EventEmitter {
       id: comment.id,
       unique_id: comment.unique_id
     }
-    var pendingComment = qiscus.selected.comments.find( cmtToFind => cmtToFind.id == comment.id )
+    var pendingComment = QiscusSDK.core.selected.comments.find( cmtToFind => cmtToFind.id == comment.id )
 
-    return this.userAdapter.postComment(qiscus.selected.id, pendingComment.message, pendingComment.unique_id, comment.type, comment.payload)
+    return this.userAdapter.postComment(QiscusSDK.core.selected.id, pendingComment.message, pendingComment.unique_id, comment.type, comment.payload)
     .then((res) => {
       // When the posting succeeded, we mark the Comment as sent,
       // so all the interested party can be notified.
@@ -778,7 +778,9 @@ export class Comment {
     this.payload               = comment.payload
     // manage comment type
     // supported comment type text, account_linking, buttons
-    let supported_comment_type = ['text','account_linking','buttons','reply']
+    let supported_comment_type = [
+      'text','account_linking','buttons','reply','system_event', 
+    ];
     this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text'
   }
   isAttachment (message) {

@@ -34,7 +34,7 @@ export default {
   name: 'QiscusWidget',
   computed: {
     init: function() { return this.$store.state.qiscus.isInit },
-    mode: function() { return qiscus.mode },
+    mode: function() { return QiscusSDK.core.mode },
     triggerLabel() {
       return this.$store.getters.triggerLabel;
     },

@@ -118,7 +118,7 @@ export default {
     this.loadRooms().then((response) => {
       this.scrollToBottom();
       // this.listener.listenUserEvent(lstore.get('qcData').token);
-      this.listener.listenRoomEvent(qiscus.selected.room.code_en);
+      this.listener.listenRoomEvent(QiscusSDK.core.selected.room.code_en);
     });
   }
 }

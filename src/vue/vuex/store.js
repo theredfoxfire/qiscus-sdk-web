@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import actions from './actions'
 import MqttAdapter from '../../MqttAdapter'
 import MqttCallback from '../../MqttCallback'
+import QiscusSDK from '../../sdk/index'
 
 // Make vue aware of Vuex
 Vue.use(Vuex)
@@ -10,17 +11,17 @@ Vue.use(Vuex)
 // Create an object to hold the initial state when
 // the app starts up
 const state = {
-  qiscus: qiscus,
-  selected: qiscus.selected,
+  qiscus: QiscusSDK,
+  selected: QiscusSDK.selected,
   windowStatus: false,
-  participants: qiscus.participants,
-  plugins: qiscus.plugins,
+  participants: QiscusSDK.participants,
+  plugins: QiscusSDK.plugins,
   // mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886", callbacks),
   mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886/mqtt", MqttCallback),
   mqttData: {
     typing: ''
   },
-  init: qiscus.isInit,
+  init: QiscusSDK.isInit,
   isLoadingComments: false,
   imageModalLink: '',
   imageModalOn: false,
@@ -61,28 +62,22 @@ const mutations = {
   },
   LOAD_COMMENTS (state, payload) {
     state.isLoadingComments = true;
-    qiscus.loadComments(payload.topic_id, payload.last_comment_id).then((response) => {
+    QiscusSDK.loadComments(payload.topic_id, payload.last_comment_id).then((response) => {
       state.isLoadingComments = false;
-      state.selected = qiscus.selected;
+      state.selected = QiscusSDK.selected;
     }, (error) => {
       console.error('Error loading Comments', error);
       state.isLoadingComments = false;
     })
   },
   UPDATE_SELECTED (state) {
-    state.selected = qiscus.selected;
+    state.selected = QiscusSDK.selected;
   },
   BACK_TO_HOME (state) {
     state.selected = null;
   },
   SUBMIT_COMMENT (state, payload) {
     state.selected = payload;
-    // state.selected = qiscus.selected;
-    // return qiscus.submitComment(payload.topic_id, payload.comment)
-    // .then((response) => {
-    //   state.selected = qiscus.selected;
-    //   return Promise.resolve(state.selected);
-    // })
   },
   SET_TYPING (state, payload) {
     if(payload.topic.username == state.qiscus.email || payload.topic.room_id != state.selected.id) return
@@ -99,7 +94,7 @@ const mutations = {
   SET_READ (state, payload) {
     state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/d`, `${payload.id}:${payload.unique_id}`);
     state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/r`, `${payload.id}:${payload.unique_id}`);
-    state.selected = qiscus.selected;
+    state.selected = QiscusSDK.selected;
   },
   TOGGLE_INIT (state, payload) {
     state.init = !state.init

@@ -1,14 +1,22 @@
 <template>
   <div class="qcw-comment-container" :id="comment.id">
+    <!-- comment data -->
     <div class="qcw-comment-date" v-if="showDate">
       - {{ dateToday }} - 
     </div>
-    <div class="qcw-comment" :class="{
-      'comment--me': comment.username_real == myemail,
-      'comment--parent': isParent,
-      'comment--mid': isMid,
-      'comment--last': isLast
-    }">
+    <!-- CommentType: "system_event" -->
+    <div v-if="comment.type == 'system_event'" class="qcw-comment--system-event">
+      {{ comment.message }}
+    </div>
+    <!-- for text type comment -->
+    <div class="qcw-comment" 
+      v-if="comment.type != 'system_event'"
+      :class="{
+        'comment--me': comment.username_real == myemail,
+        'comment--parent': isParent,
+        'comment--mid': isMid,
+        'comment--last': isLast
+      }">
       <avatar :src="comment.avatar" v-if="options.avatar && !isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar> 
       <div class="qcw-comment__message">
         <!-- Comment Time -->
@@ -112,8 +120,8 @@ export default {
     // this.onupdate();
   },
   computed: {
-    options() { return qiscus.options },
-    myemail() { return qiscus.email },
+    options() { return QiscusSDK.core.options },
+    myemail() { return QiscusSDK.email },
     isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
     isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
     isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; },
@@ -159,6 +167,10 @@ export default {
     resend(comment){
       this.$store.dispatch('resendComment', comment)
     },
+    isTypeOfEvent() {
+      const event_type = ['create_room', 'add_member', 'join_room', 'remove_member', 'left_room', 'change_room_name', 'change_room_avatar'];
+      return this.comment.type.indexOf(event_type) > -1;
+    }
   },
   data () {
     return {
