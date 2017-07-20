@@ -26,25 +26,25 @@ You can just copy and paste this into your html file and it'll work directly.
   <meta charset="UTF-8">
   <title>Document</title>
   <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.2.7/css/qiscus-sdk.2.2.7.css">
+  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.3.5/css/qiscus-sdk.2.3.5.css">
   <!-- add this CDN for emojione if you intend to support emoji -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.3.5/lib/js/emojione.min.js"></script>
 </head>
 <body>
   <div id="qiscus-widget"></div>
-  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.2.7/js/qiscus-sdk.2.2.7.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.3.5/js/qiscus-sdk.2.3.5.js"></script>
   <script>
-     qiscus.init({
+     QiscusSDK.core.init({
         AppId: 'DRAGONGO',
         options: {
           // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
           // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
-          loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+          loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
           // function below will be called when there's new message
           newMessagesCallback(data) { console.log("new message : ", data) }
         }
      });
-     qiscus.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
+     QiscusSDK.core.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
   </script>
 </body>
 </html>
@@ -59,12 +59,12 @@ On the code snippet above, we can pass several callbacks to init options, in the
 ## Init with APP ID
 We can initialize **qis**cus SDK by using this line of code:
 ```
-qiscus.init({
+QiscusSDK.core.init({
   AppId: 'DRAGONGO',
   options: {
     // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
     // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
-    loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+    loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
     // function below will be called when there's new message
     newMessagesCallback(data) { console.log("new message : ", data) }
   }
@@ -80,11 +80,11 @@ Here are list of available callbacks:
 - headerClickedCallback
 
 After we initialize the SDK, we need to set `login` data for current user by using this code:
-`qiscus.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
+`QiscusSDK.core.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
 
 ## Updating a User Profile and Avatar
 You can use the previous login code to update your data:
-`qiscus.setUser('email', 'key', 'username', 'avatar_url');`
+`QiscusSDK.core.setUser('email', 'key', 'username', 'avatar_url');`
 
 - `email` email used by currently logged in user
 - `key` secret key for current user
@@ -94,14 +94,14 @@ You can use the previous login code to update your data:
 # Room Types
 ## Creating and starting 1-to-1 chat
 To create a 1-to-1 chat use this code:
-`qiscus.chatTarget('[email / unique identifier]')`
+`QiscusSDK.core.chatTarget('[email / unique identifier]')`
 
 ## Creating a Group Room
-`qiscus.createGroupRoom (name, ...emails)`
+`QiscusSDK.core.createGroupRoom (name, ...emails)`
 where `email(s)` is in the type of `array`
 
 ## Start Group Chat
-`qiscus.chatGroup('group_room_id')`
+`QiscusSDK.core.chatGroup('group_room_id')`
 
 # Resources
 ## Video
@@ -112,18 +112,20 @@ Here's a video showing how you can set up sample app for qiscus SDK
 In case you don't want to have the sdk displaying on a widget view, we can put the Chat inside a container by setting `mode` to `wide` on `init` as a parameter like this example.
 
 ```
-  qiscus.init({
+  QiscusSDK.core.init({
       AppId: 'DRAGONGO',
       mode: 'wide',
       options: {
         // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
         // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
-        loginSuccessCallback(data) { qiscus.UI.chatTarget('guest2@qiscus.com') },
+        loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
         // function below will be called when there's new message
         newMessagesCallback(data) { console.log("new message : ", data) }
       }
    });
  ```
+
+ You can also enable / disable avatar by passing `avatar` options.
  
  The code above will put qiscus chat inside a container. Here's a working example on [codepen](https://codepen.io/desertlion/pen/MmdRBd)
 

@@ -6,6 +6,7 @@
   z-index: 2;
   width: 36px !important; height: 36px !important;
   border-radius: 50%;
+  overflow: hidden;
   &.qcw-avatar--hide {
     visibility: hidden;
   }
