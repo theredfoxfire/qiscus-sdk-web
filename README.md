@@ -34,6 +34,7 @@ You can just copy and paste this into your html file and it'll work directly.
   <div id="qiscus-widget"></div>
   <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.3.5/js/qiscus-sdk.2.3.5.js"></script>
   <script>
+     // let's setup options for our widget
      QiscusSDK.core.init({
         AppId: 'DRAGONGO',
         options: {
@@ -44,7 +45,10 @@ You can just copy and paste this into your html file and it'll work directly.
           newMessagesCallback(data) { console.log("new message : ", data) }
         }
      });
+     // login to qiscus
      QiscusSDK.core.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
+     // render the widget
+     QiscusSDK.render();
   </script>
 </body>
 </html>
@@ -53,7 +57,7 @@ We're using two CDN here, one for emoji support and one for the icon, in this ca
 
 If you already registered for your own AppId, just replace `dragongo` with your own `AppId`. In the example above we automatically open a chat roow with `guest2@qiscus.com` assuming that user already registered on `dragongo` AppId, if the user is not registered then it will be failed. 
 
-On the code snippet above, we can pass several callbacks to init options, in the example we're using `loginSuccessCallback` which will be called when login is success. It'll automatically open 1-1 chat room with `guest2@qiscus.com`. There's also `newMessagesCallback` where in the example it just log what the messages are.
+On the code snippet above, we can pass several callbacks to init options, in the example we're using `loginSuccessCallback` which will be called when login is success. It'll automatically open 1-1 chat room with `guest2@qiscus.com`. There's also `newMessagesCallback` where in the example it just log what the messages are. After that we render the widget into our page by calling `QiscusSDK.render()`
 
 # Authentication
 ## Init with APP ID
