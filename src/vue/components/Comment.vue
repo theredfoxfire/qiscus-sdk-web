@@ -121,7 +121,7 @@ export default {
   },
   computed: {
     options() { return QiscusSDK.core.options },
-    myemail() { return QiscusSDK.email },
+    myemail() { return QiscusSDK.core.email },
     isParent() { return this.commentBefore == null || this.commentBefore.username_real != this.comment.username_real; },
     isMid() { return this.commentAfter != null && !this.isParent && this.commentAfter.username_real == this.comment.username_real; },
     isLast() { return this.commentAfter == null || this.commentAfter.username_real != this.comment.username_real; },

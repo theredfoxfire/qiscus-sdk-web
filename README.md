@@ -28,7 +28,7 @@ You can just copy and paste this into your html file and it'll work directly.
   <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
   <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.4.0/css/qiscus-sdk.2.4.0.css">
   <!-- add this CDN for emojione if you intend to support emoji -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.3.5/lib/js/emojione.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
 </head>
 <body>
   <div id="qiscus-widget"></div>
@@ -40,7 +40,7 @@ You can just copy and paste this into your html file and it'll work directly.
         options: {
           // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
           // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
-          loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
+          loginSuccessCallback(data) { QiscusSDK.core.UI.chatTarget('guest2@qiscus.com') },
           // function below will be called when there's new message
           newMessagesCallback(data) { console.log("new message : ", data) }
         }
