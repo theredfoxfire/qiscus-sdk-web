@@ -1,5 +1,5 @@
-# SDK v.2.4.0
-- Fix our own comment on the left side
+# SDK v.2.4.1
+- Fix our own comment rendered on the left side
 
 # SDK v.2.4.0
 - Add system event functionality
