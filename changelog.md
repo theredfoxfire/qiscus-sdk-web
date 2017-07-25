@@ -2,7 +2,7 @@
 - Add `getOrCreateRoomByUniqueId` method
 
 # SDK v.2.4.1
-- Fix our own comment on the left side
+- Fix our own comment rendered on the wrong side
 
 # SDK v.2.4.0
 - Add system event functionality
