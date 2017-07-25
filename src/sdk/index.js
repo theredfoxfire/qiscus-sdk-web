@@ -64,6 +64,14 @@ export class qiscusSDK extends EventEmitter {
           vStore.dispatch('chatGroup', {id, oldSelected})
         })
       },
+      getOrCreateRoomByUniqueId (unique_id, name, avatar_url) {
+        if (!self.isInit) return
+        const oldSelected = Object.assign({}, QiscusSDK.core.selected)
+        self.getOrCreateRoomByUniqueId(unique_id, name, avatar_url)
+        .then((response) => {
+          vStore.dispatch('chatGroup', {id:QiscusSDK.core.selected.id, oldSelected})
+        })
+      },
       toggleChatWindow () {
         vStore.dispatch('toggleChatWindow')
       },
@@ -356,6 +364,36 @@ export class qiscusSDK extends EventEmitter {
           roomData.room_type = 'group' 
           roomData.comments = response.results.comments.reverse()
           room = new Room(roomData)
+          self.room_name_id_map[room.name] = room.id
+          self.rooms.push(room)
+        } else {
+          room = roomToFind
+        } 
+        self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
+        self.selected = room || roomToFind
+        self.isLoading = false
+        // self.emit('group-room-created', self.selected)
+      }, (error) => {
+        console.error('Error getting room by id', error)
+      })
+  }
+
+  /**
+   * @param {int} id - Room Id
+   * @param {string} room_name
+   * @param {string} avatar_url
+   * @return {Room} Room data
+   */
+  getOrCreateRoomByUniqueId (id, room_name, avatar_url) {
+    const self = this
+    self.isLoading = true;
+    return self.roomAdapter.getOrCreateRoomByUniqueId(id, room_name, avatar_url)
+      .then((response) => {
+        // make sure the room hasn't been pushed yet
+        let room
+        let roomToFind = find({ id: id})(self.rooms)
+        if (!roomToFind) {
+          room = new Room(response)
           self.room_name_id_map[room.name] = room.id
           self.rooms.push(room)
         } else {

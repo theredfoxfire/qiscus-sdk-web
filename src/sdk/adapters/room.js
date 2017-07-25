@@ -36,6 +36,26 @@ export default class RoomAdapter {
     return this.HTTPAdapter.get(`api/v2/mobile/get_room_by_id?token=${this.token}&id=${id}`)
       .then((response) => Promise.resolve(response.body))
   }
+  
+  getOrCreateRoomByUniqueId (id, name, avatar_url) {
+    let params = { 
+      token: this.token, 
+      unique_id: id,
+      name: name, 
+      avatar_url
+    }
+    return this.HTTPAdapter.post(`api/v2/mobile/get_or_create_room_with_unique_id`, params)
+    .then((res) => {
+      if (res.body.status !== 200) return Promise.reject(res)
+      const room = res.body.results.room
+      room.avatar = room.avatar_url
+      room.comments = reverse(res.body.results.comments)
+      room.name = room.room_name
+      return Promise.resolve(room)
+    }, (err) => {
+      return Promise.reject(err)
+    })
+  }
 
   createRoom (name, emails, options) {
     const body = {

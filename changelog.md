@@ -1,4 +1,7 @@
-# SDK v.2.4.0
+# SDK v.2.4.2
+- Add `getOrCreateRoomByUniqueId` method
+
+# SDK v.2.4.1
 - Fix our own comment on the left side
 
 # SDK v.2.4.0
