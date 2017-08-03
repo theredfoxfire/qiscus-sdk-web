@@ -1,3 +1,6 @@
+# SDK v.2.5.1
+- Fix sync issue not working
+
 # SDK v.2.5.0
 - Add Card Type comment support
 - Autofocus on reply
