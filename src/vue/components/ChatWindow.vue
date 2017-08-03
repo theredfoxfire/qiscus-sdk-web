@@ -246,6 +246,7 @@ export default {
         username: comment.username_as,
         message: (comment.type == 'reply') ? comment.payload.text : comment.message
       }
+      document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
     },
     cancelReply() {
       this.replied_comment = null

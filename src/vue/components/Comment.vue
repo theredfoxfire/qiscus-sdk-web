@@ -61,6 +61,8 @@
             </div>
           </div> <!-- end of comment icons -->
         </div>
+        <!-- CommentType: "CARD" -->
+        <comment-card :comment="comment" v-if="comment.type==='card'" :postbackHandler="postbackSubmit"></comment-card>
         <!-- CommentType: "ACCOUNT_LINKING" -->
         <div v-if="comment.type == 'account_linking'">
           <div class="qcw-comment__content" v-html="message"></div>
@@ -90,10 +92,11 @@ import ImageLoader from './ImageLoader.vue';
 // import highlight from 'highlight.js';
 import Avatar from './Avatar';
 import CommentReply from './CommentReply';
+import CommentCard from './CommentCard';
 
 export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
-  components: { Avatar, ImageLoader, CommentReply },
+  components: { Avatar, ImageLoader, CommentReply, CommentCard },
   updated(){
     // this.onupdate();
   },

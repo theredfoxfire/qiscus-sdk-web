@@ -252,13 +252,19 @@ code {
   margin: 10px -10px -10px -10px;
   display: flex;
   justify-content: space-between;
-  button {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  button, a {
     flex-grow: 1;
     border: 0;
     color: #2d9cdb;
     font-weight: bold;
     background: transparent;
     cursor: pointer;
+    display: inline-block;
+    margin: 0 auto;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.2em;
     &:hover {
       color: #8bd5f9;
     }
@@ -357,4 +363,19 @@ code {
   box-shadow: 0 1px 7px rgba(0,0,0,.1);
   display: inline-block;
   margin: 10px auto;
+}
+/* comment card */
+.comment__card--container {
+  width: 260px;
+}
+.comment__card--image {
+  height: 170px;
+  background-color: #7d7d7d;
+  background-size: cover;
+  margin: -7px -10px 0px -10px;
+}
+strong.comment__card--title {
+  line-height: 3em;
+  font-size: 13px;
+  display: block;
 }

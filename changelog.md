@@ -1,3 +1,11 @@
+# SDK v.2.5.0
+- Add Card Type comment support
+- Autofocus on reply
+- modify updateCommentStatus behavior
+
+# SDK v.2.4.3
+- Fix XSS bug on Reply
+
 # SDK v.2.4.2
 - Add `getOrCreateRoomByUniqueId` method
 

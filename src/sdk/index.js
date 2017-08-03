@@ -273,6 +273,9 @@ export class qiscusSDK extends EventEmitter {
       self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
       self.isLoading = false
       self.emit('chat-room-created', { room: room })
+      // id of last comment on this room
+      const last_comment = room.comments(room.comments.length-1);
+      self.updateCommentStatus(room.id, last_comment);
       return Promise.resolve(room)
     }
 
@@ -285,6 +288,9 @@ export class qiscusSDK extends EventEmitter {
         self.rooms.push(room)
         self.isLoading = false
         self.selected = room
+        // id of last comment on this room
+        const last_comment = room.comments(room.comments.length-1);
+        self.updateCommentStatus(room.id, last_comment);
 
         if (!initialMessage) return room
         const topicId = room.id
@@ -372,6 +378,9 @@ export class qiscusSDK extends EventEmitter {
         self.last_received_comment_id = (self.last_received_comment_id < room.last_comment_id) ? room.last_comment_id : self.last_received_comment_id
         self.selected = room || roomToFind
         self.isLoading = false
+        // id of last comment on this room
+        const last_comment = room.comments(room.comments.length-1);
+        self.updateCommentStatus(room.id, last_comment);
         // self.emit('group-room-created', self.selected)
       }, (error) => {
         console.error('Error getting room by id', error)
@@ -406,6 +415,21 @@ export class qiscusSDK extends EventEmitter {
       }, (error) => {
         console.error('Error getting room by id', error)
       })
+  }
+
+  /**
+   * Set read status for selected comment
+   * 
+   * @param {int} room_id 
+   * @param {obj} comment 
+   * @memberof qiscusSDK
+   */
+  updateCommentStatus(room_id, comment) {
+    const self = this;
+    self.userAdapter.updateCommentStatus(room_id, comment.id, comment.id)
+    .then( res => {
+      self.sortComments()
+    })
   }
 
   /**
@@ -817,7 +841,7 @@ export class Comment {
     // manage comment type
     // supported comment type text, account_linking, buttons
     let supported_comment_type = [
-      'text','account_linking','buttons','reply','system_event', 
+      'text','account_linking','buttons','reply','system_event','card' 
     ];
     this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text'
   }
