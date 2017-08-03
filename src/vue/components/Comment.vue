@@ -1,5 +1,5 @@
 <template>
-  <div class="qcw-comment-container" :id="comment.id">
+  <div class="qcw-comment-container" :id="comment.id" :class="commentClass">
     <!-- comment data -->
     <div class="qcw-comment-date" v-if="showDate">
       - {{ dateToday }} - 
@@ -43,28 +43,6 @@
             :onClickImage="onClickImage"
             :callback="onupdate"
           ></comment-reply>
-          <!--<div v-if="comment.type == 'reply'">
-            <div class="reply-wrapper" :class="{'reply-wrapper--me': isMe }" @click="gotoComment">
-              <div v-html="replied_comment_sender" class="reply-sender"></div>
-              <image-loader v-if="comment.isAttachment(comment.payload.replied_comment_message)"
-                :comment="comment"
-                :message="comment.payload.replied_comment_message"
-                :on-click-image="onClickImage"
-                :callback="onupdate">
-              </image-loader>
-              <div v-html="replied_comment_message" v-if="!comment.isAttachment(comment.payload.replied_comment_message)"></div>
-            </div>
-            <image-loader v-if="comment.isAttachment(comment.payload.text)"
-              :comment="comment"
-              :message="comment.payload.text"
-              :on-click-image="onClickImage"
-              :callback="onupdate">
-            </image-loader>
-            <div v-html="replied_comment_text" 
-              class="qcw-comment__content"
-              v-if="!comment.isAttachment(comment.payload.text)"
-            ></div>
-          </div>-->
           <div v-html="message" v-if="!comment.isAttachment(comment.message) && comment.type=='text'" class="qcw-comment__content"></div>
           <span class="qcw-comment__time qcw-comment__time--children" 
             v-if="!isParent"
@@ -175,6 +153,7 @@ export default {
   data () {
     return {
       message: '',
+      commentClass: `qcw-comment--${this.comment.type}`,
       replied_comment_message: '',
       replied_comment_text: '',
       replied_comment_sender: (this.comment.type=='reply') ? this.comment.payload.replied_comment_sender_username : '',
