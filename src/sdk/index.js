@@ -274,8 +274,8 @@ export class qiscusSDK extends EventEmitter {
       self.isLoading = false
       self.emit('chat-room-created', { room: room })
       // id of last comment on this room
-      const last_comment = room.comments(room.comments.length-1);
-      self.updateCommentStatus(room.id, last_comment);
+      const last_comment = room.comments[room.comments.length-1];
+      if (last_comment) self.updateCommentStatus(room.id, last_comment);
       return Promise.resolve(room)
     }
 
@@ -289,8 +289,8 @@ export class qiscusSDK extends EventEmitter {
         self.isLoading = false
         self.selected = room
         // id of last comment on this room
-        const last_comment = room.comments(room.comments.length-1);
-        self.updateCommentStatus(room.id, last_comment);
+        const last_comment = room.comments[room.comments.length-1];
+        if (last_comment) self.updateCommentStatus(room.id, last_comment);
 
         if (!initialMessage) return room
         const topicId = room.id
@@ -379,8 +379,8 @@ export class qiscusSDK extends EventEmitter {
         self.selected = room || roomToFind
         self.isLoading = false
         // id of last comment on this room
-        const last_comment = room.comments(room.comments.length-1);
-        self.updateCommentStatus(room.id, last_comment);
+        const last_comment = room.comments[room.comments.length-1];
+        if (last_comment) self.updateCommentStatus(room.id, last_comment);
         // self.emit('group-room-created', self.selected)
       }, (error) => {
         console.error('Error getting room by id', error)
