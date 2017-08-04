@@ -7,7 +7,7 @@ You can download files you need by navigating to the [release](https://github.co
 
 # Quick Start
 ## Create a new app 
-Register on [dashboard.qiscus.com](https://dashboard.qiscus.com) using your email and password and then create new application
+Register on [www.qiscus.com/dashboard](https://www.qiscus.com/dashboard) using your email and password and then create new application
 
 You should create one application per service, regardless of the platform. For example, an app released in Android, iOS or Web would require only one application to be created in the Dashboard.
 
