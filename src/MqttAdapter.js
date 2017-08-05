@@ -24,6 +24,9 @@ export default class MqttAdapter {
         callbacks.delivered(topic[3], message);
       }
     })
+    this.mqtt.on('offline', function() {
+      QiscusSDK.core.activateSync();
+    })
   }
   subscribe(topic) {
     this.mqtt.subscribe(topic);
