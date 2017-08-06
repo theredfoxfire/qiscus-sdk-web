@@ -11,7 +11,7 @@
 import CommentButtons from './CommentButtons';
 
 export default {
-  name: 'Qiscus Card Comment',
+  name: 'QiscusCardComment',
   components: { CommentButtons },
   props: ['comment', 'postbackHandler'],
   data() {

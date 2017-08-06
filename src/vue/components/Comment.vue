@@ -111,24 +111,27 @@ export default {
     renderedComment() { return (typeof emojione != "undefined") ? emojione.toShort(this.comment.message) : this.comment.message }
   },
   created() {
-    if(!this.comment.isAttachment(this.comment.message)) {
-      this.message = this.comment.message
-      this.x.text((data) => {
-        this.message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
+    const self = this;
+    if(!self.comment.isAttachment(self.comment.message)) {
+      self.message = self.comment.message
+      self.x.text((data) => {
+        self.message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
       });
     }
-    if(this.comment.type == 'reply') {
-      this.y.text((data) => {
-        this.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
+    if(self.comment.type == 'reply') {
+      self.y.text((data) => {
+        self.replied_comment_message = self.escapeHTML(data);
+        self.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(self.replied_comment_message) : self.replied_comment_message;
       })
       new EmbedJS({
-        input: this.comment.payload.text,
+        input: self.escapeHTML(self.comment.payload.text),
         excludeEmbed: ['github','youtube'],
         emoji: false,
         inlineText: false,
         linkOptions: { target: '_blank' }
       }).text( data => {
-        this.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(data) : data;
+        self.replied_comment_text = self.escapeHTML(data);
+        self.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(self.replied_comment_text) : self.replied_comment_text;
       })
     }
   },
@@ -151,7 +154,16 @@ export default {
     isTypeOfEvent() {
       const event_type = ['create_room', 'add_member', 'join_room', 'remove_member', 'left_room', 'change_room_name', 'change_room_avatar'];
       return this.comment.type.indexOf(event_type) > -1;
-    }
+    },
+    searchAndReplace(str, find, replace) {
+      return str.split(find).join(replace);
+    },
+    escapeHTML(text) {
+      let comment;
+      comment = this.searchAndReplace(text, '<', '&lt;');
+      comment = this.searchAndReplace(comment, '>', '&gt;');
+      return comment;
+    },
   },
   data () {
     return {
@@ -178,7 +190,7 @@ export default {
         emoji: false,
         inlineText: false,
         linkOptions: { target: '_blank' }
-      })
+      }),
     }
   }
 }

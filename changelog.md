@@ -1,3 +1,6 @@
+# SDK v.2.5.2
+- Fix emoji not working on reply
+
 # SDK v.2.5.1
 - Fix sync issue not working
 

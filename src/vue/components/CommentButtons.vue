@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'Qiscus Comment Buttons',
+  name: 'QiscusCommentButtons',
   props: ['buttons', 'postbackHandler'],
   methods: {
     handleClick(button) {
