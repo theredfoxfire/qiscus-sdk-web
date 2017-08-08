@@ -66,24 +66,10 @@ We can initialize **qis**cus SDK by using this line of code:
 QiscusSDK.core.init({
   AppId: 'DRAGONGO',
   options: {
-    // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
-    // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
-    loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
-    // function below will be called when there's new message
-    newMessagesCallback(data) { console.log("new message : ", data) }
   }
 });
 ```
-Here are list of available callbacks:
 
-- `loginSuccessCallback` called when user is successfully logged in. example: put alert boxes or notifs to notify user, or even do something with localstorage.
-- `loginErrorCallback` called when there's error when user try to logged in. example: put alert boxes to notify user about the error.
-- `newMessagesCallback` called when there's new incoming message. example: Put unread indicator somewhere in our apps to notify users there's incoming message or even call Desktop Notification code here.
-- `chatRoomCreatedCallback` called when user successfully open 1-1 chat. example: log the time, put analytic code, etc.
-- `groupRoomCreatedCallback` called when user successfully open group chat. example: log the time, put analytic code, etc.
-- `headerClickedCallback` called when user click the header of chat room. example: put code to open user or group detail.
-- `commentDeliveredCallback` called when comment we sent is already delivered to target user. example: put analytic code.
-- `commentReadCallback` called when comment we sent is delivered and read by target user. example: put analytic code.
 
 After we initialize the SDK, we need to set `login` data for current user by using this code:
 `QiscusSDK.core.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
@@ -109,10 +95,33 @@ where `email(s)` is in the type of `array`
 ## Start Group Chat
 `QiscusSDK.core.UI.chatGroup('group_room_id')`
 
-# Resources
-## Video
-Here's a video showing how you can set up sample app for qiscus SDK
-[![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
+# Event Handler
+
+During `Qiscus.init` you can put callbacks that will being called when the event triggered.
+
+```
+QiscusSDK.core.init({
+  AppId: 'DRAGONGO',
+  options: {
+    // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
+    // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
+    loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
+    // function below will be called when there's new message
+    newMessagesCallback(data) { console.log("new message : ", data) }
+  }
+});
+```
+
+Here are list of available callbacks:
+
+- `loginSuccessCallback` called when user is successfully logged in. example: put alert boxes or notifs to notify user, or even do something with localstorage.
+- `loginErrorCallback` called when there's error when user try to logged in. example: put alert boxes to notify user about the error.
+- `newMessagesCallback` called when there's new incoming message. example: Put unread indicator somewhere in our apps to notify users there's incoming message or even call Desktop Notification code here.
+- `chatRoomCreatedCallback` called when user successfully open 1-1 chat. example: log the time, put analytic code, etc.
+- `groupRoomCreatedCallback` called when user successfully open group chat. example: log the time, put analytic code, etc.
+- `headerClickedCallback` called when user click the header of chat room. example: put code to open user or group detail.
+- `commentDeliveredCallback` called when comment we sent is already delivered to target user. example: put analytic code.
+- `commentReadCallback` called when comment we sent is delivered and read by target user. example: put analytic code.
 
 # UI Customization
 In case you don't want to have the sdk displaying on a widget view, we can put the Chat inside a container by setting `mode` to `wide` on `init` as a parameter like this example.
@@ -150,6 +159,10 @@ Widget components have namespaces of `qcw...`
 | .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 | .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 
+# Resources
+## Video
+Here's a video showing how you can set up sample app for qiscus SDK
+[![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
 
 
 
