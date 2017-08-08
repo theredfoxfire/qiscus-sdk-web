@@ -699,7 +699,6 @@ export class Room {
     this.unread_comments = []
     this.custom_title = null
     this.custom_subtitle = null
-    this.test = 'aaaa'
     this.receiveComments(roomData.comments)
   }
 
@@ -716,14 +715,11 @@ export class Room {
     const filteredComments = comments
       .filter(comment => {
         const commentId = comment.unique_temp_id ? comment.unique_temp_id : comment.id
-        const isNotDuplicateComment = comment.unique_temp_id
-          ? !~currentCommentUniqueIds.indexOf(commentId)
-          : !~currentCommentUniqueIds.indexOf(commentId)
-        return isNotDuplicateComment
+        return currentCommentUniqueIds.indexOf(commentId) < 0;
       })
-    filteredComments.forEach(comment => {
-      this.comments.push(new Comment(comment))
-    })
+      .forEach(comment => {
+        this.comments.push(new Comment(comment))
+      });
   }
 
   countUnreadComments () {
@@ -839,6 +835,12 @@ export class Comment {
     this.attachment            = null
     this.payload               = comment.payload
     // manage comment type
+    // if reply
+    if(comment.type === 'reply') {
+      comment.payload.replied_comment_message = escapeHTML(comment.payload.replied_comment_message);
+      comment.payload.text = escapeHTML(comment.payload.text);
+    }
+
     // supported comment type text, account_linking, buttons
     let supported_comment_type = [
       'text','account_linking','buttons','reply','system_event','card' 
@@ -886,7 +888,6 @@ export class Comment {
     this.isFailed = true
     this.isPending = false
   }
-
 }
 
 // this part is only for browsers, but we need to get around this part
