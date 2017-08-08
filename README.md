@@ -26,13 +26,13 @@ You can just copy and paste this into your html file and it'll work directly.
   <meta charset="UTF-8">
   <title>Document</title>
   <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css>
-  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.4.0/css/qiscus-sdk.2.4.0.css">
+  <link rel="stylesheet" type="text/css" href="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.5.4/css/qiscus-sdk.2.5.4.css">
   <!-- add this CDN for emojione if you intend to support emoji -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/lib/js/emojione.min.js"></script>
 </head>
 <body>
   <div id="qiscus-widget"></div>
-  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.4.0/js/qiscus-sdk.2.4.0.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/qiscus-sdk/web/v2.5.4/js/qiscus-sdk.2.5.4.js"></script>
   <script>
      // let's setup options for our widget
      QiscusSDK.core.init({
@@ -76,12 +76,14 @@ QiscusSDK.core.init({
 ```
 Here are list of available callbacks:
 
-- loginSuccessCallback
-- loginErrorCallback
-- newMessagesCallback
-- chatRoomCreatedCallback
-- groupRoomCreatedCallback
-- headerClickedCallback
+- `loginSuccessCallback` called when user is successfully logged in. example: put alert boxes or notifs to notify user, or even do something with localstorage.
+- `loginErrorCallback` called when there's error when user try to logged in. example: put alert boxes to notify user about the error.
+- `newMessagesCallback` called when there's new incoming message. example: Put unread indicator somewhere in our apps to notify users there's incoming message or even call Desktop Notification code here.
+- `chatRoomCreatedCallback` called when user successfully open 1-1 chat. example: log the time, put analytic code, etc.
+- `groupRoomCreatedCallback` called when user successfully open group chat. example: log the time, put analytic code, etc.
+- `headerClickedCallback` called when user click the header of chat room. example: put code to open user or group detail.
+- `commentDeliveredCallback` called when comment we sent is already delivered to target user. example: put analytic code.
+- `commentReadCallback` called when comment we sent is delivered and read by target user. example: put analytic code.
 
 After we initialize the SDK, we need to set `login` data for current user by using this code:
 `QiscusSDK.core.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
@@ -98,14 +100,14 @@ You can use the previous login code to update your data:
 # Room Types
 ## Creating and starting 1-to-1 chat
 To create a 1-to-1 chat use this code:
-`QiscusSDK.core.chatTarget('[email / unique identifier]')`
+`QiscusSDK.core.UI.chatTarget('[email / unique identifier]')`
 
 ## Creating a Group Room
 `QiscusSDK.core.createGroupRoom (name, ...emails)`
 where `email(s)` is in the type of `array`
 
 ## Start Group Chat
-`QiscusSDK.core.chatGroup('group_room_id')`
+`QiscusSDK.core.UI.chatGroup('group_room_id')`
 
 # Resources
 ## Video

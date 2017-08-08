@@ -1,3 +1,7 @@
+# SDK v.2.5.4
+- Updated docs for callbacks
+- Optimize receiveComments method
+
 # SDK v.2.5.3
 - Fix url not rendered properly
 
