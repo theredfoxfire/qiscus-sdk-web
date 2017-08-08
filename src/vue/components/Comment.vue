@@ -94,6 +94,15 @@ import Avatar from './Avatar';
 import CommentReply from './CommentReply';
 import CommentCard from './CommentCard';
 
+function searchAndReplace(str, find, replace) {
+  return str.split(find).join(replace);
+};
+function escapeHTML(text) {
+  let comment;
+  comment = searchAndReplace(text, '<', '&lt;');
+  comment = searchAndReplace(comment, '>', '&gt;');
+  return comment;
+};
 export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
   components: { Avatar, ImageLoader, CommentReply, CommentCard },
@@ -120,18 +129,16 @@ export default {
     }
     if(self.comment.type == 'reply') {
       self.y.text((data) => {
-        self.replied_comment_message = self.escapeHTML(data);
-        self.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(self.replied_comment_message) : self.replied_comment_message;
+        self.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(data) : self.replied_comment_message;
       })
       new EmbedJS({
-        input: self.escapeHTML(self.comment.payload.text),
+        input: self.comment.payload.text,
         excludeEmbed: ['github','youtube'],
         emoji: false,
         inlineText: false,
         linkOptions: { target: '_blank' }
       }).text( data => {
-        self.replied_comment_text = self.escapeHTML(data);
-        self.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(self.replied_comment_text) : self.replied_comment_text;
+        self.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(data) : self.replied_comment_text;
       })
     }
   },

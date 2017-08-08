@@ -1,3 +1,6 @@
+# SDK v.2.5.3
+- Fix url not rendered properly
+
 # SDK v.2.5.2
 - Fix emoji not working on reply
 
