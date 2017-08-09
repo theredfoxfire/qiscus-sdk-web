@@ -74,7 +74,7 @@ QiscusSDK.core.init({
 After we initialize the SDK, we need to set `login` data for current user by using this code:
 `QiscusSDK.core.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
 
-## Updating a User Profile and Avatar
+## Set User or Updating a User Profile and Avatar
 You can use the previous login code to update your data:
 `QiscusSDK.core.setUser('email', 'key', 'username', 'avatar_url');`
 
@@ -82,6 +82,13 @@ You can use the previous login code to update your data:
 - `key` secret key for current user
 - `username` username to be displayed to other participant
 - `avatar_url` user avatar, fallback to default avatar if not provided
+
+```
+     // login to qiscus
+     QiscusSDK.core.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
+     // render the widget
+     QiscusSDK.render();
+```
 
 # Room Types
 ## Creating and starting 1-to-1 chat
