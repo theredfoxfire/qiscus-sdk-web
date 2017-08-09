@@ -1,5 +1,7 @@
 # Qiscus SDK Web
 
+<p align="center"><br/><img src="https://res.cloudinary.com/qiscus/image/upload/K8xvGP4tXd/ss1.png" width="37%" /><br/></p>
+
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 The other version is the one with `View` layer already integrated in it (in this case we're using VueJs, other view layer already on TODO list).
