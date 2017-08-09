@@ -56,7 +56,7 @@ You can just copy and paste this into your html file and it'll work directly.
 </html>
 ```
 
-<p align="center"><br/><img src="https://res.cloudinary.com/qiscus/image/upload/K8xvGP4tXd/ss1.png" width="70%" /><br/></p>
+<p align="center"><br/><img src="https://res.cloudinary.com/qiscus/image/upload/JnLaMVdypw/ss3.png" width="70%" /><br/></p>
 
 
 
