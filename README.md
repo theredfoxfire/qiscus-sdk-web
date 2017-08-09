@@ -74,7 +74,7 @@ QiscusSDK.core.init({
 After we initialize the SDK, we need to set `login` data for current user by using this code:
 `QiscusSDK.core.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
 
-## Set User or Updating a User Profile and Avatar
+## Set User or Updating a User Profile
 You can use the previous login code to update your data:
 `QiscusSDK.core.setUser('email', 'key', 'username', 'avatar_url');`
 
