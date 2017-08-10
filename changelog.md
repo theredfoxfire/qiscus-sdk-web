@@ -1,7 +1,7 @@
-# SDK v.2.5.5
+# SDK v.2.5.6
 - Fix chatRoomCreatedCallback not behaving as intended
 
-# SDK v.2.5.4
+# SDK v.2.5.5
 - Fix some html still not rendered properly on reply
 
 # SDK v.2.5.4
