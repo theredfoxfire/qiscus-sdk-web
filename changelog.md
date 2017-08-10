@@ -1,3 +1,9 @@
+# SDK v.2.5.5
+- Fix chatRoomCreatedCallback not behaving as intended
+
+# SDK v.2.5.4
+- Fix some html still not rendered properly on reply
+
 # SDK v.2.5.4
 - Updated docs for callbacks
 - Optimize receiveComments method

@@ -291,6 +291,7 @@ export class qiscusSDK extends EventEmitter {
         // id of last comment on this room
         const last_comment = room.comments[room.comments.length-1];
         if (last_comment) self.updateCommentStatus(room.id, last_comment);
+        self.emit('chat-room-created', { room: room })
 
         if (!initialMessage) return room
         const topicId = room.id
