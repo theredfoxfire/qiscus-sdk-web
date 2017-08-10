@@ -1,5 +1,7 @@
 # Qiscus SDK Web
 
+<p align="center"><br/><img src="https://res.cloudinary.com/qiscus/image/upload/K8xvGP4tXd/ss1.png" width="70%" /><br/></p>
+
 **Qis**cus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
 There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
 The other version is the one with `View` layer already integrated in it (in this case we're using VueJs, other view layer already on TODO list).
@@ -46,13 +48,18 @@ You can just copy and paste this into your html file and it'll work directly.
         }
      });
      // login to qiscus
-     QiscusSDK.core.setUser('guest@qiscus.com', 'password', 'Qiscus Demo');
+     QiscusSDK.core.setUser('guest3@qiscus.com', 'password', 'Qiscus Demo');
      // render the widget
      QiscusSDK.render();
   </script>
 </body>
 </html>
 ```
+
+<p align="center"><br/><img src="https://res.cloudinary.com/qiscus/image/upload/JnLaMVdypw/ss3.png" width="70%" /><br/></p>
+
+
+
 We're using two CDN here, one for emoji support and one for the icon, in this case we're using FontAwesome. The *emojione* is optional though.
 
 If you already registered for your own AppId, just replace `dragongo` with your own `AppId`. In the example above we automatically open a chat roow with `guest2@qiscus.com` assuming that user already registered on `dragongo` AppId, if the user is not registered then it will be failed. 
