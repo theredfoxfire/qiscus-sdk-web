@@ -100,6 +100,20 @@ export default {
   loadComments: ({commit}, payload) => commit('LOAD_COMMENTS', payload),
   sync: ({commit}) => commit('SYNC'),
   setTyping: ({commit}, payload) => commit('SET_TYPING', payload),
+  setDelivered: ({commit}, payload) => {
+    // find the comment that need to be altered
+    const commentToFind = find(selectedComment => {
+      return (
+        payload.unique_temp_id
+          ? selectedComment.unique_id === payload.unique_temp_id
+          : selectedComment.id === payload.id
+      )
+    })(QiscusSDK.core.selected.comments)
+    if (commentToFind){
+      commentToFind.markAsRead()
+      commit('SET_DELIVERED', commentToFind)
+    } 
+  },
   setRead: ({commit}, payload) => {
     // find the comment that need to be altered
     const commentToFind = find(selectedComment => {
@@ -117,6 +131,7 @@ export default {
   toggleInit: ({commit}) => commit('TOGGLE_INIT'),
   updateSelected: ({commit}) => commit('UPDATE_SELECTED'),
   openImageModal: ({commit}, payload) => commit('OPEN_IMAGE_MODAL', payload),
-  closeImageModal: ({commit}) => commit('CLOSE_IMAGE_MODAL')
+  closeImageModal: ({commit}) => commit('CLOSE_IMAGE_MODAL'),
+  subscribeUserChannel: ({commit}) => commit('SUBSCRIBE_USER_CHANNEL'),
 }
 // topic_id, last_comment_id, timestamp, after

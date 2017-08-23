@@ -379,3 +379,20 @@ strong.comment__card--title {
   font-size: 13px;
   display: block;
 }
+.slide-y {
+  transition: all .32s ease;
+}
+.slide-y-enter, .slide-y-leave-to
+  /* .slide-y-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.slide-y-leave-active {
+  position: absolute;
+}
+.qcw-carousel__item .comment__card--container {
+  padding: 10px;
+  box-shadow: 0 3px 7px rgba(0,0,0,.3);
+  overflow: hidden;
+  transition: all .32s ease;
+}

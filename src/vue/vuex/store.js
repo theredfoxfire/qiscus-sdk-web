@@ -39,11 +39,15 @@ const mutations = {
   TOGGLE_CHAT_WINDOW (state) {
     state.windowStatus = !state.windowStatus
   },
+  SUBSCRIBE_USER_CHANNEL(state) {
+    state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
+  },
   CHAT_TARGET (state, {email, options}) {
     state.mqttData.typing = '';
     // reset the state with new data
     state.windowStatus = true;
     state.selected = state.qiscus.selected;
+    state.mqtt.unsubscribe(`${state.qiscus.userData.token}/c`);
     state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
     state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
     state.mqttData.typing = '';
@@ -52,7 +56,6 @@ const mutations = {
     if(state.selected) {
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
-      state.mqtt.unsubscribe(`${state.qiscus.userData.token}/c`);
     }
     state.windowStatus = true;
     state.selected = state.qiscus.selected;
@@ -94,6 +97,10 @@ const mutations = {
   SET_READ (state, payload) {
     state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/d`, `${payload.id}:${payload.unique_id}`);
     state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/r`, `${payload.id}:${payload.unique_id}`);
+    state.selected = QiscusSDK.selected;
+  },
+  SET_DELIVERED(state, payload) {
+    state.mqtt.publish(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/${state.qiscus.email}/d`, `${payload.id}:${payload.unique_id}`);
     state.selected = QiscusSDK.selected;
   },
   TOGGLE_INIT (state, payload) {

@@ -62,7 +62,12 @@
           </div> <!-- end of comment icons -->
         </div>
         <!-- CommentType: "CARD" -->
-        <comment-card :comment="comment" v-if="comment.type==='card'" :postbackHandler="postbackSubmit"></comment-card>
+        <comment-card :data="comment.payload" 
+          v-if="comment.type==='card'"></comment-card>
+        <!-- CommentType: "CUSTOM" -->
+        <div v-if="comment.type === 'custom'">
+          <comment-carousel v-if="comment.subtype==='carousel'" :cards="comment.payload.content"></comment-carousel>
+        </div>
         <!-- CommentType: "ACCOUNT_LINKING" -->
         <div v-if="comment.type == 'account_linking'">
           <div class="qcw-comment__content" v-html="message"></div>
@@ -93,6 +98,7 @@ import ImageLoader from './ImageLoader.vue';
 import Avatar from './Avatar';
 import CommentReply from './CommentReply';
 import CommentCard from './CommentCard';
+import CommentCarousel from './CommentCarousel';
 
 function searchAndReplace(str, find, replace) {
   return str.split(find).join(replace);
@@ -105,7 +111,7 @@ function escapeHTML(text) {
 };
 export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
-  components: { Avatar, ImageLoader, CommentReply, CommentCard },
+  components: { Avatar, ImageLoader, CommentReply, CommentCard, CommentCarousel },
   updated(){
     // this.onupdate();
   },

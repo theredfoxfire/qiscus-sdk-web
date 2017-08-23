@@ -1,3 +1,9 @@
+# SDK v.2.5.7
+- Add `carousel` component
+- Activate sync on loginsuccess
+- Fix `newMessagesCallback` not working
+- Add how `setRead` and `setDelivered` for comments works
+
 # SDK v.2.5.6
 - Fix chatRoomCreatedCallback not behaving as intended
 

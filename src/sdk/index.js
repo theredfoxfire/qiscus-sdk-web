@@ -43,7 +43,9 @@ export class qiscusSDK extends EventEmitter {
     self.isLogin     = false
     self.isLoading   = false
     self.isInit      = false
-    self.sync        = 'socket' // possible values 'socket', 'http', 'both'
+    self.isSynced    = false
+    self.sync        = 'both' // possible values 'socket', 'http', 'both'
+
     // there's two mode, widget and wide
     self.mode        = 'widget'
     self.plugins     = []
@@ -95,12 +97,16 @@ export class qiscusSDK extends EventEmitter {
       // let's convert the data into something we can use
       // first we need to make sure we sort this data out based on room_id
       map((comment) => {
+        self.last_received_comment_id = (comment.id > self.last_received_comment_id) ? comment.id : self.last_received_comment_id;
         const theRoom = find({ id: comment.room_id })(self.rooms)
         if (theRoom != null) {
           theRoom.receiveComments([comment])
-          vStore.dispatch('setRead', comment)
+          if(self.selected.id === comment.room_id) {
+            vStore.dispatch('setRead', comment)
+          } else {
+            vStore.dispatch('setDelivered', comment)
+          }
           // update last_received_comment_id
-          self.last_received_comment_id = comment.id
 
           // update comment status, if only self.selected isn't null and it is the correct room
           if(self.selected && self.selected.id == comment.room_id) {
@@ -111,7 +117,6 @@ export class qiscusSDK extends EventEmitter {
           }
         }
       })(data)
-      
       if (self.options.newMessagesCallback) self.options.newMessagesCallback(data)
     })
 
@@ -122,6 +127,8 @@ export class qiscusSDK extends EventEmitter {
     self.on('login-success', function (response) {
       self.isLogin = true
       self.userData = response.results.user
+      
+      if (this.sync == 'http' || this.sync == 'both') this.activateSync.call(this);
 
       // now that we have the token, etc, we need to set all our adapters
       // /////////////// API CLIENT /////////////////
@@ -133,6 +140,7 @@ export class qiscusSDK extends EventEmitter {
       self.userAdapter = new UserAdapter(self.HTTPAdapter)
       self.roomAdapter = new RoomAdapter(self.HTTPAdapter)
       self.topicAdapter = new TopicAdapter(self.HTTPAdapter)
+      vStore.dispatch('subscribeUserChannel');
       if (self.options.loginSuccessCallback) self.options.loginSuccessCallback(response)
     })
 
@@ -209,7 +217,6 @@ export class qiscusSDK extends EventEmitter {
     if (!config.AppId) throw new Error('AppId Undefined')
     // setup how sdk will sync data: socket, http, both
     if (config.sync) this.sync = config.sync
-    if (this.sync == 'http' || this.sync == 'both') this.activateSync()
     // setup how sdk will set the layout, widget or wide 
     if (config.mode) this.mode = config.mode
     // initconfig for developer
@@ -240,9 +247,9 @@ export class qiscusSDK extends EventEmitter {
   // Activate Sync Feature if `http` or `both` is chosen as sync value when init
   activateSync () {
     const self = this
-    window.setInterval(function(){
-      self.synchronize();
-    }, 3500)
+    if (self.isSynced) return false;
+    self.isSynced = true;
+    window.setInterval(() => self.synchronize(), 3500);
   }
 
   /**
@@ -438,7 +445,6 @@ export class qiscusSDK extends EventEmitter {
    * If comment count > 0 then we have new message
    */
   synchronize () {
-    if(this.last_received_comment_id <= 0) return
     this.userAdapter.sync(this.last_received_comment_id)
     .then((comments) => {
       if (comments.length > 0) this.emit('newmessages', comments)
@@ -844,9 +850,10 @@ export class Comment {
 
     // supported comment type text, account_linking, buttons
     let supported_comment_type = [
-      'text','account_linking','buttons','reply','system_event','card' 
+      'text','account_linking','buttons','reply','system_event','card', 'custom'
     ];
-    this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text'
+    this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text';
+    this.subtype = (comment.type === 'custom') ? comment.payload.type : null;
   }
   isAttachment (message) {
     return (message.substring(0, '[file]'.length) == '[file]')

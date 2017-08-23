@@ -1,9 +1,9 @@
 <template>
   <div class="comment__card--container">
-    <div class="comment__card--image" :style="{'background-image': 'url('+card.image+')'}"></div>
-    <strong class="comment__card--title">{{ card.title }}</strong>
-    <div class="comment__card--description">{{ card.description }}</div>
-    <comment-buttons :buttons="card.buttons" :postbackHandler="postbackHandler"></comment-buttons>
+    <div class="comment__card--image" :style="{'background-image': 'url('+data.image+')'}"></div>
+    <strong class="comment__card--title">{{ data.title }}</strong>
+    <div class="comment__card--description">{{ data.description }}</div>
+    <comment-buttons :buttons="data.buttons" :postbackHandler="postbackSubmit"></comment-buttons>
   </div>
 </template>
 
@@ -13,12 +13,13 @@ import CommentButtons from './CommentButtons';
 export default {
   name: 'QiscusCardComment',
   components: { CommentButtons },
-  props: ['comment', 'postbackHandler'],
-  data() {
-    return {
-      card: this.comment.payload,
-    }
-  },
+  props: ['data'],
+  methods: {
+    postbackSubmit(button) {
+      const topicId = qiscus.selected.id
+      qiscus.submitComment(topicId, button.label, null, 'button_postback_response', JSON.stringify(button.payload))
+    },
+  }
 }
 </script>
 

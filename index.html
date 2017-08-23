@@ -63,6 +63,9 @@
             headerClickedCallback(response) {
               console.info('header di click', response);
             },
+            newMessagesCallback(response) {
+              console.info('incoming new message', response);
+            }
           }
         });
         QiscusSDK.core.setUser('fikri@qiscus.com', 'password', 'fikri');
