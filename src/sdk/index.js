@@ -178,7 +178,7 @@ export class qiscusSDK extends EventEmitter {
     })
 
     self.on('login-error', function(error) {
-      console.error('Error login', error)
+      if (self.options.loginErrorCallback) self.options.loginErrorCallback(error)
     })
   }
 
