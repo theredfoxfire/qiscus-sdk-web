@@ -144,16 +144,6 @@ QiscusSDK.core.init({
 });
 ```
 
-Here are list of available callbacks:
-
-- `loginSuccessCallback` called when user is successfully logged in. example: put alert boxes or notifs to notify user, or even do something with localstorage.
-- `loginErrorCallback` called when there's error when user try to logged in. example: put alert boxes to notify user about the error.
-- `newMessagesCallback` called when there's new incoming message. example: Put unread indicator somewhere in our apps to notify users there's incoming message or even call Desktop Notification code here.
-- `chatRoomCreatedCallback` called when user successfully open 1-1 chat. example: log the time, put analytic code, etc.
-- `groupRoomCreatedCallback` called when user successfully open group chat. example: log the time, put analytic code, etc.
-- `headerClickedCallback` called when user click the header of chat room. example: put code to open user or group detail.
-- `commentDeliveredCallback` called when comment we sent is already delivered to target user. example: put analytic code.
-- `commentReadCallback` called when comment we sent is delivered and read by target user. example: put analytic code.
 
 # UI Customization
 In case you don't want to have the sdk displaying on a widget view, we can put the Chat inside a container by setting `mode` to `wide` on `init` as a parameter like this example.
