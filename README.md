@@ -117,11 +117,29 @@ During `Qiscus.init` you can put callbacks that will being called when the event
 QiscusSDK.core.init({
   AppId: 'DRAGONGO',
   options: {
-    // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
-    // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
+    // called when user is successfully logged in. example: put alert boxes or notifs to notify user, or even do something with localstorage.
     loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
-    // function below will be called when there's new message
-    newMessagesCallback(data) { console.log("new message : ", data) }
+    // called when there's error when user try to logged in. example: put alert boxes to notify user about the error.
+    
+    
+    // called when there's new incoming message. example: Put unread indicator somewhere in our apps to notify users there's incoming message or even call Desktop Notification code here.
+    newMessagesCallback(data) { console.log("new message : ", data) },
+    
+    // called when user successfully open 1-1 chat. example: log the time, put analytic code, etc.
+     chatRoomCreatedCallback(data) { console.log("chat room created : ", data) },
+     
+    // called when user successfully open group chat. example: log the time, put analytic code, etc.
+     groupRoomCreatedCallback(data) { console.log("group room created : ", data) },
+     
+    // called when user click the header of chat room. example: put code to open user or group detail.
+     headerClickedCallback(data) { console.log("header clicked : ", data) },
+
+    // called when comment we sent is already delivered to target user. example: put analytic code.
+     commentDeliveredCallback(data) { console.log("message delivered : ", data) },
+    
+    // called when comment we sent is delivered and read by target user. example: put analytic code.
+     commentReadCallback(data) { console.log("message read : ", data) },
+    
   }
 });
 ```
