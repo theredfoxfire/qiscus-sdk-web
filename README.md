@@ -97,8 +97,8 @@ You can use the previous login code to update your data:
      QiscusSDK.render();
 ```
 
-# Room Types
-## Creating and starting 1-to-1 chat
+# Chat Rooms
+## Create 1-to-1 chat
 To create a 1-to-1 chat use this code:
 `QiscusSDK.core.UI.chatTarget('[email / unique identifier]')`
 
@@ -106,7 +106,7 @@ To create a 1-to-1 chat use this code:
 `QiscusSDK.core.createGroupRoom (name, ...emails)`
 where `email(s)` is in the type of `array`
 
-## Start Group Chat
+## Get a Group Room instance with room id
 `QiscusSDK.core.UI.chatGroup('group_room_id')`
 
 # Event Handler
@@ -145,11 +145,6 @@ In case you don't want to have the sdk displaying on a widget view, we can put t
       AppId: 'DRAGONGO',
       mode: 'wide',
       options: {
-        // When we're success login into qiscus SDK we'll have a 1-on-1 chat to guest2@qiscus.com
-        // You can change this to any user you have on your AppId, e.g: contact@your_company.com, etc
-        loginSuccessCallback(data) { QiscusSDK.UI.chatTarget('guest2@qiscus.com') },
-        // function below will be called when there's new message
-        newMessagesCallback(data) { console.log("new message : ", data) }
       }
    });
  ```
@@ -172,11 +167,6 @@ Widget components have namespaces of `qcw...`
 | .qcw-comment-form textarea | Comment Text Input Field |
 | .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 | .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
-
-# Resources
-## Video
-Here's a video showing how you can set up sample app for qiscus SDK
-[![Qiscus-SDK Howto](https://cdn.rawgit.com/qiscus/qiscus-sdk-web/master/qiscus-sdk-sample.png)](https://www.youtube.com/watch?v=x-l-TVfPiCQ)
 
 
 
