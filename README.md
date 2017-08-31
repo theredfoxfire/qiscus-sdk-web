@@ -106,7 +106,7 @@ To create a 1-to-1 chat use this code:
 `QiscusSDK.core.createGroupRoom (name, ...emails)`
 where `email(s)` is in the type of `array`
 
-## Get a Group Room instance with room id
+## Get a room by id
 `QiscusSDK.core.UI.chatGroup('group_room_id')`
 
 # Event Handler
