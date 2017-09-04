@@ -1,6 +1,6 @@
 # SDK v.2.5.8
 - Add contact rendering
-- Add location rendering only if `google_key` is passed as options when initiating sdk
+- Add location rendering
 - Modify how reply rendered
 - Fix login-error callback not being called
 - change clickable area for `headerClickCallback`

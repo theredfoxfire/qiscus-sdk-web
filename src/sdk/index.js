@@ -35,7 +35,6 @@ export class qiscusSDK extends EventEmitter {
     self.options     = {
       avatar: true,
       mode: 'widget',
-      google_key: null,
     }
 
     // SDK Configuration
