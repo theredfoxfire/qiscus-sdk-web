@@ -35,6 +35,7 @@ export class qiscusSDK extends EventEmitter {
     self.options     = {
       avatar: true,
       mode: 'widget',
+      google_key: null,
     }
 
     // SDK Configuration
@@ -178,7 +179,7 @@ export class qiscusSDK extends EventEmitter {
     })
 
     self.on('login-error', function(error) {
-      console.error('Error login', error)
+      if (self.options.loginErrorCallback) self.options.loginErrorCallback(error);
     })
   }
 
@@ -561,7 +562,7 @@ export class qiscusSDK extends EventEmitter {
       // get the comment for current replied id
       var parsedPayload = JSON.parse(payload)
       var replied_message = self.selected.comments.find(cmt => cmt.id == parsedPayload.replied_comment_id)
-      parsedPayload.replied_comment_message = replied_message.message
+      parsedPayload.replied_comment_message = replied_message.payload.text
       parsedPayload.replied_comment_sender_username = replied_message.username_as
       pendingComment.payload = parsedPayload
     }
@@ -850,7 +851,7 @@ export class Comment {
 
     // supported comment type text, account_linking, buttons
     let supported_comment_type = [
-      'text','account_linking','buttons','reply','system_event','card', 'custom'
+      'text','account_linking','buttons','reply','system_event','card', 'custom', 'contact_person', 'location'
     ];
     this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text';
     this.subtype = (comment.type === 'custom') ? comment.payload.type : null;

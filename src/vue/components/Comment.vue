@@ -25,9 +25,24 @@
           <span class="qcw-comment__time" v-if="isParent">{{comment.time}}</span>
         </div>
         <i class="fa fa-reply reply-btn" @click="replyHandler(comment)" :class="{'reply-btn--me': isMe}"></i>
+        <!-- CommentType: "contact_person" -->
+        <div v-if="comment.type == 'contact_person'" class="qcw-comment--contact">
+          <i class="fa fa-user fa-fw"></i> <strong>{{ comment.payload.name }}</strong><br>
+          <i class="fa fa-fw" :class="{
+            'fa-phone': comment.payload.type == 'phone',
+            'fa-envelope': comment.payload.type == 'email'
+          }"></i> <span>{{ comment.payload.value }}</span>
+        </div>
+        <!-- CommentType: "location" -->
+        <static-map :lat="comment.payload.latitude"
+          :lng="comment.payload.longitude"
+          :name="comment.payload.name"
+          :message="comment.message"
+          :mapurl="comment.payload.map_url"
+          v-if="comment.type == 'location'"></static-map>
         <!-- CommentType: "TEXT" -->
         <div v-if="comment.type == 'text' || comment.type == 'reply'">
-          <image-loader v-if="comment.isAttachment(comment.message)"
+          <image-loader v-if="comment.isAttachment(comment.message) && comment.type != 'reply'"
             :comment="comment"
             :message="comment.message"
             :on-click-image="onClickImage"
@@ -99,6 +114,7 @@ import Avatar from './Avatar';
 import CommentReply from './CommentReply';
 import CommentCard from './CommentCard';
 import CommentCarousel from './CommentCarousel';
+import StaticMap from './StaticMap';
 
 function searchAndReplace(str, find, replace) {
   return str.split(find).join(replace);
@@ -111,7 +127,7 @@ function escapeHTML(text) {
 };
 export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
-  components: { Avatar, ImageLoader, CommentReply, CommentCard, CommentCarousel },
+  components: { Avatar, ImageLoader, CommentReply, CommentCard, CommentCarousel, StaticMap },
   updated(){
     // this.onupdate();
   },

@@ -23,12 +23,14 @@
       <h3 style="padding: 20px; text-align: center;">No Active Chat, please select participant to chat to</h3>
     </div>
     <div v-if="init && selected" class="widget-chat-wrapper">
-      <div class="qcw-header" @click="onHeaderClicked">
-        <img class="qcw-room-avatar" :src="selected.avatar || 'https://qiscuss3.s3.amazonaws.com/uploads/55c0c6ee486be6b686d52e5b9bbedbbf/2.png'" alt="Room Avatar" />
-        <div v-if="!selected.custom_title">{{ selected.name }}</div>
-        <div v-if="selected.custom_title">{{ selected.custom_title }}</div>
-        <div v-if="mqttData.typing != ''" class="isTypingText">{{ mqttData.typing }} is typing ...</div>
-        <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
+      <div class="qcw-header">
+        <div class="qcw-header__main" @click="onHeaderClicked">
+          <img class="qcw-room-avatar" :src="selected.avatar || 'https://qiscuss3.s3.amazonaws.com/uploads/55c0c6ee486be6b686d52e5b9bbedbbf/2.png'" alt="Room Avatar" />
+          <div v-if="!selected.custom_title">{{ selected.name }}</div>
+          <div v-if="selected.custom_title">{{ selected.custom_title }}</div>
+          <div v-if="mqttData.typing != ''" class="isTypingText">{{ mqttData.typing }} is typing ...</div>
+          <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
+        </div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
       </div>
       <div class="qcw-goto-bottom" @click="scrollToBottom" v-if="!scrollable && !showActions && replied_comment == null"><i class="fa fa-angle-double-down"></i></div>
@@ -238,7 +240,7 @@ export default {
       }
     },
     onHeaderClicked() {
-      if(qiscus) qiscus.emit('header-clicked', 'hohohoho');
+      if(qiscus) qiscus.emit('header-clicked');
     },
     setReply(comment) {
       this.replied_comment = {
