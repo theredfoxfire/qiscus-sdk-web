@@ -561,7 +561,9 @@ export class qiscusSDK extends EventEmitter {
       // get the comment for current replied id
       var parsedPayload = JSON.parse(payload)
       var replied_message = self.selected.comments.find(cmt => cmt.id == parsedPayload.replied_comment_id)
-      parsedPayload.replied_comment_message = replied_message.payload.text
+      parsedPayload.replied_comment_message = 
+        (replied_message.type == 'reply') ? replied_message.payload.text
+                                          : replied_message.message;
       parsedPayload.replied_comment_sender_username = replied_message.username_as
       pendingComment.payload = parsedPayload
     }

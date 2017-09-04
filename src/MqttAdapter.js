@@ -13,6 +13,7 @@ export default class MqttAdapter {
         QiscusSDK.core.emit('newmessages', [JSON.parse(message)]);
       } else if(topic.length == 3) {
         // it's a user status message -> u/{user}/s
+        QiscusSDK.core.emit('presence', JSON.parse(message));
       } else if(topic[0] == 'r' && topic[4] == 't') {
         // it's a typing message
         callbacks.typing({username:topic[3], room_id: topic[1]}, message)

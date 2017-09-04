@@ -51,6 +51,14 @@ const mutations = {
     state.mqtt.subscribe(`r/${state.selected.id}/${state.selected.last_comment_topic_id}/+/t`);
     state.mqtt.subscribe(`${state.qiscus.userData.token}/c`);
     state.mqttData.typing = '';
+
+    // set presence, ambil email yang lama
+    if(qiscus.selected) {
+      const targetEmail = qiscus.selected.participants
+        .find(target => target.email != qiscus.email);
+      if(targetEmail) state.mqtt.unsubscribe(`u/${targetEmail.email}/s`);
+    }
+    state.mqtt.subscribe(`u/${email}/s`);
   },
   CHAT_GROUP (state, {id, oldSelected}) {
     if(state.selected) {

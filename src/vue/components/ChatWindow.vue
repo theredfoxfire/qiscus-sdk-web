@@ -246,6 +246,7 @@ export default {
       this.replied_comment = {
         id: comment.id,
         username: comment.username_as,
+        type: comment.type,
         message: (comment.type == 'reply') ? comment.payload.text : comment.message
       }
       document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
