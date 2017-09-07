@@ -1,8 +1,15 @@
 import mqtt from 'mqtt';
+import {format} from 'date-fns';
 
 export default class MqttAdapter {
   constructor(url, callbacks) {
-    this.mqtt = mqtt.connect(url)
+    this.mqtt = mqtt.connect(url, {
+      will: {
+        topic: `u/${qiscus.userData.email}/s`,
+        payload: `1:${format(new Date(), 'x')}`,
+        retain: true
+      }
+    })
     this.mqtt.on('message', function(topic, message) {
       // set the message to readable string
       message = message.toString();
@@ -13,7 +20,10 @@ export default class MqttAdapter {
         QiscusSDK.core.emit('newmessages', [JSON.parse(message)]);
       } else if(topic.length == 3) {
         // it's a user status message -> u/{user}/s
-        QiscusSDK.core.emit('presence', JSON.parse(message));
+        // const presencePayload = message.split(":");
+        if (presencePayload[1].length > 13) return;
+        console.info('paylod presence', message);
+        QiscusSDK.core.emit('presence', message);
       } else if(topic[0] == 'r' && topic[4] == 't') {
         // it's a typing message
         callbacks.typing({username:topic[3], room_id: topic[1]}, message)

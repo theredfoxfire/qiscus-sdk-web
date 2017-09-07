@@ -29,6 +29,7 @@
           <div v-if="!selected.custom_title">{{ selected.name }}</div>
           <div v-if="selected.custom_title">{{ selected.custom_title }}</div>
           <div v-if="mqttData.typing != ''" class="isTypingText">{{ mqttData.typing }} is typing ...</div>
+          <div v-if="!mqttData.typing && chatmateStatus" class="isTypingText">{{ chatmateStatus }}</div>
           <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
         </div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
@@ -116,6 +117,7 @@ export default {
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected || false},
+    chatmateStatus: function(){ return this.$store.state.qiscus.chatmateStatus },
     userdata: function() { return this.$store.state.qiscus.userData },
     mqtt: function() { return this.$store.state.mqtt },
     mqttData: function() { return this.$store.state.mqttData },
