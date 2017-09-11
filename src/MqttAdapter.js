@@ -20,9 +20,8 @@ export default class MqttAdapter {
         QiscusSDK.core.emit('newmessages', [JSON.parse(message)]);
       } else if(topic.length == 3) {
         // it's a user status message -> u/{user}/s
-        // const presencePayload = message.split(":");
+        const presencePayload = message.split(":");
         if (presencePayload[1].length > 13) return;
-        console.info('paylod presence', message);
         QiscusSDK.core.emit('presence', message);
       } else if(topic[0] == 'r' && topic[4] == 't') {
         // it's a typing message

@@ -205,7 +205,6 @@ export default {
       me: qiscus.email,
       x: new EmbedJS({
         input: this.comment.message,
-        // googleAuthKey: 'AIzaSyAO1Oui55SvTwdk4XCMzmAgr145urfQ9No',
         excludeEmbed: ['github','youtube'],
         emoji: false,
         inlineText: false,

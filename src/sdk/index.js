@@ -7,7 +7,7 @@ import compose from 'lodash/fp/compose'
 import reverse from 'lodash/fp/reverse'
 import value from 'lodash/fp/value'
 import reduce from 'lodash/fp/reduce'
-import moment from 'moment'
+import {distanceInWordsToNow, format} from 'date-fns'
 
 import HttpAdapter from './adapters/http'
 import UserAdapter from './adapters/user'
@@ -27,6 +27,7 @@ export class qiscusSDK extends EventEmitter {
     self.pendingCommentId = 0
     self.last_received_comment_id = 0
     self.mqtt = null // I'll look into this later, basically we'll move mqtt from vuex to core
+    self.chatmateStatus = ''
 
     // User Properties
     self.userData    = {}
@@ -180,6 +181,14 @@ export class qiscusSDK extends EventEmitter {
     self.on('login-error', function(error) {
       if (self.options.loginErrorCallback) self.options.loginErrorCallback(error);
     })
+
+    self.on('presence', function(data) {
+      const payload = data.split(":");
+      QiscusSDK.core.chatmateStatus = (payload[0] == 1)
+        ? 'Online'
+        : `Last seen ${distanceInWordsToNow(Number(payload[1]))}`
+      if (self.options.presenceCallback) self.options.presenceCallback(data);
+    })
   }
 
   /**
@@ -265,6 +274,7 @@ export class qiscusSDK extends EventEmitter {
     // check if the room exists
     const self = this
     self.isLoading = true
+    self.chatmateStatus = ''
     options = self.options
 
     // make sure data already loaded first
@@ -367,6 +377,7 @@ export class qiscusSDK extends EventEmitter {
   getRoomById (id) {
     const self = this
     self.isLoading = true;
+    self.chatmateStatus = ''
     return self.roomAdapter.getRoomById(id)
       .then((response) => {
         // make sure the room hasn't been pushed yet
@@ -550,7 +561,8 @@ export class qiscusSDK extends EventEmitter {
       username_real: this.email,
       user_avatar_url: this.userData.avatar_url,
       id: self.pendingCommentId,
-      type: type || 'text'
+      type: type || 'text',
+      timestamp: format(new Date())
     }
     if(type != 'text') commentData.payload = JSON.parse(payload)
     var pendingComment = self.prepareCommentToBeSubmitted(commentData)
@@ -830,9 +842,8 @@ export class Comment {
     this.message               = escapeHTML(comment.message)
     this.username_as           = comment.username_as || comment.username
     this.username_real         = comment.username_real || comment.email
-    let theDate                = moment(comment.timestamp)
-    this.date                  = theDate.format('YYYY-MM-DD')
-    this.time                  = theDate.format('HH:mm A')
+    this.date                  = format(comment.timestamp, 'YYYY-MM-DD')
+    this.time                  = format(comment.timestamp, 'HH:mm A')
     this.unique_id             = comment.unique_temp_id || comment.unique_id
     this.avatar                = comment.user_avatar_url
     /* comment status */
