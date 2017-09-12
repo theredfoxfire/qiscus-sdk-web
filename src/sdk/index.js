@@ -258,7 +258,7 @@ export class qiscusSDK extends EventEmitter {
     const self = this
     if (self.isSynced) return false;
     self.isSynced = true;
-    window.setInterval(() => self.synchronize(), 3500);
+    window.setInterval(() => self.synchronize(), 7500);
   }
 
   /**
@@ -456,6 +456,7 @@ export class qiscusSDK extends EventEmitter {
    * If comment count > 0 then we have new message
    */
   synchronize () {
+    vStore.state.mqtt.publish(`u/${qiscus.userData.email}/s`, `1:${format(new Date(), 'x')}`);
     this.userAdapter.sync(this.last_received_comment_id)
     .then((comments) => {
       if (comments.length > 0) this.emit('newmessages', comments)
