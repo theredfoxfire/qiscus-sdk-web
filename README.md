@@ -34,7 +34,7 @@ You can just copy and paste this into your html file and it'll work directly.
 </head>
 <body>
   <div id="qiscus-widget"></div>
-  <script src="https://res.cloudinary.com/qiscus/raw/upload/qDoXwv1doA/qiscus-sdk.2.5.8.js"></script>
+  <script src="https://res.cloudinary.com/qiscus/raw/upload/LwJUbnqW0r/qiscus-sdk.2.5.8.js"></script>
   <script>
      // let's setup options for our widget
      QiscusSDK.core.init({
