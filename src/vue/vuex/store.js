@@ -5,11 +5,25 @@ import MqttAdapter from '../../MqttAdapter'
 import MqttCallback from '../../MqttCallback'
 import QiscusSDK from '../../sdk/index'
 
+function unsetPresence(state) {
+  if(qiscus.selected && qiscus.selected.room_type != 'group') {
+    const targetEmail = qiscus.selected.participants
+      .find(target => target.email != qiscus.email);
+    if(targetEmail) state.mqtt.unsubscribe(`u/${targetEmail.email}/s`);
+  }
+}
+function setPresence(state, email) {
+  // unset old presence, ambil email yang lama
+  unsetPresence(state);
+  state.mqtt.subscribe(`u/${email}/s`);
+}
+
 // Make vue aware of Vuex
 Vue.use(Vuex)
 
 // Create an object to hold the initial state when
 // the app starts up
+const mqttURL = "wss://mqtt.qiscus.com:1886/mqtt";
 const state = {
   qiscus: QiscusSDK,
   selected: QiscusSDK.selected,
@@ -17,7 +31,7 @@ const state = {
   participants: QiscusSDK.participants,
   plugins: QiscusSDK.plugins,
   // mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886", callbacks),
-  mqtt: new MqttAdapter("wss://mqtt.qiscus.com:1886/mqtt", MqttCallback),
+  mqtt: new MqttAdapter(mqttURL, MqttCallback),
   mqttData: {
     typing: ''
   },
@@ -53,14 +67,16 @@ const mutations = {
     state.mqttData.typing = '';
 
     // set presence, ambil email yang lama
+    setPresence(state);
     if(qiscus.selected) {
       const targetEmail = qiscus.selected.participants
         .find(target => target.email != qiscus.email);
       if(targetEmail) state.mqtt.unsubscribe(`u/${targetEmail.email}/s`);
     }
-    state.mqtt.subscribe(`u/${email}/s`);
   },
   CHAT_GROUP (state, {id, oldSelected}) {
+    unsetPresence(state);
+    qiscus.chatmateStatus = `${qiscus.selected.getParticipants().join(",")}...`;
     if(state.selected) {
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);

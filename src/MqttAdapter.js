@@ -6,7 +6,7 @@ export default class MqttAdapter {
     this.mqtt = mqtt.connect(url, {
       will: {
         topic: `u/${qiscus.userData.email}/s`,
-        payload: `1:${format(new Date(), 'x')}`,
+        payload: `0:${format(new Date(), 'x')}`,
         retain: true
       }
     })

@@ -358,11 +358,12 @@ export class qiscusSDK extends EventEmitter {
    * @param {string[]} emails - Participant to be invited
    * @returns {Promise.<Room, Error>} - Room detail
    */
-  createGroupRoom (name, ...emails) {
+  createGroupRoom (name, emails, options) {
     const self = this
     if (!this.isLogin) throw new Error('Please initiate qiscus SDK first')
     return new GroupChatBuilder(this.roomAdapter)
       .withName(name)
+      .withOptions(options)
       .addParticipants(emails)
       .create()
       .then((res) => {
@@ -757,25 +758,8 @@ export class Room {
     }
   }
 
-  addTopic (Topic) {
-    // Check if we got the topic in the list
-    let topic = this.getTopic(Topic.id)
-    if (topic) {
-      // let's update the topic with new data
-      topic = Object.assign({}, topic, Topic)
-    } else {
-      this.topics.push(Topic)
-    }
-  }
-
-  getTopic (topicId) {
-    return find(topic => topic.id === topicId)(this.topics)
-  }
-
-  removeTopic (Topic) {
-    const index = this.getTopicIndex(Topic.id)
-    if (index < 0) return false
-    this.topics.splice(index, 1)
+  getParticipants() {
+    return this.participants.map(participant => participant.username);
   }
 
   getParticipant (participantEmail) {
@@ -836,6 +820,7 @@ function escapeHTML(text) {
   comment = searchAndReplace(comment, '>', '&gt;');
   return comment;
 }
+
 export class Comment {
   constructor (comment) {
     this.id                    = comment.id
