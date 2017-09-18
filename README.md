@@ -2,9 +2,8 @@
 
 <p align="center"><br/><img src="https://res.cloudinary.com/qiscus/image/upload/K8xvGP4tXd/ss1.png" width="70%" /><br/></p>
 
-Qiscus SDK helps you build Web Chat Application easy and fast. It uses **qis**cus server backend for the API.
-There's two version of the SDK. The SDK Core Only version which you can use to build a custom chat app without opinionated view layer.
-The other version is the one with `View` layer already integrated in it (in this case we're using VueJs, other view layer already on TODO list).
+Qiscus SDK helps you build Web Chat Application easy and fast. It uses Qiscus server backend for the API.
+
 You can download files you need by navigating to the [release](https://github.com/qiscus/qiscus-sdk-web/releases) section.
 
 # Quick Start
@@ -13,12 +12,12 @@ Register on [www.qiscus.com/dashboard](https://www.qiscus.com/dashboard) using y
 
 You should create one application per service, regardless of the platform. For example, an app released in Android, iOS or Web would require only one application to be created in the Dashboard.
 
-All users within the same qiscus application are able to communicate with each other, across all platforms. This means users using iOS, Android, web clients, etc. can all chat with one another. However, users in different Qiscus applications cannot talk to each other.
+All users within the same Qiscus application are able to communicate with each other, across all platforms. This means users using iOS, Android, web clients, etc. can all chat with one another. However, users in different Qiscus `APP_ID` cannot talk to each other.
 
-Done! Now you can use the `APP_ID` into your apps and get chat functionality by implementing qiscus into your app.
+Now you can use the `APP_ID` into your apps and get chat functionality by implementing qiscus into your app.
 
 ## Integrating SDK with an existing app 
-**qis**cus SDK let you add a chat widget directly into your existing HTML web pages. You just need to include the javascript and css files from the build directory. And you also need to append `<div id="qiscus-widget"></div>` tag before closing body tag. Here's sample HTML:
+Qiscus SDK let you add a chat widget directly into your existing HTML web pages. You just need to include the javascript and css files from the build directory. And you also need to append `<div id="qiscus-widget"></div>` tag before closing body tag. Here's sample HTML:
 
 You can just copy and paste this into your html file and it'll work directly.
 
@@ -68,7 +67,8 @@ On the code snippet above, we can pass several callbacks to init options, in the
 
 # Authentication
 ## Init with APP ID
-We can initialize **qis**cus SDK by using this line of code:
+
+We can initialize Qiscus SDK by using this line of code:
 ```
 QiscusSDK.core.init({
   AppId: 'DRAGONGO',
@@ -77,12 +77,13 @@ QiscusSDK.core.init({
 });
 ```
 
-
 After we initialize the SDK, we need to set `login` data for current user by using this code:
 `QiscusSDK.core.setUser('[email / unique identifer]', '[password]', '[Display Name]');`
 
 ## Set User or Updating a User Profile
+
 You can use the previous login code to update your data:
+
 `QiscusSDK.core.setUser('email', 'key', 'username', 'avatar_url');`
 
 - `email` email used by currently logged in user
@@ -100,13 +101,17 @@ You can use the previous login code to update your data:
 # Chat Rooms
 ## Create 1-to-1 chat
 To create a 1-to-1 chat use this code:
+
 `QiscusSDK.core.UI.chatTarget('[email / unique identifier]')`
 
 ## Creating a Group Room
+
 `QiscusSDK.core.createGroupRoom (name, ...emails)`
+
 where `email(s)` is in the type of `array`
 
 ## Get a room by id
+
 `QiscusSDK.core.UI.chatGroup('group_room_id')`
 
 # Event Handler
@@ -173,13 +178,12 @@ Widget components have namespaces of `qcw-...`
 | .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 
 
-
 and many more
 
 
 # Sample Code
 
-The code above will put qiscus chat inside a container. Here's a working example on [codepen](https://codepen.io/desertlion/pen/MmdRBd)
+The code above will put qiscus chat inside a container. Here's a working example on [Codepen](https://codepen.io/desertlion/pen/MmdRBd)
 
 
 
