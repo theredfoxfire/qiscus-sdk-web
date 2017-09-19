@@ -16,7 +16,7 @@ All users within the same Qiscus application are able to communicate with each o
 
 Now you can use the `APP_ID` into your apps and get chat functionality by implementing qiscus into your app.
 
-## Integrating SDK with an existing app 
+## Integrating SDK
 Qiscus SDK let you add a chat widget directly into your existing HTML web pages. You just need to include the javascript and css files from the build directory. And you also need to append `<div id="qiscus-widget"></div>` tag before closing body tag. Here's sample HTML:
 
 You can just copy and paste this into your html file and it'll work directly.
@@ -59,7 +59,8 @@ You can just copy and paste this into your html file and it'll work directly.
 
 
 
-We're using two CDN here, one for emoji support and one for the icon, in this case we're using FontAwesome. The *emojione* is optional though.
+We're using two CDN here, one for emoji support and one for the icon, in this case we're using FontAwesome. 
+The *emojione* is optional though.
 
 If you already registered for your own AppId, just replace `dragongo` with your own `AppId`. In the example above we automatically open a chat roow with `guest2@qiscus.com` assuming that user already registered on `dragongo` AppId, if the user is not registered then it will be failed. 
 
@@ -110,7 +111,7 @@ To create a 1-to-1 chat use this code:
 
 where `email(s)` is in the type of `array`
 
-## Get a room by id
+## Get Room by id
 
 `QiscusSDK.core.UI.chatGroup('group_room_id')`
 
@@ -183,8 +184,22 @@ and many more
 
 # Sample Code
 
+## Codepen
 The code above will put qiscus chat inside a container. Here's a working example on [Codepen](https://codepen.io/desertlion/pen/MmdRBd)
 
+## Full flow implementation
+We have full flow of Chat SDK implementation with standard features like Chat List, Group creation, Add participant, etc
+here on our Repository [https://bitbucket.org/qiscus/qiscus-sdk-sandbox](https://bitbucket.org/qiscus/qiscus-sdk-sandbox)
+
+You can see [Live Demo](https://qiscus-sdk-sandbox.herokuapp.com/app) here
+
+The implementation is using Vue js
+
+## Simple HTML and jQuery
+We are also provide sample using very simple HTML and jQuery that can be used for reference here
+[Repository](https://github.com/apiep/qiscus-sdk-simple-sample)
+
+you can see the [Live Demo](https://apiep.github.io/qiscus-sdk-simple-sample/) here
 
 
 
