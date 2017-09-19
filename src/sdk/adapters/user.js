@@ -56,4 +56,21 @@ export default class User {
       .catch((error) => Promise.reject(error))
   }
 
+  loadRoomList(params = {}) {
+    let body = `?token=${this.token}`;
+    (params.page) ? body += '&page' + params.page : null;
+    (params.show_participants) ? body += '&show_participants' + params.show_participants : true;
+    (params.limit) ? body += '&limit' + params.limit : null;
+    return this.HTTPAdapter.get(`api/v2/sdk/user_rooms${body}`)
+    .then((res) => {
+      return new Promise((resolve, reject) => {
+        if (res.body.status !== 200) return reject(res);
+        const data = res.body.results.rooms_info;
+        return resolve(data);
+      })
+    }, (error) => {
+      return Promise.reject(error)
+    })
+  }
+
 }

@@ -98,6 +98,13 @@ You can use the previous login code to update your data:
 ```
 
 # Chat Rooms
+## Get Rooms List
+`QiscusSDK.core.loadRoomsList(params)`
+Parameters:
+- `page` [int] page to load
+- `limit` [int] limit room results, default to `100`
+- `show_participants` [bool] whether to attach participant lists or not, default to `true`
+
 ## Create 1-to-1 chat
 To create a 1-to-1 chat use this code:
 `QiscusSDK.core.UI.chatTarget('[email / unique identifier]')`

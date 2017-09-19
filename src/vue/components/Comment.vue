@@ -206,6 +206,7 @@ export default {
       x: new EmbedJS({
         input: this.comment.message,
         excludeEmbed: ['github','youtube'],
+        locationEmbed: false,
         emoji: false,
         inlineText: false,
         linkOptions: {
@@ -215,6 +216,7 @@ export default {
       y: new EmbedJS({
         input: (this.comment.type == 'reply') ? this.comment.payload.replied_comment_message : '.',
         excludeEmbed: ['github','youtube'],
+        locationEmbed: false,
         emoji: false,
         inlineText: false,
         linkOptions: { target: '_blank' }

@@ -699,6 +699,15 @@ export class qiscusSDK extends EventEmitter {
     })
   }
 
+  async loadRoomList (params = {}) {
+    const rooms = await this.userAdapter.loadRoomList({query: params});
+    return rooms.map(room => {
+      room.last_comment_id = room.last_comment.id;
+      room.last_comment_message = room.last_comment.message;
+      return new Room(room)
+    });
+  }
+
 }
 
 export class Room {
@@ -710,19 +719,18 @@ export class Room {
     this.last_comment_topic_id = roomData.last_topic_id
     this.last_comment_topic_title = roomData.last_comment_topic_title
     this.avatar = roomData.room_avatar || roomData.avatarURL || roomData.avatar_url
-    this.name = roomData.name
+    this.name = roomData.name || roomData.room_name
     this.room_type = roomData.room_type
     this.secret_code = roomData.secret_code
     this.participants = roomData.participants
-    this.topics = []
     this.comments = []
-    this.count_notif = roomData.count_notif
+    this.count_notif = roomData.count_notif || roomData.unread_count
     this.isLoaded = false
-    this.code_en = roomData.code_en
     this.unread_comments = []
     this.custom_title = null
     this.custom_subtitle = null
-    this.receiveComments(roomData.comments)
+    this.options = roomData.options
+    if(roomData.comments) this.receiveComments(roomData.comments)
   }
 
   setTitle ( title ) {
@@ -773,38 +781,6 @@ export class Room {
     // get if there's existing participant, if any then push
     let participantToFind = this.getParticipant(participant.email)
     if (!participantToFind) this.participants.push(participant)
-  }
-}
-
-export class Topic {
-  constructor (topic_data) {
-    this.id = topic_data.id
-    this.title = topic_data.title
-    this.comment_unread = topic_data.comment_unread
-    this.deleted = topic_data.deleted || false
-    this.unread = topic_data.unread
-    this.comments = []
-    this.isLoaded = false
-  }
-
-  addComment (Comment) {
-    // Check if we got the topic in the list
-    let comment = this.getComment(Comment.id)
-    if (comment) {
-      // let's update the topic with new data
-      comment = Object.assign({}, comment, Comment)
-    } else {
-      this.comments.push(Comment)
-    }
-  }
-  getComment (comment_id) {
-    return find(comment => comment.id === comment_id)(this.comments)
-  }
-  markAsRead () {
-    this.comment_unread = 0
-  }
-  increaseUnreadCommentsCount () {
-    this.comment_unread++
   }
 }
 

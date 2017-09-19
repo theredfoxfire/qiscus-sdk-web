@@ -76,7 +76,7 @@ const mutations = {
   },
   CHAT_GROUP (state, {id, oldSelected}) {
     unsetPresence(state);
-    qiscus.chatmateStatus = `${qiscus.selected.getParticipants().join(",")}...`;
+    qiscus.chatmateStatus = `${qiscus.selected.getParticipants().join(", ").substr(0,30)} ...`;
     if(state.selected) {
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
