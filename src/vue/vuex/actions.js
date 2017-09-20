@@ -41,12 +41,13 @@ export default {
     }, 0)
   },
   backToHome: ({commit}) => commit('BACK_TO_HOME'),
-  submitComment: ({commit}, {topic_id, comment}) => {
+  submitComment: ({commit, dispatch}, {topic_id, comment}) => {
     return QiscusSDK.core.submitComment(topic_id, comment)
     .then((response) => {
       commit('SUBMIT_COMMENT', QiscusSDK.core.selected)
       const selected = QiscusSDK.core.selected.comments
       const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
+      dispatch('setNewCommentText', '');
       setTimeout(function(){
         if(latestCommentId > 0){
           const elementToScroll = document.getElementById(latestCommentId)
@@ -60,12 +61,13 @@ export default {
       return Promise.reject(error)
     })
   },
-  submitCommentWithPayload: ({commit}, {topic_id, comment, payload_type, payload}) => {
-    return QiscusSDK.core.submitComment(topic_id, comment, null, 'reply', JSON.stringify(payload)) 
+  submitCommentWithPayload: ({commit, dispatch}, {topic_id, comment, payload_type, payload}) => {
+    return QiscusSDK.core.submitComment(topic_id, comment, null, 'reply', JSON.stringify(payload))
     .then( response => {
       commit('SUBMIT_COMMENT', QiscusSDK.core.selected)
       const selected = QiscusSDK.core.selected.comments
       const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
+      dispatch('setNewCommentText', '');
       setTimeout(function(){
         if(latestCommentId > 0){
           const elementToScroll = document.getElementById(latestCommentId)
@@ -115,7 +117,7 @@ export default {
     if (commentToFind){
       commentToFind.markAsRead()
       commit('SET_DELIVERED', commentToFind)
-    } 
+    }
   },
   setRead: ({commit}, payload) => {
     // find the comment that need to be altered
@@ -129,12 +131,13 @@ export default {
     if (commentToFind){
       commentToFind.markAsRead()
       commit('SET_READ', commentToFind)
-    } 
+    }
   },
   toggleInit: ({commit}) => commit('TOGGLE_INIT'),
   updateSelected: ({commit}) => commit('UPDATE_SELECTED'),
   openImageModal: ({commit}, payload) => commit('OPEN_IMAGE_MODAL', payload),
   closeImageModal: ({commit}) => commit('CLOSE_IMAGE_MODAL'),
   subscribeUserChannel: ({commit}) => commit('SUBSCRIBE_USER_CHANNEL'),
+  setNewCommentText: ({commit}, payload) => commit('SET_NEW_COMMENT_TEXT', payload),
 }
 // topic_id, last_comment_id, timestamp, after

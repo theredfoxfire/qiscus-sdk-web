@@ -64,8 +64,8 @@
         </li>
       </ul>
       <!-- untuk preview klo reply -->
-      <reply-preview 
-        :replied_comment="replied_comment" 
+      <reply-preview
+        :replied_comment="replied_comment"
         v-if="replied_comment !== null"
         :onDismiss="cancelReply">
       </reply-preview>
@@ -74,8 +74,8 @@
       <div class="qcw-comment-form">
         <textarea placeholder="type your comment here ..."
           row="2"
-          @focus="publishTyping"
-          @keyup="publishTyping"
+          @focus="commentFormHandler"
+          @keyup="commentFormHandler"
           @keydown.enter="trySubmitComment($event)"
           v-model="commentInput">
         </textarea>
@@ -127,6 +127,7 @@ export default {
       if(this.$store.state.qiscus.isLoading) return true;
       return false;
     },
+    newCommentText: function() { return this.$store.state.newCommentText },
   },
   data() {
     return {
@@ -150,12 +151,18 @@ export default {
     // let scrollTreshold = commentContainerHeight * 90 / 100
     let scrollTreshold = commentContainerHeight - 170
     this.scrollable = (scrollTop >= scrollTreshold) || false
-    
+
     if(this.scrollable) {
-      window.setTimeout(function(){ 
-        commentContainer.scrollTop = commentContainerHeight 
+      window.setTimeout(function(){
+        commentContainer.scrollTop = commentContainerHeight
       }, 0)
-    } 
+    }
+  },
+  watch: {
+    // whenever question changes, this function will run
+    newCommentText: function (newInput) {
+      this.commentInput = newInput
+    }
   },
   methods: {
     toggleActions() {
@@ -191,7 +198,7 @@ export default {
         if(typeof emojione != "undefined") message = emojione.shortnameToUnicode(message)
         if(this.commentInput.trim().length < 1) return;
         this.submitComment(this.selected.last_comment_topic_id, message);
-        this.commentInput = ''
+        this.commentFormHandler();
         this.mqtt.publish(`r/${this.selected.id}/${this.selected.last_comment_topic_id}/fikri@qiscus.com/t`, 0);
         this.showActions = false;
       }
@@ -287,6 +294,10 @@ export default {
 
       // reader.onload = (e) => { vm.uploadedFiles.push(e.target.result) };
       // reader.readAsDataURL(files[0]);
+    },
+    commentFormHandler() {
+      this.$store.dispatch('setNewCommentText', this.commentInput);
+      this.publishTyping();
     },
   }
 }
