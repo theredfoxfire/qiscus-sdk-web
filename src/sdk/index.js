@@ -84,6 +84,14 @@ export class qiscusSDK extends EventEmitter {
         if(element) {
           element.scrollIntoView({block: 'end', behaviour: 'smooth'})
         }
+      },
+      gotoComment(comment) {
+        if (!self.isInit) return
+        const oldSelected = Object.assign({}, self.selected)
+        self.getRoomById(comment.room_id)
+        .then((response) => {
+          vStore.dispatch('chatGroup', {id:comment.room_id, oldSelected, commentId: comment.id});
+        })
       }
     }
 
@@ -268,14 +276,13 @@ export class qiscusSDK extends EventEmitter {
    * @param distinct_id {string | optional} - unique string to differentiate chat room with same target
    * @return <Room>
    */
-  chatTarget (email, options = {}) {
+  chatTarget (email, options = null) {
     const initialMessage = options.message
     const distinctId = options.distinctId
     // check if the room exists
     const self = this
     self.isLoading = true
     self.chatmateStatus = ''
-    options = self.options
 
     // make sure data already loaded first
     if (this.userData.length != null) return false
@@ -708,6 +715,20 @@ export class qiscusSDK extends EventEmitter {
     });
   }
 
+  /**
+   * 
+   * Search Qiscus Messages
+   * 
+   * @param {any} [params={query,room_id,last_comment_id}] 
+   * @memberof qiscusSDK
+   */
+  async searchMessages(params = {}) {
+    const messages = await this.userAdapter.searchMessages(params);
+    return messages.map(message => {
+      return new Comment(message);
+    });
+  }
+
 }
 
 export class Room {
@@ -808,6 +829,7 @@ export class Comment {
     this.time                  = format(comment.timestamp, 'HH:mm A')
     this.unique_id             = comment.unique_temp_id || comment.unique_id
     this.avatar                = comment.user_avatar_url
+    this.room_id               = comment.room_id
     /* comment status */
     this.isPending             = false
     this.isFailed              = false
@@ -825,7 +847,8 @@ export class Comment {
 
     // supported comment type text, account_linking, buttons
     let supported_comment_type = [
-      'text','account_linking','buttons','reply','system_event','card', 'custom', 'contact_person', 'location'
+      'text','account_linking','buttons','reply','system_event','card', 'custom', 
+      'contact_person', 'location', 'file_attachment'
     ];
     this.type = (supported_comment_type.indexOf(comment.type) >= 0) ? comment.type : 'text';
     this.subtype = (comment.type === 'custom') ? comment.payload.type : null;

@@ -179,10 +179,39 @@ Widget components have namespaces of `qcw-...`
 | .qcw-comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 | .comment-form i | Comment Form icons (paperclip and paper-plane icon) | 
 
+# Search Messages
+**qisc**us SDK provide API to search for Messages.
 
+```
+QiscusSDK.core.searchMessages(params)
+```
 
-and many more
+**params**
+- **query** {string} keyword to search
+- **room_id** {int} search in specific room
+- **last_comment_id** {int} search query only on comments higher than this id
 
+Search message API above return Javascript Promise. So you can work on the result after the promise is resolved. Example:
+
+```
+QiscusSDK.core.searchMessages({query: 'hello'})
+  .then(messages => {
+    // messages return Array of Qiscus SDK Comments
+    // You can use `gotoComment` API to navigate to specific comment in a room if only the comment is already loaded
+    // If not, it will only navigate to the Room where the comment is resided
+    QiscusSDK.Core.UI.gotoComment(messages[0]) // => navigate to the 1st room of search messages
+  })
+```
+
+# Load Room List
+```
+QiscusSDK.core.loadRoomList(params)
+```
+
+**params**
+- page {int} page number, default 1
+- show_participants {bool}, default to true
+- limit {int}, default to 100
 
 # Sample Code
 

@@ -7,7 +7,6 @@
     <div class="comment-loading-container" v-if="isLoading">
       <loader width="150px" height="150px"></loader>
     </div>
-    <init-config v-if="!selected && !init && dev_mode"></init-config>
     <div v-if="!selected && !init && !dev_mode">
       <div class="qcw-header">
         Widget not yet initialized
@@ -108,12 +107,11 @@ import Loader from './Loader.vue'
 import Comment from './Comment.vue'
 // import {chatTarget,toggleChatWindow, backToHome, submitComment, loadComments} from '../vuex/actions'
 import ChatParticipants from './ChatParticipants.vue'
-import InitConfig from './InitConfig.vue'
 import LoadMore from './LoadMore.vue'
 import ReplyPreview from './ReplyPreview.vue'
 
 export default {
-  components: {ChatParticipants, Comment, InitConfig, LoadMore, Loader, ReplyPreview},
+  components: {ChatParticipants, Comment, LoadMore, Loader, ReplyPreview},
   computed: {
     windowStatus: function(){ return this.$store.state.windowStatus },
     selected: function() { return this.$store.state.qiscus.selected || false},

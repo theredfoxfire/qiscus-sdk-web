@@ -73,4 +73,17 @@ export default class User {
     })
   }
 
+  searchMessages (params) {
+    const body = {
+      token: this.token,
+      query: params.query || null,
+      room_id: params.room_id || null,
+      last_comment_id: params.last_comment_id || null,
+    }
+    return this.HTTPAdapter
+      .post('api/v2/sdk/search_messages', body)
+      .then((res) => Promise.resolve(res.body.results.comments))
+      .catch((error) => Promise.reject(error))
+  }
+
 }

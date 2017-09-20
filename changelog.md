@@ -1,3 +1,10 @@
+# SDK v.2.5.9
+- Add file_attachment message type rendering
+- `QiscusSDK.core.searchMessages` API
+- `QiscusSDK.core.UI.gotoComment` API
+- `QiscusSDK.core.loadRoomList` API
+- Fixing chatTarget sending the wrong options
+
 # SDK v.2.5.8
 - Add contact rendering
 - Add location rendering

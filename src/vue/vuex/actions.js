@@ -24,17 +24,20 @@ export default {
       return Promise.reject(error)
     })
   },
-  chatGroup: ({commit}, {id, oldSelected}) => {
-    commit('CHAT_GROUP', {id, oldSelected})
-    const selected = QiscusSDK.core.selected.comments
-    const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
+  chatGroup: ({commit}, {id, oldSelected, commentId}) => {
+    commit('CHAT_GROUP', {id, oldSelected});
+    const selected = QiscusSDK.core.selected.comments;
+    const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0;
+    const commentForm = document.getElementsByClassName('qcw-comment-form');
+
     setTimeout(function(){
       if(latestCommentId > 0){
-        const elementToScroll = document.getElementById(latestCommentId)
+        const targetId = commentId || latestCommentId;
+        const elementToScroll = document.getElementById(targetId);
         elementToScroll.scrollIntoView({block: 'end', behavior: 'smooth'})
       }
       //on entering the room, wait for data processed then focus on comment form
-      document.getElementsByClassName('qcw-comment-form').item(0).getElementsByTagName('textarea').item(0).focus();
+      if(commentForm) commentForm.item(0).getElementsByTagName('textarea').item(0).focus();
     }, 0)
   },
   backToHome: ({commit}) => commit('BACK_TO_HOME'),

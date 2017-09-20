@@ -40,6 +40,12 @@
           :message="comment.message"
           :mapurl="comment.payload.map_url"
           v-if="comment.type == 'location'"></static-map>
+
+        <!-- CommentType: "file_attachment" -->
+        <file-attachment v-if="comment.type == 'file_attachment'"
+          :comment="comment"
+          :on-click-image="onClickImage">
+        </file-attachment>
         <!-- CommentType: "TEXT" -->
         <div v-if="comment.type == 'text' || comment.type == 'reply'">
           <image-loader v-if="comment.isAttachment(comment.message) && comment.type != 'reply'"
@@ -58,7 +64,9 @@
             :onClickImage="onClickImage"
             :callback="onupdate"
           ></comment-reply>
-          <div v-html="message" v-if="!comment.isAttachment(comment.message) && comment.type=='text'" class="qcw-comment__content"></div>
+          <comment-render 
+            :text="comment.message" v-if="!comment.isAttachment(comment.message) && comment.type=='text'" >
+          </comment-render>
           <span class="qcw-comment__time qcw-comment__time--children" 
             v-if="!isParent"
             :class="{'qcw-comment__time--attachment': comment.isAttachment(comment.message)}">
@@ -115,6 +123,8 @@ import CommentReply from './CommentReply';
 import CommentCard from './CommentCard';
 import CommentCarousel from './CommentCarousel';
 import StaticMap from './StaticMap';
+import FileAttachment from './FileAttachment';
+import CommentRender from './CommentRender';
 
 function searchAndReplace(str, find, replace) {
   return str.split(find).join(replace);
@@ -127,7 +137,7 @@ function escapeHTML(text) {
 };
 export default {
   props: ['comment','onupdate', 'onClickImage', 'commentBefore', 'commentAfter', 'replyHandler'],
-  components: { Avatar, ImageLoader, CommentReply, CommentCard, CommentCarousel, StaticMap },
+  components: { Avatar, ImageLoader, CommentReply, CommentCard, CommentCarousel, StaticMap, FileAttachment, CommentRender },
   updated(){
     // this.onupdate();
   },
@@ -151,7 +161,7 @@ export default {
     }
     if(self.comment.type == 'reply') {
       self.y.text((data) => {
-        self.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(data) : self.replied_comment_message;
+        self.replied_comment_message = (typeof emojione != 'undefined') ? emojione.toImage(data) : self.data;
       })
       new EmbedJS({
         input: self.comment.payload.text,
@@ -160,7 +170,7 @@ export default {
         inlineText: false,
         linkOptions: { target: '_blank' }
       }).text( data => {
-        self.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(data) : self.replied_comment_text;
+        self.replied_comment_text = (typeof emojione != 'undefined') ? emojione.toImage(data) : self.data;
       })
     }
   },
