@@ -39,7 +39,7 @@ const state = {
   isLoadingComments: false,
   imageModalLink: '',
   imageModalOn: false,
-  dev_mode: false
+  newCommentText: '',
 }
 
 // Create an object storing various mutations. We will write the mutation
@@ -79,7 +79,7 @@ const mutations = {
     if(state.selected) {
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
       state.mqtt.unsubscribe(`r/${oldSelected.id}/${oldSelected.last_comment_topic_id}/+/t`);
-      state.qiscus.chatmateStatus = (state.qiscus.selected.room_type == 'group') 
+      state.qiscus.chatmateStatus = (state.qiscus.selected.room_type == 'group')
         ? `${state.qiscus.selected.getParticipants().join(", ").substr(0,30)} ...`
         : '';
     }
@@ -112,7 +112,7 @@ const mutations = {
     if(payload.topic.username == state.qiscus.email || payload.topic.room_id != state.selected.id) return
     // let's get the email of this payload
     const Participant = state.qiscus.selected.participants.find( (participant) => participant.email == payload.topic.username )
-    const username = (Participant) ? Participant.username : payload.topic.username 
+    const username = (Participant) ? Participant.username : payload.topic.username
 
     if(payload.message == 1){
       state.mqttData.typing = username;
@@ -139,7 +139,10 @@ const mutations = {
   CLOSE_IMAGE_MODAL (state) {
     state.imageModalLink = '';
     state.imageModalOn = false;
-  }
+  },
+  SET_NEW_COMMENT_TEXT (state, payload) {
+    state.newCommentText = payload;
+  },
 }
 
 // Set the Getters
