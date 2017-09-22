@@ -295,6 +295,9 @@ code {
   font-size: 12px;
   text-align: left;
   color: #757575;
+  max-height: 150px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
   margin-bottom: 10px;
   .reply-preview & {
     margin-bottom: 0;
@@ -319,7 +322,10 @@ code {
   position: absolute;
   bottom: 40px;
   width: 100%;
+  max-height: 50%;
   line-height: 1.7em;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
   z-index: 2;
 }
 .reply-preview__close-btn {
