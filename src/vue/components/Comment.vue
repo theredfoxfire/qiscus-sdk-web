@@ -2,14 +2,14 @@
   <div class="qcw-comment-container" :id="comment.id" :class="commentClass">
     <!-- comment data -->
     <div class="qcw-comment-date" v-if="showDate">
-      - {{ dateToday }} - 
+      - {{ dateToday }} -
     </div>
     <!-- CommentType: "system_event" -->
     <div v-if="comment.type == 'system_event'" class="qcw-comment--system-event">
       {{ comment.message }}
     </div>
     <!-- for text type comment -->
-    <div class="qcw-comment" 
+    <div class="qcw-comment"
       v-if="comment.type != 'system_event'"
       :class="{
         'comment--me': comment.username_real == myemail,
@@ -17,7 +17,7 @@
         'comment--mid': isMid,
         'comment--last': isLast
       }">
-      <avatar :src="comment.avatar" v-if="options.avatar && !isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar> 
+      <avatar :src="comment.avatar" v-if="options.avatar && !isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar>
       <div class="qcw-comment__message">
         <!-- Comment Time -->
         <div class="qcw-comment__info" v-if="isParent">
@@ -64,10 +64,10 @@
             :onClickImage="onClickImage"
             :callback="onupdate"
           ></comment-reply>
-          <comment-render 
+          <comment-render
             :text="comment.message" v-if="!comment.isAttachment(comment.message) && comment.type=='text'" >
           </comment-render>
-          <span class="qcw-comment__time qcw-comment__time--children" 
+          <span class="qcw-comment__time qcw-comment__time--children"
             v-if="!isParent"
             :class="{'qcw-comment__time--attachment': comment.isAttachment(comment.message)}">
             {{comment.time}}
@@ -76,6 +76,7 @@
             <i class="qcw-comment__state fa fa-clock-o" v-if="comment.isPending"></i>
             <i class="qcw-comment__state fa fa-check" v-if="comment.isSent && !comment.isDelivered"></i>
             <i class="qcw-comment__state fa fa-times-circle" v-if="comment.isFailed" @click="resend(comment)"></i>
+            <i class="qcw-comment__state fa fa-refresh" v-if="comment.isFailed" @click="resend(comment)"></i>
             <div class="qcw-comment__state qcw-comment__state--delivered" v-if="comment.isDelivered && !comment.isRead">
               <i class="fa fa-check"></i><i class="fa fa-check"></i>
             </div>
@@ -85,7 +86,7 @@
           </div> <!-- end of comment icons -->
         </div>
         <!-- CommentType: "CARD" -->
-        <comment-card :data="comment.payload" 
+        <comment-card :data="comment.payload"
           v-if="comment.type==='card'"></comment-card>
         <!-- CommentType: "CUSTOM" -->
         <div v-if="comment.type === 'custom'">
@@ -108,7 +109,7 @@
           </div>
         </div>
       </div>
-      <avatar :src="comment.avatar" v-if="options.avatar && isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar> 
+      <avatar :src="comment.avatar" v-if="options.avatar && isMe" :class="{'qcw-avatar--hide': !isParent}"></avatar>
     </div>
   </div>
 </template>

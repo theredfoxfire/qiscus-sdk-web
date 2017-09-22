@@ -144,7 +144,7 @@
 .qcw-image-container {
   height: 100px; overflow: hidden;
   border-radius: 0 0 5px 5px;
-  
+
   img {
     min-width: 200px;
     min-height: 110px;
@@ -190,16 +190,31 @@
   text-indent: -5px;
   transition: opacity .32s ease;
   opacity: .3;
+  &.fa.fa-refresh {
+    display: none;
+  }
   .qcw-comment__message:hover & {
     opacity: 1;
   }
+  .qcw-comment__message:hover &.fa.fa-times-circle {
+    display: none;
+  }
+  .qcw-comment__message:hover &.fa.fa-refresh {
+    display: unset;
+    color: #3b97ac;
+    font-size: 11px;
+  }
   &.fa.fa-times-circle {
+    opacity: 1;
     color: #e74c3c;
     font-size: 11px;
   }
   &--read {
     color: #3498db;
   }
+}
+.fa.fa-times-circle:hover {
+  display: none;
 }
 .qcw-comment-date {
   text-align: center;

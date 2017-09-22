@@ -28,7 +28,7 @@
           <div v-if="!selected.custom_title">{{ selected.name }}</div>
           <div v-if="selected.custom_title">{{ selected.custom_title }}</div>
           <div v-if="mqttData.typing != ''" class="isTypingText">{{ mqttData.typing }} is typing ...</div>
-          <div v-if="!mqttData.typing && chatmateStatus" class="isTypingText">{{ chatmateStatus }}</div>
+          <div v-if="!mqttData.typing && chatmateStatus && selected.room_type != 'group'" class="isTypingText">{{ chatmateStatus }}</div>
           <div v-if="selected.custom_subtitle && !mqttData.typing" class="isTypingText">{{ selected.custom_subtitle }}</div>
         </div>
         <i class="fa fa-chevron-down" @click="toggleChatWindow"></i>
@@ -296,7 +296,7 @@ export default {
       // reader.readAsDataURL(files[0]);
     },
     commentFormHandler() {
-      this.$store.dispatch('setNewCommentText', this.commentInput);
+      new Promise(this.$store.dispatch('setNewCommentText', this.commentInput)).then(this.commentInput = '');
       this.publishTyping();
     },
   }
