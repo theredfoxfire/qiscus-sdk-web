@@ -296,7 +296,7 @@ export default {
       // reader.readAsDataURL(files[0]);
     },
     commentFormHandler() {
-      this.$store.dispatch('setNewCommentText', this.commentInput);
+      new Promise(this.$store.dispatch('setNewCommentText', this.commentInput)).then(this.commentInput = '');
       this.publishTyping();
     },
   }
