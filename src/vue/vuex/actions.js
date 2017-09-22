@@ -29,7 +29,6 @@ export default {
     const selected = QiscusSDK.core.selected.comments;
     const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0;
     const commentForm = document.getElementsByClassName('qcw-comment-form');
-
     setTimeout(function(){
       if(latestCommentId > 0){
         const targetId = commentId || latestCommentId;
@@ -78,6 +77,7 @@ export default {
       }, 0)
       return Promise.resolve(QiscusSDK.core.selected);
     }, (error) => {
+      dispatch('setNewCommentText', '');
       return Promise.reject(error)
     })
   },
@@ -87,6 +87,7 @@ export default {
       commit('SUBMIT_COMMENT', QiscusSDK.core.selected)
       const selected = QiscusSDK.core.selected.comments
       const latestCommentId = (selected.length > 0) ? selected[selected.length-1].id : 0
+      dispatch('setNewCommentText', '');
       setTimeout(function(){
         if(latestCommentId > 0){
           const elementToScroll = document.getElementById(latestCommentId)
@@ -98,6 +99,7 @@ export default {
       console.info('resend comment successful')
       return Promise.resolve(QiscusSDK.core.selected);
     }, error => {
+      dispatch('setNewCommentText', '');
       console.error('resend comment error', error)
       return Promise.reject(error)
     })
